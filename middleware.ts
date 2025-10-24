@@ -54,10 +54,10 @@ export async function middleware(request: NextRequest) {
     }
   );
 
-  // Refresh session if expired - required for Server Components
+  // Check authentication status - getUser() is the recommended approach for middleware
   const {
-    data: { session },
-  } = await supabase.auth.getSession();
+    data: { user },
+  } = await supabase.auth.getUser();
 
   // Protected routes check
   const isProtectedRoute = request.nextUrl.pathname.startsWith('/chat') ||
@@ -68,13 +68,13 @@ export async function middleware(request: NextRequest) {
   const isAuthRoute = request.nextUrl.pathname.startsWith('/login') ||
     request.nextUrl.pathname.startsWith('/register');
 
-  // Redirect to login if accessing protected route without session
-  if (isProtectedRoute && !session) {
+  // Redirect to login if accessing protected route without authentication
+  if (isProtectedRoute && !user) {
     return NextResponse.redirect(new URL('/login', request.url));
   }
 
-  // Redirect to chat if accessing auth routes with active session
-  if (isAuthRoute && session) {
+  // Redirect to chat if accessing auth routes with active authentication
+  if (isAuthRoute && user) {
     return NextResponse.redirect(new URL('/chat', request.url));
   }
 

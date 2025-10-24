@@ -1,63 +1,13 @@
-import { createServerClient, type CookieOptions } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
 
 export async function middleware(request: NextRequest) {
-  let response = NextResponse.next({
-    request: {
-      headers: request.headers,
-    },
-  });
-
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        get(name: string) {
-          return request.cookies.get(name)?.value;
-        },
-        set(name: string, value: string, options: CookieOptions) {
-          request.cookies.set({
-            name,
-            value,
-            ...options,
-          });
-          response = NextResponse.next({
-            request: {
-              headers: request.headers,
-            },
-          });
-          response.cookies.set({
-            name,
-            value,
-            ...options,
-          });
-        },
-        remove(name: string, options: CookieOptions) {
-          request.cookies.set({
-            name,
-            value: '',
-            ...options,
-          });
-          response = NextResponse.next({
-            request: {
-              headers: request.headers,
-            },
-          });
-          response.cookies.set({
-            name,
-            value: '',
-            ...options,
-          });
-        },
-      },
-    }
+  // Check for Supabase auth token in cookies
+  // Supabase stores auth tokens in cookies with pattern: sb-*-auth-token
+  const authCookie = request.cookies.getAll().find(cookie =>
+    cookie.name.startsWith('sb-') && cookie.name.endsWith('-auth-token')
   );
 
-  // Check authentication status - getUser() is the recommended approach for middleware
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const hasSession = !!authCookie?.value;
 
   // Protected routes check
   const isProtectedRoute = request.nextUrl.pathname.startsWith('/chat') ||
@@ -69,16 +19,18 @@ export async function middleware(request: NextRequest) {
     request.nextUrl.pathname.startsWith('/register');
 
   // Redirect to login if accessing protected route without authentication
-  if (isProtectedRoute && !user) {
-    return NextResponse.redirect(new URL('/login', request.url));
+  if (isProtectedRoute && !hasSession) {
+    const loginUrl = new URL('/login', request.url);
+    loginUrl.searchParams.set('redirect', request.nextUrl.pathname);
+    return NextResponse.redirect(loginUrl);
   }
 
   // Redirect to chat if accessing auth routes with active authentication
-  if (isAuthRoute && user) {
+  if (isAuthRoute && hasSession) {
     return NextResponse.redirect(new URL('/chat', request.url));
   }
 
-  return response;
+  return NextResponse.next();
 }
 
 export const config = {

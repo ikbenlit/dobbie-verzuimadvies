@@ -74,6 +74,21 @@ export default function PricingNew() {
           <p className="mt-4 text-lg text-brand-text max-w-2xl mx-auto">
             {content.description}
           </p>
+
+          {/* ROI Context */}
+          <div className="mt-8 bg-white/60 backdrop-blur-sm rounded-2xl p-6 max-w-3xl mx-auto border border-[#E9B046]/20">
+            <div className="flex flex-col md:flex-row items-center justify-center gap-4 text-brand-text">
+              <div className="flex items-center gap-2">
+                <span className="text-2xl font-bold text-[#5A0D29]">€405</span>
+                <span className="text-sm">gemiddelde kosten per verzuimdag</span>
+              </div>
+              <span className="hidden md:block text-[#E9B046] text-2xl">→</span>
+              <div className="text-center">
+                <p className="font-bold text-[#E9B046]">DOBbie kost minder dan 1 uur bedrijfsarts</p>
+                <p className="text-sm text-brand-text/80">Verdient zich vaak al in de eerste week terug</p>
+              </div>
+            </div>
+          </div>
         </div>
         <div className="grid lg:grid-cols-3 gap-8 max-w-5xl mx-auto">
           {content.plans.map((plan, index) => (

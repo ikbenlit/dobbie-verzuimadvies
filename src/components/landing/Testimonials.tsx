@@ -1,79 +1,69 @@
-'use client';
-
-import Image from 'next/image';
+import { Quote } from 'lucide-react';
 
 interface Testimonial {
-  name: string;
-  role: string;
-  image: string;
   quote: string;
+  author: string;
+  gradient: string;
+  bgColor: string;
 }
 
 const testimonials: Testimonial[] = [
   {
-    name: 'Mark van der Berg',
-    role: 'HR Manager bij TechCorp',
-    image: '/images/testimonials/mark.webp',
-    quote:
-      'DOBbie heeft ons enorm geholpen bij het stroomlijnen van ons verzuimproces. De 24/7 beschikbaarheid en accurate adviezen hebben onze HR-afdeling veel tijd bespaard.',
+    quote: "Sinds DOBbie is er veel minder onzekerheid bij onze teamleiders.",
+    author: "HR-adviseur",
+    gradient: "from-[#771138] to-[#5A0D29]",
+    bgColor: "bg-[#5A0D29]/5"
   },
   {
-    name: 'Linda de Vries',
-    role: 'Casemanager Verzuim',
-    image: '/images/avatar-1.webp',
-    quote:
-      'Als casemanager waardeer ik de actuele kennis van wet- en regelgeving. DOBbie geeft direct bruikbare antwoorden en houdt rekening met de laatste updates in de Wet Poortwachter.',
+    quote: "Ik gebruik DOBbie voordat ik contact opneem met de arbodienst – dat scheelt tijd én vragen.",
+    author: "Leidinggevende",
+    gradient: "from-[#E9B046] to-[#F0C674]",
+    bgColor: "bg-[#E9B046]/5"
   },
   {
-    name: 'Peter Jansen',
-    role: 'Directeur MKB',
-    image: '/images/testimonials/peter.webp',
-    quote:
-      'Voor een klein bedrijf als het onze is DOBbie de perfecte oplossing. Professioneel advies wanneer we het nodig hebben, zonder de kosten van een fulltime bedrijfsarts.',
-  },
-  {
-    name: 'Sarah Ahmed',
-    role: 'Teamleider Personeelszaken',
-    image: '/images/avatar-3.webp',
-    quote:
-      'De combinatie van AI-technologie met gedegen medische en juridische kennis maakt DOBbie uniek. Het helpt ons om compliant te blijven en tegelijk efficiënt te werken.',
-  },
+    quote: "Veel vragen die eerst op mijn spreekuur kwamen, worden nu al opgelost. Ik kan me richten op medische beoordeling.",
+    author: "Bedrijfsarts",
+    gradient: "from-blue-500 to-blue-600",
+    bgColor: "bg-blue-500/5"
+  }
 ];
 
 export default function Testimonials() {
   return (
-    <section id="testimonials" className="py-16 md:py-24 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12 md:mb-16">
-          <h2 className="font-serif text-3xl md:text-4xl font-bold text-bordeaux">
-            Wat onze gebruikers zeggen
+    <section className="py-24 bg-white">
+      <div className="container mx-auto px-4">
+        <div className="text-center mb-12">
+          <h2 className="font-serif text-3xl md:text-5xl font-bold text-[#5A0D29] mb-4">
+            Wat anderen zeggen
           </h2>
-          <p className="mt-4 text-lg md:text-xl text-gray-dark max-w-3xl mx-auto">
-            Ontdek hoe DOBbie organisaties helpt bij professionele
-            verzuimbegeleiding.
+          <p className="text-lg text-brand-text max-w-2xl mx-auto">
+            DOBbie helpt al verschillende organisaties bij verzuimbegeleiding
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
           {testimonials.map((testimonial, index) => (
             <div
               key={index}
-              className="bg-cream p-6 rounded-lg shadow-md transition-all duration-300 hover:transform hover:-translate-y-1 hover:shadow-[0_10px_15px_-3px_rgba(0,0,0,0.1),0_4px_6px_-2px_rgba(0,0,0,0.05)]"
+              className={`${testimonial.bgColor} rounded-2xl p-8 border-2 border-transparent hover:border-opacity-30 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 group relative overflow-hidden`}
             >
-              <div className="flex items-center mb-4">
-                <Image
-                  src={testimonial.image}
-                  alt={testimonial.name}
-                  width={48}
-                  height={48}
-                  className="w-12 h-12 rounded-full mr-4"
-                />
-                <div>
-                  <h3 className="font-bold text-gray-dark">{testimonial.name}</h3>
-                  <p className="text-sm text-gray-dark">{testimonial.role}</p>
-                </div>
+              {/* Gradient accent bar */}
+              <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${testimonial.gradient}`}></div>
+
+              {/* Quote icon */}
+              <div className={`w-12 h-12 bg-gradient-to-br ${testimonial.gradient} rounded-full flex items-center justify-center mb-6 transition-transform duration-300 group-hover:scale-110`}>
+                <Quote className="w-6 h-6 text-white" />
               </div>
-              <p className="text-gray-dark italic">&ldquo;{testimonial.quote}&rdquo;</p>
+
+              {/* Quote text */}
+              <p className="text-brand-text mb-6 leading-relaxed italic">
+                "{testimonial.quote}"
+              </p>
+
+              {/* Author */}
+              <div className={`text-sm font-bold bg-gradient-to-r ${testimonial.gradient} bg-clip-text text-transparent`}>
+                — {testimonial.author}
+              </div>
             </div>
           ))}
         </div>

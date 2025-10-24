@@ -17,8 +17,8 @@ export default function Vision() {
             <h2 className="font-serif text-3xl md:text-5xl font-bold text-[#5A0D29]">
               {content.title}
             </h2>
-            <p className="mt-4 text-lg text-brand-text">
-              &ldquo;{content.description}&rdquo;
+            <p className="mt-4 text-lg text-brand-text whitespace-pre-line">
+              {content.description}
             </p>
             <div className="mt-6">
               <p className="font-bold text-[#5A0D29]">{content.author.name}</p>

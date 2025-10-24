@@ -1,14 +1,14 @@
 {
   "sectionId": "visie",
-  "badge": "De visie achter DOBbie",
-  "title": "Gemaakt door Experts",
-  "description": "Met DOBbie willen we complexe verzuimvraagstukken toegankelijk en beheersbaar maken voor iedere werkgever. Mijn jarenlange ervaring in de branche heeft me geleerd waar de knelpunten zitten. DOBbie is het antwoord: een slimme, efficiënte tool die organisaties ondersteunt bij het creëren van een gezond en productief werkklimaat.",
+  "badge": "Waarom DOBbie werkt",
+  "title": "Ontwikkeld door een bedrijfsarts",
+  "description": "Ik ben geregistreerd bedrijfsarts met meer dan 10 jaar ervaring in uiteenlopende sectoren.\n\nOp mijn spreekuur krijg ik regelmatig vragen die weken blijven liggen, maar geen medische beoordeling nodig hebben. Zonde van de tijd – voor alle partijen.\n\nDOBbie is gebouwd om dat op te lossen. Zodat de leidinggevende handelt met vertrouwen. De medewerker weet waar hij aan toe is. En de bedrijfsarts zich kan richten op waar hij écht nodig is.",
   "author": {
     "name": "Talar Lazarian",
-    "role": "Oprichtster van DOBbie",
+    "role": "Bedrijfsarts & Oprichtster van DOBbie",
     "image": {
       "src": "/images/talar-blauw.webp",
-      "alt": "Oprichtster Talar Lazarian"
+      "alt": "Dr. Talar Lazarian - Bedrijfsarts en oprichtster van DOBbie"
     }
   }
 }

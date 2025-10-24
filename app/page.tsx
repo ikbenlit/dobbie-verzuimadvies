@@ -2,8 +2,14 @@ import {
   Header,
   Hero,
   Stats,
-  WhyDobbie,
+  ProblemSolution,
+  DobbieHero,
+  DobbieFeatures,
+  CombinedBenefits,
+  DobbieTargetGroups,
+  DobbieCTA,
   Vision,
+  Testimonials,
   PricingNew,
   FAQ,
   FooterNew,
@@ -17,10 +23,16 @@ export default function HomePage() {
       <main>
         <Hero />
         <Stats />
-        <WhyDobbie />
+        <Testimonials />
+        <ProblemSolution />
+        <DobbieHero />
+        <DobbieFeatures />
+        <CombinedBenefits />
+        <DobbieTargetGroups />
         <Vision />
         <PricingNew />
         <FAQ />
+        <DobbieCTA />
       </main>
       <FooterNew />
       <ScrollToTopButton />

@@ -12,3 +12,15 @@ export { default as Vision } from './Vision';
 export { default as FAQ } from './FAQ';
 export { default as FooterNew } from './FooterNew';
 export { default as PricingNew } from './PricingNew';
+
+// Export DOBbie section components
+export { default as DobbieHero } from './DobbieHero';
+export { default as DobbieFeatures } from './DobbieFeatures';
+export { default as DobbieBenefits } from './DobbieBenefits';
+export { default as DobbieTargetGroups } from './DobbieTargetGroups';
+export { default as DobbieCTA } from './DobbieCTA';
+
+// Export new content components
+export { default as ResultsList } from './ResultsList';
+export { default as ProblemSolution } from './ProblemSolution';
+export { default as CombinedBenefits } from './CombinedBenefits';

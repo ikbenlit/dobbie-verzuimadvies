@@ -20,7 +20,8 @@
       "Bash(pnpm run build:*)",
       "Bash(pnpm add:*)",
       "Bash(1)",
-      "Bash(pnpm run dev)"
+      "Bash(pnpm run dev)",
+      "Bash(test:*)"
     ],
     "deny": []
   },

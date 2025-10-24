@@ -3,12 +3,19 @@ import './globals.css';
 import { ThemeProvider } from '@/components/providers/ThemeProvider';
 
 export const metadata: Metadata = {
-  title: 'DoBbie - Jouw Digitale Verzuimbuddy',
-  description: 'DoBbie is een digitale verzuimbuddy die 24/7 praktische, juridisch onderbouwde antwoorden geeft op vragen over verzuim, communicatie en wetgeving.',
+  title: 'DOBbie | 24/7 AI Verzuimadvies voor Leidinggevenden',
+  description: 'Direct verzuimadvies voor leidinggevenden. DOBbie AI-assistent gebaseerd op WVP & NVAB richtlijnen. ✓ 24/7 beschikbaar ✓ Juridisch onderbouwd ✓ Probeer gratis',
+  keywords: ['verzuimbegeleiding', 'leidinggevenden', 'AI verzuimadvies', 'WVP proces', 'NVAB richtlijnen', 'bedrijfsarts', 're-integratie', 'verzuimgesprek'],
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
   themeColor: '#771138',
   icons: {
     icon: '/favicon.png',
+  },
+  openGraph: {
+    title: 'DOBbie | 24/7 AI Verzuimadvies voor Leidinggevenden',
+    description: 'Direct verzuimadvies voor leidinggevenden. Gebaseerd op WVP & NVAB richtlijnen. Probeer gratis.',
+    type: 'website',
+    locale: 'nl_NL',
   },
 };
 

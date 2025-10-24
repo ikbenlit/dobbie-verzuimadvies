@@ -1,0 +1,14 @@
+{
+  "sectionId": "visie",
+  "badge": "De visie achter DOBbie",
+  "title": "Gemaakt door Experts",
+  "description": "Met DOBbie willen we complexe verzuimvraagstukken toegankelijk en beheersbaar maken voor iedere werkgever. Mijn jarenlange ervaring in de branche heeft me geleerd waar de knelpunten zitten. DOBbie is het antwoord: een slimme, efficiënte tool die organisaties ondersteunt bij het creëren van een gezond en productief werkklimaat.",
+  "author": {
+    "name": "Talar Lazarian",
+    "role": "Oprichtster van DOBbie",
+    "image": {
+      "src": "/images/talar-blauw.webp",
+      "alt": "Oprichtster Talar Lazarian"
+    }
+  }
+}

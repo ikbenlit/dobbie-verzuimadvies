@@ -1,0 +1,33 @@
+{
+  "hero": {
+    "badge": "Online Verzuimadvies",
+    "title": "Professioneel advies binnen handbereik",
+    "description": "Direct antwoord op al uw vragen over verzuim, re-integratie en arbeidsgerelateerde zaken. Efficiënt, betrouwbaar en altijd beschikbaar.",
+    "primaryCta": {
+      "text": "Probeer DOBbie",
+      "href": "/chat"
+    },
+    "secondaryCta": {
+      "text": "Meer Informatie",
+      "href": "#waarom"
+    },
+    "video": {
+      "src": "/video/demo-dobbie.mp4",
+      "alt": "DOBbie demo video"
+    }
+  },
+  "stats": [
+    {
+      "value": "95%",
+      "label": "Nauwkeurigheid in Advies"
+    },
+    {
+      "value": "24/7",
+      "label": "Beschikbaarheid"
+    },
+    {
+      "value": "1000+",
+      "label": "Tevreden Bedrijven"
+    }
+  ]
+}

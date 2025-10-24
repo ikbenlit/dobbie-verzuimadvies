@@ -1,0 +1,23 @@
+{
+  "sectionId": "faq",
+  "title": "Veelgestelde Vragen",
+  "description": "Vind hier antwoorden op de meest voorkomende vragen over DOBbie.",
+  "items": [
+    {
+      "question": "Voor wie is DOBbie bedoeld?",
+      "answer": "DOBbie is ontworpen voor HR-managers, leidinggevenden en ondernemers in het MKB die snel en betrouwbaar advies nodig hebben over verzuim en re-integratie."
+    },
+    {
+      "question": "Hoe actueel is de informatie van DOBbie?",
+      "answer": "Onze kennisbank wordt continu bijgewerkt door arbeidsrecht- en verzuimexperts om te garanderen dat alle adviezen in lijn zijn met de laatste wet- en regelgeving, zoals de Wet verbetering poortwachter."
+    },
+    {
+      "question": "Is mijn data veilig bij DOBbie?",
+      "answer": "Ja, wij nemen databeveiliging zeer serieus. Alle data wordt versleuteld opgeslagen op servers binnen de EU en we zijn volledig GDPR-compliant. Gesprekken worden anoniem verwerkt."
+    },
+    {
+      "question": "Kan ik mijn abonnement op elk moment opzeggen?",
+      "answer": "Absoluut. U kunt uw abonnement op elk moment eenvoudig online opzeggen. U behoudt toegang tot het einde van uw huidige factureringsperiode."
+    }
+  ]
+}

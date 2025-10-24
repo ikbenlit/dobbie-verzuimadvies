@@ -4,10 +4,13 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useSupabaseAuth } from '@/lib/supabase/client';
+import { Eye, EyeOff, Loader2, Check } from 'lucide-react';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -15,101 +18,248 @@ export default function LoginPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!email || !password) {
+      setError('Vul alle velden in.');
+      return;
+    }
+
     setError(null);
     setLoading(true);
 
     try {
       await signIn(email, password);
       router.push('/chat');
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Er is iets misgegaan bij het inloggen');
+      router.refresh();
+    } catch (err: any) {
+      console.error('Login error:', err);
+
+      // User-friendly error messages
+      if (err.message?.includes('Invalid login credentials')) {
+        setError('Onjuiste inloggegevens. Controleer je e-mailadres en wachtwoord.');
+      } else if (err.message?.includes('Email not confirmed')) {
+        setError('Je account is nog niet bevestigd. Controleer je e-mail.');
+      } else if (err.message?.includes('Too many requests')) {
+        setError('Te veel login pogingen. Probeer het later opnieuw.');
+      } else {
+        setError('Er is een fout opgetreden. Probeer het opnieuw.');
+      }
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-cream px-4 py-12 sm:px-6 lg:px-8">
-      <div className="w-full max-w-md space-y-8">
-        <div>
-          <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-bordeaux">
-            Inloggen bij DoBbie
-          </h2>
-          <p className="mt-2 text-center text-sm text-gray-dark">
-            Of{' '}
-            <Link
-              href="/register"
-              className="font-medium text-bordeaux hover:text-bordeaux-hover"
-            >
-              maak een nieuw account aan
-            </Link>
-          </p>
-        </div>
+    <div className="min-h-screen flex flex-col md:flex-row">
+      {/* Linkerkant - Login Formulier (md:w-2/5) */}
+      <div className="relative w-full md:w-2/5 bg-[#F5F2EB] flex items-center justify-center p-8 order-2 md:order-1 overflow-hidden">
+        {/* Achtergrond decoratie */}
+        <div className="absolute -top-20 -left-24 w-72 h-72 bg-[#771138] rounded-full opacity-10 blur-3xl -z-10 animate-pulse-slow" />
+        <div className="absolute -bottom-24 -right-20 w-80 h-80 bg-[#E9B046] rounded-full opacity-20 blur-3xl -z-10 animate-pulse-slower" />
 
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          {error && (
-            <div className="rounded-md bg-red-50 p-4">
-              <p className="text-sm text-red-800">{error}</p>
-            </div>
-          )}
+        <div className="relative z-10 max-w-md w-full bg-white p-8 md:p-10 rounded-lg shadow-lg">
+          {/* Logo en welkomstbericht */}
+          <div className="text-center mb-8">
+            <h1 className="font-serif text-[28px] font-bold text-[#771138] mb-2">
+              Welkom terug
+            </h1>
+            <p className="text-[#3D3D3D] text-[15px]">
+              Log in om verder te gaan met DOBbie - De Online Bedrijfsarts
+            </p>
+          </div>
 
-          <div className="-space-y-px rounded-md shadow-sm">
+          <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label htmlFor="email" className="sr-only">
+              <label
+                htmlFor="email"
+                className="block text-[15px] font-semibold text-[#3D3D3D] mb-2"
+              >
                 E-mailadres
               </label>
               <input
-                id="email"
-                name="email"
                 type="email"
-                autoComplete="email"
-                required
+                id="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="relative block w-full appearance-none rounded-none rounded-t-md border border-gray-light px-3 py-2 text-gray-dark placeholder-gray-500 focus:z-10 focus:border-bordeaux focus:outline-none focus:ring-bordeaux sm:text-sm"
-                placeholder="E-mailadres"
+                className="bg-white border border-[#D1D5DB] rounded-md px-4 py-3 w-full focus:border-[#771138] focus:outline-none focus:ring-2 focus:ring-[#771138]/20 transition-all duration-300 ease-in-out"
+                placeholder="naam@voorbeeld.nl"
+                required
               />
             </div>
+
             <div>
-              <label htmlFor="password" className="sr-only">
+              <label
+                htmlFor="password"
+                className="block text-[15px] font-semibold text-[#3D3D3D] mb-2"
+              >
                 Wachtwoord
               </label>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                autoComplete="current-password"
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="relative block w-full appearance-none rounded-none rounded-b-md border border-gray-light px-3 py-2 text-gray-dark placeholder-gray-500 focus:z-10 focus:border-bordeaux focus:outline-none focus:ring-bordeaux sm:text-sm"
-                placeholder="Wachtwoord"
-              />
+              <div className="relative">
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  id="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="bg-white border border-[#D1D5DB] rounded-md px-4 py-3 w-full pr-12 focus:border-[#771138] focus:outline-none focus:ring-2 focus:ring-[#771138]/20 transition-all duration-300 ease-in-out"
+                  placeholder="••••••••"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-[#707070] hover:text-[#3D3D3D] transition-colors"
+                >
+                  {showPassword ? (
+                    <EyeOff className="h-5 w-5" />
+                  ) : (
+                    <Eye className="h-5 w-5" />
+                  )}
+                </button>
+              </div>
             </div>
-          </div>
 
-          <div className="flex items-center justify-between">
-            <div className="text-sm">
+            <div className="flex justify-between items-center">
+              <div className="flex items-center">
+                <input
+                  type="checkbox"
+                  id="remember"
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
+                  className="mr-2 h-4 w-4 accent-[#771138] border-[#D1D5DB] rounded"
+                />
+                <label htmlFor="remember" className="text-[14px] text-[#707070]">
+                  Onthouden
+                </label>
+              </div>
               <Link
                 href="/forgot-password"
-                className="font-medium text-bordeaux hover:text-bordeaux-hover"
+                className="text-[14px] font-semibold text-[#771138] hover:text-[#5A0D29] transition-colors duration-200"
               >
                 Wachtwoord vergeten?
               </Link>
             </div>
-          </div>
 
-          <div>
             <button
               type="submit"
               disabled={loading}
-              className="group relative flex w-full justify-center rounded-md border border-transparent bg-bordeaux px-4 py-2 text-sm font-medium text-white hover:bg-bordeaux-hover focus:outline-none focus:ring-2 focus:ring-bordeaux focus:ring-offset-2 disabled:opacity-50"
+              className="w-full font-bold text-[16px] rounded-md py-[14px] px-[28px] text-white transition-all duration-300 ease-in-out disabled:opacity-70 bg-[#771138] hover:bg-[#5A0D29] flex items-center justify-center"
             >
-              {loading ? 'Bezig met inloggen...' : 'Inloggen'}
+              {loading ? (
+                <>
+                  <Loader2 className="animate-spin -ml-1 mr-3 h-5 w-5" />
+                  Bezig met inloggen...
+                </>
+              ) : (
+                'Inloggen'
+              )}
             </button>
+
+            {error && (
+              <p className="mt-2 text-center text-[14px] text-red-600">{error}</p>
+            )}
+
+            <div className="text-center space-y-2">
+              <p className="text-[14px] text-[#707070]">
+                Nog geen account?{' '}
+                <Link
+                  href="/register"
+                  className="text-[#771138] hover:text-[#5A0D29] font-semibold transition-colors duration-200"
+                >
+                  Registreren
+                </Link>
+              </p>
+              <Link
+                href="/"
+                className="block text-[14px] text-[#707070] hover:text-[#3D3D3D] transition-colors duration-200"
+              >
+                Terug naar home
+              </Link>
+            </div>
+          </form>
+
+          <div className="mt-6 bg-[#F5F2EB] text-[#3D3D3D] p-4 rounded-md shadow-sm text-[14px] text-center">
+            <div className="font-semibold mb-1">Test inloggegevens:</div>
+            <div>
+              <span className="font-medium">E-mail:</span> demo@dobbie.nl
+            </div>
+            <div>
+              <span className="font-medium">Wachtwoord:</span> dobbie123
+            </div>
           </div>
-        </form>
+        </div>
       </div>
+
+      {/* Rechterkant - Feature Showcase (md:w-3/5) */}
+      <div className="w-full md:w-3/5 text-white p-8 md:p-12 flex items-center relative overflow-hidden order-1 md:order-2 bg-[#771138]">
+        <div className="relative z-10 max-w-xl mx-auto flex flex-col items-center justify-center h-full">
+          <h2 className="font-serif text-[28px] font-bold mb-4 text-center md:text-left text-white">
+            24/7 professioneel advies over verzuim
+          </h2>
+          <p className="text-[15px] mb-8 text-center md:text-left text-white opacity-90">
+            DOBbie - De Online Bedrijfsarts helpt u met professionele begeleiding
+            bij verzuim, Wet Poortwachter en personeelsbeleid.
+          </p>
+
+          <div className="space-y-4 mb-8 w-full max-w-md">
+            <div className="flex items-center p-4 rounded-md bg-white/10 backdrop-blur-md">
+              <div className="bg-[#E9B046] rounded-full w-8 h-8 flex items-center justify-center mr-4 flex-shrink-0">
+                <Check className="h-5 w-5 text-white" />
+              </div>
+              <p className="text-[15px] text-white">
+                Direct antwoord op al uw vragen over verzuim
+              </p>
+            </div>
+            <div className="flex items-center p-4 rounded-md bg-white/10 backdrop-blur-md">
+              <div className="bg-[#E9B046] rounded-full w-8 h-8 flex items-center justify-center mr-4 flex-shrink-0">
+                <Check className="h-5 w-5 text-white" />
+              </div>
+              <p className="text-[15px] text-white">
+                Actuele kennis van wet- en regelgeving
+              </p>
+            </div>
+            <div className="flex items-center p-4 rounded-md bg-white/10 backdrop-blur-md">
+              <div className="bg-[#E9B046] rounded-full w-8 h-8 flex items-center justify-center mr-4 flex-shrink-0">
+                <Check className="h-5 w-5 text-white" />
+              </div>
+              <p className="text-[15px] text-white">
+                Professionele ondersteuning bij verzuimbeleid
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <style jsx>{`
+        @keyframes pulse-slow {
+          0%,
+          100% {
+            opacity: 0.1;
+            transform: scale(1);
+          }
+          50% {
+            opacity: 0.2;
+            transform: scale(1.05);
+          }
+        }
+        @keyframes pulse-slower {
+          0%,
+          100% {
+            opacity: 0.2;
+            transform: scale(1);
+          }
+          50% {
+            opacity: 0.3;
+            transform: scale(1.03);
+          }
+        }
+
+        .animate-pulse-slow {
+          animation: pulse-slow 8s infinite ease-in-out;
+        }
+        .animate-pulse-slower {
+          animation: pulse-slower 10s infinite ease-in-out;
+        }
+      `}</style>
     </div>
   );
 }

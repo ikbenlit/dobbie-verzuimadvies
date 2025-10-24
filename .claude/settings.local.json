@@ -16,7 +16,11 @@
       "WebFetch(domain:supabase.com)",
       "Bash(git checkout:*)",
       "Bash(pnpm install)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(pnpm run build:*)",
+      "Bash(pnpm add:*)",
+      "Bash(1)",
+      "Bash(pnpm run dev)"
     ],
     "deny": []
   },

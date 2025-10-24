@@ -62,7 +62,8 @@ export async function middleware(request: NextRequest) {
   // Protected routes check
   const isProtectedRoute = request.nextUrl.pathname.startsWith('/chat') ||
     request.nextUrl.pathname.startsWith('/admin') ||
-    request.nextUrl.pathname.startsWith('/dashboard');
+    request.nextUrl.pathname.startsWith('/dashboard') ||
+    request.nextUrl.pathname.startsWith('/contact');
 
   const isAuthRoute = request.nextUrl.pathname.startsWith('/login') ||
     request.nextUrl.pathname.startsWith('/register');

@@ -1,0 +1,45 @@
+{
+  "sectionId": "prijzen",
+  "title": "Kies het plan dat bij u past",
+  "description": "Transparante prijzen voor elke organisatie. Start vandaag nog met het optimaliseren van uw verzuimbeleid.",
+  "plans": [
+    {
+      "plan": "Basis",
+      "price": "49",
+      "period": "maand",
+      "features": [
+        "Onbeperkt vragen stellen",
+        "Toegang voor 1 gebruiker",
+        "Basis kennisbank",
+        "Email ondersteuning"
+      ],
+      "isFeatured": false
+    },
+    {
+      "plan": "Professioneel",
+      "price": "99",
+      "period": "maand",
+      "features": [
+        "Alles in Basis",
+        "Toegang voor 5 gebruikers",
+        "Uitgebreide kennisbank",
+        "Prioriteit ondersteuning",
+        "Maandelijkse updates"
+      ],
+      "isFeatured": true
+    },
+    {
+      "plan": "Enterprise",
+      "price": "Contact",
+      "period": "ons",
+      "features": [
+        "Alles in Professioneel",
+        "Onbeperkt aantal gebruikers",
+        "API-toegang",
+        "Persoonlijke onboarding",
+        "Dedicated accountmanager"
+      ],
+      "isFeatured": false
+    }
+  ]
+}

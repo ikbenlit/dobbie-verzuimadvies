@@ -5,31 +5,31 @@ const targetGroups = [
     icon: Users,
     title: "Leidinggevenden",
     description: "Zelfverzekerd verzuimgesprekken voeren",
-    gradient: "bg-gradient-to-br from-[#771138] to-[#5A0D29]",
-    hoverGradient: "hover:from-[#5A0D29] hover:to-[#771138]"
+    gradient: "bg-gradient-to-br from-bordeaux to-bordeaux-hover",
+    hoverGradient: "hover:from-bordeaux-hover hover:to-bordeaux"
   },
   {
     icon: MessageSquare,
     title: "HR-professionals",
     description: "Professionele ondersteuning bij complex verzuim",
-    gradient: "bg-gradient-to-br from-[#E9B046] to-[#F0C674]",
-    hoverGradient: "hover:from-[#F0C674] hover:to-[#E9B046]"
+    gradient: "bg-gradient-to-br from-gold to-gold-light",
+    hoverGradient: "hover:from-gold-light hover:to-gold"
   },
   {
     icon: TrendingUp,
     title: "Ondernemers",
     description: "Efficiënt verzuimbeleid zonder externe expertise",
-    gradient: "bg-gradient-to-br from-blue-500 to-purple-500",
-    hoverGradient: "hover:from-purple-500 hover:to-blue-500"
+    gradient: "bg-gradient-to-br from-teal to-teal-dark",
+    hoverGradient: "hover:from-teal-dark hover:to-teal"
   }
 ];
 
 export default function DobbieTargetGroups() {
   return (
-    <section className="py-16 bg-white">
+    <section className="py-16 bg-brand-light">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h3 className="font-serif text-2xl md:text-3xl font-bold text-[#5A0D29] mb-4">
+          <h3 className="font-serif text-2xl md:text-3xl font-bold text-bordeaux-hover mb-4">
             Voor wie is DOBbie bedoeld?
           </h3>
         </div>
@@ -43,7 +43,7 @@ export default function DobbieTargetGroups() {
               <div className={`w-16 h-16 ${group.gradient} ${group.hoverGradient} rounded-full flex items-center justify-center mx-auto mb-4 transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg`}>
                 <group.icon className="w-8 h-8 text-white" />
               </div>
-              <h4 className="text-xl font-bold text-[#5A0D29] mb-3">
+              <h4 className="text-xl font-bold text-bordeaux-hover mb-3">
                 {group.title}
               </h4>
               <p className="text-brand-text">

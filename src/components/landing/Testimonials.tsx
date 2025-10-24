@@ -11,29 +11,29 @@ const testimonials: Testimonial[] = [
   {
     quote: "Sinds DOBbie is er veel minder onzekerheid bij onze teamleiders.",
     author: "HR-adviseur",
-    gradient: "from-[#771138] to-[#5A0D29]",
-    bgColor: "bg-[#5A0D29]/5"
+    gradient: "from-bordeaux to-bordeaux-hover",
+    bgColor: "bg-bordeaux/5"
   },
   {
     quote: "Ik gebruik DOBbie voordat ik contact opneem met de arbodienst – dat scheelt tijd én vragen.",
     author: "Leidinggevende",
-    gradient: "from-[#E9B046] to-[#F0C674]",
-    bgColor: "bg-[#E9B046]/5"
+    gradient: "from-gold to-gold-light",
+    bgColor: "bg-gold/5"
   },
   {
     quote: "Veel vragen die eerst op mijn spreekuur kwamen, worden nu al opgelost. Ik kan me richten op medische beoordeling.",
     author: "Bedrijfsarts",
-    gradient: "from-blue-500 to-blue-600",
-    bgColor: "bg-blue-500/5"
+    gradient: "from-teal to-teal-dark",
+    bgColor: "bg-teal/5"
   }
 ];
 
 export default function Testimonials() {
   return (
-    <section className="py-24 bg-white">
+    <section className="py-24 bg-brand-light">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="font-serif text-3xl md:text-5xl font-bold text-[#5A0D29] mb-4">
+          <h2 className="font-serif text-3xl md:text-5xl font-bold text-bordeaux-hover mb-4">
             Wat anderen zeggen
           </h2>
           <p className="text-lg text-brand-text max-w-2xl mx-auto">

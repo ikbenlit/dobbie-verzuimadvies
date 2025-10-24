@@ -5,23 +5,23 @@ export default function Vision() {
   const content = getVisionContent();
 
   return (
-    <section id={content.sectionId} className="py-24 bg-white">
+    <section id={content.sectionId} className="py-24 bg-brand-light">
       <div className="container mx-auto px-4">
         <div className="grid md:grid-cols-2 gap-10 items-center">
           <div className="order-2 md:order-1">
-            <div className="inline-block bg-brand-light rounded-full px-4 py-1.5 mb-4">
-              <p className="text-sm text-[#5A0D29] font-medium">
+            <div className="inline-block bg-white rounded-full px-4 py-1.5 mb-4">
+              <p className="text-sm text-bordeaux-hover font-medium">
                 {content.badge}
               </p>
             </div>
-            <h2 className="font-serif text-3xl md:text-5xl font-bold text-[#5A0D29]">
+            <h2 className="font-serif text-3xl md:text-5xl font-bold text-bordeaux-hover">
               {content.title}
             </h2>
             <p className="mt-4 text-lg text-brand-text whitespace-pre-line">
               {content.description}
             </p>
             <div className="mt-6">
-              <p className="font-bold text-[#5A0D29]">{content.author.name}</p>
+              <p className="font-bold text-bordeaux-hover">{content.author.name}</p>
               <p className="text-sm text-brand-text">{content.author.role}</p>
             </div>
           </div>

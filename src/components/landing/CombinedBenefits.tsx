@@ -5,25 +5,25 @@ const stats = [
     percentage: "75%",
     label: "Tijdsbesparing",
     description: "Van uren zoeken naar minuten directe adviezen",
-    color: "text-green-600",
-    bgColor: "bg-green-500/10",
-    ringColor: "ring-green-500/20"
+    color: "text-teal",
+    bgColor: "bg-teal/10",
+    ringColor: "ring-teal/20"
   },
   {
     percentage: "40%",
     label: "Meer succes",
     description: "Verhoogd re-integratiesucces door evidence-based aanpak",
-    color: "text-[#E9B046]",
-    bgColor: "bg-[#E9B046]/10",
-    ringColor: "ring-[#E9B046]/20"
+    color: "text-gold",
+    bgColor: "bg-gold/10",
+    ringColor: "ring-gold/20"
   },
   {
     percentage: "90%",
     label: "Minder risico's",
     description: "Voorkom juridische problemen door correct handelen",
-    color: "text-[#5A0D29]",
-    bgColor: "bg-[#5A0D29]/10",
-    ringColor: "ring-[#5A0D29]/20"
+    color: "text-bordeaux",
+    bgColor: "bg-bordeaux/10",
+    ringColor: "ring-bordeaux/20"
   }
 ];
 
@@ -31,48 +31,48 @@ const results = [
   {
     icon: TrendingUp,
     title: "Sneller hersteltraject",
-    color: "text-green-600",
-    bgColor: "bg-green-500/10"
+    color: "text-teal",
+    bgColor: "bg-teal/10"
   },
   {
     icon: Clock,
     title: "Eerder terugkeer naar werk",
-    color: "text-[#E9B046]",
-    bgColor: "bg-[#E9B046]/10"
+    color: "text-gold",
+    bgColor: "bg-gold/10"
   },
   {
     icon: Users,
     title: "Meer eigenaarschap bij leidinggevenden",
-    color: "text-blue-600",
-    bgColor: "bg-blue-500/10"
+    color: "text-bordeaux",
+    bgColor: "bg-bordeaux/10"
   },
   {
     icon: Smile,
     title: "Minder frustratie bij medewerkers",
-    color: "text-green-600",
-    bgColor: "bg-green-500/10"
+    color: "text-teal",
+    bgColor: "bg-teal/10"
   },
   {
     icon: CheckCircle,
     title: "Minder druk op HR en bedrijfsarts",
-    color: "text-[#5A0D29]",
-    bgColor: "bg-[#5A0D29]/10"
+    color: "text-bordeaux-hover",
+    bgColor: "bg-bordeaux-hover/10"
   },
   {
     icon: Handshake,
     title: "Betere samenwerking en dossiervorming",
-    color: "text-blue-600",
-    bgColor: "bg-blue-500/10"
+    color: "text-gold",
+    bgColor: "bg-gold/10"
   }
 ];
 
 export default function CombinedBenefits() {
   return (
-    <section className="py-24 bg-brand-light">
+    <section className="py-24 bg-white">
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="text-center mb-12">
-          <h2 className="font-serif text-3xl md:text-5xl font-bold text-[#5A0D29] mb-4">
+          <h2 className="font-serif text-3xl md:text-5xl font-bold text-bordeaux-hover mb-4">
             Wat DOBbie in de praktijk oplevert
           </h2>
           <p className="text-lg text-brand-text max-w-2xl mx-auto">
@@ -82,7 +82,7 @@ export default function CombinedBenefits() {
 
         {/* Stats Section */}
         <div className="bg-white rounded-2xl shadow-lg p-8 md:p-12 mb-12">
-          <h3 className="font-serif text-2xl md:text-3xl font-bold text-[#5A0D29] text-center mb-8">
+          <h3 className="font-serif text-2xl md:text-3xl font-bold text-bordeaux-hover text-center mb-8">
             Bewezen resultaten
           </h3>
           <div className="grid md:grid-cols-3 gap-8 mb-12">
@@ -105,7 +105,7 @@ export default function CombinedBenefits() {
 
           {/* Results Grid */}
           <div className="border-t border-gray-200 pt-8">
-            <h4 className="font-bold text-xl text-[#5A0D29] text-center mb-6">
+            <h4 className="font-bold text-xl text-bordeaux-hover text-center mb-6">
               Directe voordelen voor uw organisatie
             </h4>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 max-w-4xl mx-auto">
@@ -118,7 +118,7 @@ export default function CombinedBenefits() {
                     <result.icon className={`w-5 h-5 ${result.color}`} />
                   </div>
                   <div className="flex-1">
-                    <h5 className="font-semibold text-[#5A0D29] text-sm leading-snug">
+                    <h5 className="font-semibold text-bordeaux-hover text-sm leading-snug">
                       {result.title}
                     </h5>
                   </div>

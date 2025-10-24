@@ -23,9 +23,9 @@ const FAQItem: React.FC<FAQItemProps> = ({
         onClick={onClick}
         className="w-full flex justify-between items-center text-left"
       >
-        <h3 className="text-lg font-semibold text-[#5A0D29]">{question}</h3>
+        <h3 className="text-lg font-semibold text-bordeaux-hover">{question}</h3>
         {isOpen ? (
-          <MinusIcon className="h-6 w-6 text-[#5A0D29]" />
+          <MinusIcon className="h-6 w-6 text-bordeaux-hover" />
         ) : (
           <PlusIcon className="h-6 w-6 text-brand-text" />
         )}
@@ -48,10 +48,10 @@ export default function FAQ() {
   };
 
   return (
-    <section id={content.sectionId} className="py-24 bg-white">
+    <section id={content.sectionId} className="py-24 bg-brand-light">
       <div className="container mx-auto px-4 max-w-3xl">
         <div className="text-center mb-12">
-          <h2 className="font-serif text-3xl md:text-5xl font-bold text-[#5A0D29]">
+          <h2 className="font-serif text-3xl md:text-5xl font-bold text-bordeaux-hover">
             {content.title}
           </h2>
           <p className="mt-4 text-lg text-brand-text">

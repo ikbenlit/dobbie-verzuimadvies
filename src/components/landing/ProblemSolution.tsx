@@ -11,7 +11,7 @@ export default function ProblemSolution() {
               <div className="w-12 h-12 bg-red-500/10 rounded-full flex items-center justify-center">
                 <AlertCircle className="w-6 h-6 text-red-600" />
               </div>
-              <h3 className="font-serif text-2xl font-bold text-[#5A0D29]">
+              <h3 className="font-serif text-2xl font-bold text-bordeaux-hover">
                 Hoe verzuim onnodig stilvalt
               </h3>
             </div>
@@ -39,7 +39,7 @@ export default function ProblemSolution() {
               <div className="w-12 h-12 bg-green-500/10 rounded-full flex items-center justify-center">
                 <CheckCircle2 className="w-6 h-6 text-green-600" />
               </div>
-              <h3 className="font-serif text-2xl font-bold text-[#5A0D29]">
+              <h3 className="font-serif text-2xl font-bold text-bordeaux-hover">
                 Wat je eigenlijk zou willen
               </h3>
             </div>
@@ -56,7 +56,7 @@ export default function ProblemSolution() {
                 Die het gesprek aangaan, plannen maken en zorgen voor beweging.
               </p>
               <div className="bg-green-50 border-l-4 border-green-500 pl-4 py-3 space-y-2">
-                <p className="font-bold text-[#5A0D29]">En u wilt zelf grip:</p>
+                <p className="font-bold text-bordeaux-hover">En u wilt zelf grip:</p>
                 <ul className="text-sm space-y-1">
                   <li>✓ Geen eindeloze wachttijden, maar <strong>snelheid</strong></li>
                   <li>✓ Geen miscommunicatie, maar <strong>duidelijkheid</strong></li>
@@ -69,8 +69,8 @@ export default function ProblemSolution() {
 
         {/* CTA */}
         <div className="text-center mt-12">
-          <p className="text-xl font-bold text-[#5A0D29]">
-            Kortom: u wilt <span className="text-green-600">daadkracht in het proces</span> –
+          <p className="text-xl font-bold text-bordeaux-hover">
+            Kortom: u wilt <span className="text-teal">daadkracht in het proces</span> –
             zonder dat u daar nóg een systeem voor moet beheren.
           </p>
         </div>

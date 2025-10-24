@@ -29,6 +29,11 @@ export default {
           DEFAULT: '#E9B046',    // Goudgeel
           light: '#F0C674',      // Lichtere gold variant
         },
+        'teal': {
+          DEFAULT: '#2C5F5D',    // Diep teal - secundaire kleur
+          dark: '#234A48',       // Hover staat
+          light: '#3A7B78',      // Lichtere teal variant
+        },
         'gray': {
           light: '#D1D5DB',   // Lichtgrijs
           dark: '#3D3D3D',    // Donkergrijs
@@ -40,6 +45,7 @@ export default {
           light: '#F5F2EB',     // Cream achtergrond
           text: '#3D3D3D',      // Primaire tekst kleur
           accent: '#E9B046',    // Gold accent
+          secondary: '#2C5F5D', // Teal secundaire accent
         },
 
         // Neutrale kleuren

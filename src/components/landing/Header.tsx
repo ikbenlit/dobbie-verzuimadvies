@@ -41,7 +41,7 @@ export default function Header() {
 
         <Link
           href="/chat"
-          className="hidden md:inline-block bg-brand-accent text-brand-dark font-bold py-2 px-6 rounded-full hover:bg-opacity-80 transition-all"
+          className="hidden md:inline-block bg-teal text-white font-bold py-2 px-6 rounded-full hover:bg-teal-dark transition-all"
         >
           {nav.startButton}
         </Link>

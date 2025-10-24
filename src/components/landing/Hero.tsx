@@ -13,27 +13,27 @@ export default function Hero() {
           {/* Text Content */}
           <div className="text-center md:text-left">
             <div className="inline-block bg-white/60 rounded-full px-4 py-1.5 mb-4 shadow-sm">
-              <p className="text-sm text-[#5A0D29] font-medium">
+              <p className="text-sm text-bordeaux-hover font-medium">
                 {hero.badge}
               </p>
             </div>
-            <h1 className="font-serif text-4xl md:text-6xl font-bold text-[#5A0D29] leading-tight">
+            <h1 className="font-serif text-4xl md:text-6xl font-bold text-bordeaux-hover leading-tight">
               {hero.title}
             </h1>
             <p className="mt-6 text-lg text-brand-text max-w-xl mx-auto md:mx-0 leading-relaxed">
               U hoeft niet langer te wachten op overvolle bedrijfsartsen of te twijfelen of u juist handelt.
-              <strong className="text-[#5A0D29]"> DOBbie is uw AI-verzuimbuddy die 24/7 klaarstaat</strong> voor leidinggevenden.
+              <strong className="text-bordeaux-hover"> DOBbie is uw AI-verzuimbuddy die 24/7 klaarstaat</strong> voor leidinggevenden.
             </p>
             <div className="mt-10 flex flex-col sm:flex-row justify-center md:justify-start items-center gap-4">
               <Link
                 href={hero.primaryCta.href}
-                className="bg-[#771138] text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-[#5A0D29] transition-all w-full sm:w-auto"
+                className="bg-bordeaux text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-bordeaux-hover transition-all w-full sm:w-auto"
               >
                 {hero.primaryCta.text}
               </Link>
               <a
                 href={hero.secondaryCta.href}
-                className="bg-[#E9B046] text-black font-bold py-3 px-8 rounded-full shadow-lg hover:bg-[#5A0D29] hover:text-white transition-all w-full sm:w-auto"
+                className="bg-white text-bordeaux font-bold py-3 px-8 rounded-full shadow-lg border-2 border-bordeaux hover:bg-teal hover:text-white hover:border-teal transition-all w-full sm:w-auto"
               >
                 {hero.secondaryCta.text}
               </a>

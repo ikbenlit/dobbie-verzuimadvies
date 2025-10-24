@@ -7,7 +7,7 @@ interface StatItemProps {
 
 const StatItem: React.FC<StatItemProps> = ({ value, label }) => (
   <div className="text-center">
-    <p className="font-serif text-4xl md:text-5xl font-bold text-[#5A0D29]">
+    <p className="font-serif text-4xl md:text-5xl font-bold text-bordeaux-hover">
       {value}
     </p>
     <p className="mt-2 text-sm text-brand-text">{label}</p>

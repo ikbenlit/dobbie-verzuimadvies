@@ -576,6 +576,30 @@ User Input → ChatInput Component
 - ✅ Build succesvol (289 kB First Load JS)
 - ✅ Dev server draait op http://localhost:3000
 
+### 2025-10-24 (Update 6): Content Management & Cleanup - Migratie VOLTOOID! 🎉
+- ✅ Content Management Systeem geïmplementeerd (JSON-based)
+  - ✅ Centrale JSON bestanden voor alle website teksten
+  - ✅ TypeScript interfaces voor type-safety
+  - ✅ Helper functies voor content loading
+  - ✅ 7 content bestanden: home, features, why-dobbie, vision, faq, pricing, common
+  - ✅ Documentatie in `src/content/README.md` en `docs/CONTENT-MANAGEMENT.md`
+- ✅ Alle landing page components refactored om content te gebruiken
+  - ✅ Hero, Stats, Features, WhyDobbie, Vision, FAQ, PricingNew, Header, FooterNew
+- ✅ Complete Svelte cleanup
+  - ✅ Verwijderd: docs/mockup, .svelte-backup, .svelte-kit directories
+  - ✅ Verwijderd: svelte.config.js, vite.config.ts, vitest-setup-client.ts
+  - ✅ ESLint config vervangen (Svelte → Next.js)
+  - ✅ .gitignore bijgewerkt voor Next.js
+- ✅ Build fixes
+  - ✅ Token helper TypeScript errors gefixed
+  - ✅ ChatSidebar store interface gefixed
+  - ✅ DobbieSection (unused) verwijderd
+  - ✅ Production build succesvol (233 kB homepage, 291 kB chat)
+- ✅ Deployment-ready
+  - ✅ ESLint warnings alleen (geen errors)
+  - ✅ Next.js build compleet zonder fouten
+  - ✅ Alle routes werkend en geoptimaliseerd
+
 ### Totale voortgang: ~85% compleet
 
 **Voltooide fases:**

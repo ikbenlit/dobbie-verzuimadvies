@@ -13,17 +13,14 @@ export function estimateTokens(text: string, charactersPerToken: number = 4): nu
     }
     
     // Verbeterde schatting voor Nederlandse tekst
-    let adjustedText = text;
-    
     // Nederlandse leestekens en spaties tellen anders
     const dutchPunctuationCount = (text.match(/[.,!?;:""'']/g) || []).length;
-    const whitespaceCount = (text.match(/\s/g) || []).length;
-    
+
     // Nederlandse lange woorden (samengestelde woorden) tellen vaak als meer tokens
     const longWordCount = (text.match(/\b\w{12,}\b/g) || []).length;
-    
+
     // Basis berekening
-    let baseTokens = Math.ceil(text.length / charactersPerToken);
+    const baseTokens = Math.ceil(text.length / charactersPerToken);
     
     // Aanpassingen voor Nederlands:
     // - Lange woorden krijgen een kleine boost (samengestelde woorden)

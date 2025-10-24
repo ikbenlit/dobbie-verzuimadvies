@@ -27,7 +27,7 @@ export function ChatSidebar() {
   const [isOpen, setIsOpen] = useState(true);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const pathname = usePathname();
-  const { currentUser, signOut } = useUserStore();
+  const { user: currentUser, signOut } = useUserStore();
 
   const navLinks: NavLink[] = [
     {

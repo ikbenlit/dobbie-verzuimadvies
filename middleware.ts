@@ -1,36 +1,67 @@
 import { NextResponse, type NextRequest } from 'next/server';
 
 export async function middleware(request: NextRequest) {
-  // Check for Supabase auth token in cookies
-  // Supabase stores auth tokens in cookies with pattern: sb-*-auth-token
-  const authCookie = request.cookies.getAll().find(cookie =>
-    cookie.name.startsWith('sb-') && cookie.name.endsWith('-auth-token')
-  );
+  try {
+    // Check for Supabase auth tokens in cookies
+    // Supabase uses multiple cookie patterns, check for the most common ones
+    const cookies = request.cookies;
 
-  const hasSession = !!authCookie?.value;
+    // Check for any Supabase auth-related cookies
+    // Common patterns: sb-{project-ref}-auth-token, sb-access-token, sb-refresh-token
+    let hasSession = false;
 
-  // Protected routes check
-  const isProtectedRoute = request.nextUrl.pathname.startsWith('/chat') ||
-    request.nextUrl.pathname.startsWith('/admin') ||
-    request.nextUrl.pathname.startsWith('/dashboard') ||
-    request.nextUrl.pathname.startsWith('/contact');
+    // Try to find auth token by iterating through cookie names
+    const cookieNames = [
+      'sb-access-token',
+      'sb-refresh-token',
+    ];
 
-  const isAuthRoute = request.nextUrl.pathname.startsWith('/login') ||
-    request.nextUrl.pathname.startsWith('/register');
+    // Check if any of the standard Supabase auth cookies exist
+    for (const cookieName of cookieNames) {
+      if (cookies.get(cookieName)) {
+        hasSession = true;
+        break;
+      }
+    }
 
-  // Redirect to login if accessing protected route without authentication
-  if (isProtectedRoute && !hasSession) {
-    const loginUrl = new URL('/login', request.url);
-    loginUrl.searchParams.set('redirect', request.nextUrl.pathname);
-    return NextResponse.redirect(loginUrl);
+    // If standard cookies not found, check for project-specific pattern
+    // by looking at all cookies (Edge Runtime compatible approach)
+    if (!hasSession) {
+      // Get all cookies and check for sb-*-auth-token pattern
+      const allCookies = cookies.getAll();
+      hasSession = allCookies.some(cookie =>
+        cookie.name.includes('sb-') && cookie.name.includes('auth-token')
+      );
+    }
+
+    // Protected routes check
+    const isProtectedRoute = request.nextUrl.pathname.startsWith('/chat') ||
+      request.nextUrl.pathname.startsWith('/admin') ||
+      request.nextUrl.pathname.startsWith('/dashboard') ||
+      request.nextUrl.pathname.startsWith('/contact');
+
+    const isAuthRoute = request.nextUrl.pathname.startsWith('/login') ||
+      request.nextUrl.pathname.startsWith('/register');
+
+    // Redirect to login if accessing protected route without authentication
+    if (isProtectedRoute && !hasSession) {
+      const loginUrl = new URL('/login', request.url);
+      loginUrl.searchParams.set('redirect', request.nextUrl.pathname);
+      return NextResponse.redirect(loginUrl);
+    }
+
+    // Redirect to chat if accessing auth routes with active authentication
+    if (isAuthRoute && hasSession) {
+      return NextResponse.redirect(new URL('/chat', request.url));
+    }
+
+    return NextResponse.next();
+  } catch (error) {
+    // Log error for debugging but don't block the request
+    console.error('Middleware error:', error);
+    // Allow request to continue even if middleware fails
+    return NextResponse.next();
   }
-
-  // Redirect to chat if accessing auth routes with active authentication
-  if (isAuthRoute && hasSession) {
-    return NextResponse.redirect(new URL('/chat', request.url));
-  }
-
-  return NextResponse.next();
 }
 
 export const config = {

@@ -25,7 +25,7 @@ export default async function ChatLayout({
   // Convert Supabase user to app User format
   const userData = {
     id: user.id,
-    email: user.email,
+    email: user.email ?? (user.user_metadata?.email as string | undefined) ?? '',
     full_name: user.user_metadata?.full_name,
     account_type: user.user_metadata?.account_type,
     organization_id: user.user_metadata?.organization_id,

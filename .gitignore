@@ -5,6 +5,7 @@ node_modules
 /out/
 /build
 .vercel
+.next/
 
 # OS
 .DS_Store

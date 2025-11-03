@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import { ThemeProvider } from '@/components/providers/ThemeProvider';
 
@@ -7,7 +7,6 @@ export const metadata: Metadata = {
   description: 'Direct verzuimadvies voor leidinggevenden. DOBbie AI-assistent gebaseerd op WVP & NVAB richtlijnen. ✓ 24/7 beschikbaar ✓ Juridisch onderbouwd ✓ Probeer gratis',
   keywords: ['verzuimbegeleiding', 'leidinggevenden', 'AI verzuimadvies', 'WVP proces', 'NVAB richtlijnen', 'bedrijfsarts', 're-integratie', 'verzuimgesprek'],
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
-  themeColor: '#771138',
   icons: {
     icon: '/favicon.png',
   },
@@ -17,6 +16,10 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'nl_NL',
   },
+};
+
+export const viewport: Viewport = {
+  themeColor: '#771138',
 };
 
 export default function RootLayout({

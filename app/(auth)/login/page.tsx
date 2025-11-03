@@ -29,8 +29,8 @@ export default function LoginPage() {
 
     try {
       await signIn(email, password);
-      router.push('/chat');
-      router.refresh();
+      // Force full page reload to ensure cookies are set before middleware runs
+      window.location.href = '/chat';
     } catch (err: any) {
       console.error('Login error:', err);
 

@@ -24,10 +24,27 @@ export default {
         'cream': '#F5F2EB',
 
         // Accentkleuren
-        'gold': '#E9B046',
+        'gold': {
+          DEFAULT: '#E9B046',
+          light: '#F0C674',
+        },
+        'teal': {
+          DEFAULT: '#2C5F5D',
+          dark: '#234A48',
+          light: '#3A7B78',
+        },
         'gray': {
           light: '#D1D5DB',
           dark: '#3D3D3D',
+        },
+
+        // Brand colors
+        'brand': {
+          dark: '#5A0D29',
+          light: '#F5F2EB',
+          text: '#3D3D3D',
+          accent: '#E9B046',
+          secondary: '#2C5F5D',
         },
 
         // Neutrale kleuren

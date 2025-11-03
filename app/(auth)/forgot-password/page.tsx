@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { Loader2, Check, Mail } from 'lucide-react';
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState('');
@@ -29,7 +30,7 @@ export default function ForgotPasswordPage() {
         return;
       }
 
-      setMessage(data.message);
+      setMessage(data.message || 'We hebben een reset link naar je e-mailadres gestuurd.');
       setEmail('');
     } catch (err) {
       setError('Er is een fout opgetreden. Probeer het later opnieuw.');
@@ -39,67 +40,167 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-cream px-4 py-12 sm:px-6 lg:px-8">
-      <div className="w-full max-w-md space-y-8">
-        <div>
-          <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-bordeaux">
-            Wachtwoord vergeten
-          </h2>
-          <p className="mt-2 text-center text-sm text-gray-dark">
-            Voer je e-mailadres in en we sturen je een link om je wachtwoord te resetten.
-          </p>
+    <div className="min-h-screen flex flex-col md:flex-row">
+        {/* Linkerkant - Forgot Password Formulier (md:w-2/5) */}
+        <div className="relative w-full md:w-2/5 bg-[#F5F2EB] flex items-center justify-center p-8 order-2 md:order-1 overflow-hidden">
+          {/* Achtergrond decoratie */}
+          <div className="absolute -top-20 -left-24 w-72 h-72 bg-[#771138] rounded-full opacity-10 blur-3xl -z-10 animate-pulse-slow" />
+          <div className="absolute -bottom-24 -right-20 w-80 h-80 bg-[#E9B046] rounded-full opacity-20 blur-3xl -z-10 animate-pulse-slower" />
+
+          <div className="relative z-10 max-w-md w-full bg-white p-8 md:p-10 rounded-lg shadow-lg">
+            {/* Logo en welkomstbericht */}
+            <div className="text-center mb-8">
+              <h1 className="font-serif text-[28px] font-bold text-[#771138] mb-2">
+                Wachtwoord vergeten?
+              </h1>
+              <p className="text-[#3D3D3D] text-[15px]">
+                Geen probleem. Voer je e-mailadres in en we sturen je een link om je wachtwoord te resetten.
+              </p>
+            </div>
+
+            {/* Success Banner */}
+            {message && (
+              <div className="mb-6 bg-green-50 border border-green-200 text-green-800 p-4 rounded-md">
+                <div className="flex items-center">
+                  <Check className="h-5 w-5 mr-2 flex-shrink-0" />
+                  <p className="text-[14px]">{message}</p>
+                </div>
+              </div>
+            )}
+
+            {/* Error Banner */}
+            {error && (
+              <div className="mb-6 bg-red-50 border border-red-200 text-red-800 p-4 rounded-md">
+                <p className="text-[14px]">{error}</p>
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div>
+                <label
+                  htmlFor="email"
+                  className="block text-[15px] font-semibold text-[#3D3D3D] mb-2"
+                >
+                  E-mailadres
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="bg-white border border-[#D1D5DB] rounded-md px-4 py-3 w-full focus:border-[#771138] focus:outline-none focus:ring-2 focus:ring-[#771138]/20 transition-all duration-300 ease-in-out"
+                  placeholder="naam@voorbeeld.nl"
+                  required
+                  disabled={loading}
+                />
+              </div>
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full font-bold text-[16px] rounded-md py-[14px] px-[28px] text-white transition-all duration-300 ease-in-out disabled:opacity-70 bg-[#771138] hover:bg-[#5A0D29] flex items-center justify-center"
+              >
+                {loading ? (
+                  <>
+                    <Loader2 className="animate-spin -ml-1 mr-3 h-5 w-5" />
+                    Bezig met versturen...
+                  </>
+                ) : (
+                  <>
+                    <Mail className="h-5 w-5 mr-2" />
+                    Verstuur reset link
+                  </>
+                )}
+              </button>
+
+              <div className="text-center space-y-2">
+                <Link
+                  href="/login"
+                  className="block text-[14px] text-[#771138] hover:text-[#5A0D29] font-semibold transition-colors duration-200"
+                >
+                  Terug naar inloggen
+                </Link>
+                <Link
+                  href="/"
+                  className="block text-[14px] text-[#707070] hover:text-[#3D3D3D] transition-colors duration-200"
+                >
+                  Terug naar home
+                </Link>
+              </div>
+            </form>
+          </div>
         </div>
 
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          {error && (
-            <div className="rounded-md bg-red-50 p-4">
-              <p className="text-sm text-red-800">{error}</p>
+        {/* Rechterkant - Feature Showcase (md:w-3/5) */}
+        <div className="w-full md:w-3/5 text-white p-8 md:p-12 flex items-center relative overflow-hidden order-1 md:order-2 bg-[#771138]">
+          <div className="relative z-10 max-w-xl mx-auto flex flex-col items-center justify-center h-full">
+            <h2 className="font-serif text-[28px] font-bold mb-4 text-center md:text-left text-white">
+              We helpen je graag verder
+            </h2>
+            <p className="text-[15px] mb-8 text-center md:text-left text-white opacity-90">
+              Je krijgt binnen enkele minuten een e-mail met instructies om je wachtwoord te resetten.
+            </p>
+
+            <div className="space-y-4 mb-8 w-full max-w-md">
+              <div className="flex items-center p-4 rounded-md bg-white/10 backdrop-blur-md">
+                <div className="bg-[#E9B046] rounded-full w-8 h-8 flex items-center justify-center mr-4 flex-shrink-0">
+                  <Check className="h-5 w-5 text-white" />
+                </div>
+                <p className="text-[15px] text-white">
+                  Veilig en betrouwbaar reset proces
+                </p>
+              </div>
+              <div className="flex items-center p-4 rounded-md bg-white/10 backdrop-blur-md">
+                <div className="bg-[#E9B046] rounded-full w-8 h-8 flex items-center justify-center mr-4 flex-shrink-0">
+                  <Check className="h-5 w-5 text-white" />
+                </div>
+                <p className="text-[15px] text-white">
+                  Direct weer toegang tot je account
+                </p>
+              </div>
+              <div className="flex items-center p-4 rounded-md bg-white/10 backdrop-blur-md">
+                <div className="bg-[#E9B046] rounded-full w-8 h-8 flex items-center justify-center mr-4 flex-shrink-0">
+                  <Check className="h-5 w-5 text-white" />
+                </div>
+                <p className="text-[15px] text-white">
+                  Hulp nodig? Neem contact met ons op
+                </p>
+              </div>
             </div>
-          )}
-
-          {message && (
-            <div className="rounded-md bg-green-50 p-4">
-              <p className="text-sm text-green-800">{message}</p>
-            </div>
-          )}
-
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-dark">
-              E-mailadres
-            </label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              autoComplete="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="mt-1 block w-full rounded-md border border-gray-light px-3 py-2 text-gray-dark placeholder-gray-500 focus:border-bordeaux focus:outline-none focus:ring-bordeaux sm:text-sm"
-              placeholder="jouw@email.nl"
-            />
           </div>
+        </div>
 
-          <div>
-            <button
-              type="submit"
-              disabled={loading}
-              className="group relative flex w-full justify-center rounded-md border border-transparent bg-bordeaux px-4 py-2 text-sm font-medium text-white hover:bg-bordeaux-hover focus:outline-none focus:ring-2 focus:ring-bordeaux focus:ring-offset-2 disabled:opacity-50"
-            >
-              {loading ? 'Bezig...' : 'Verstuur reset link'}
-            </button>
-          </div>
+        <style jsx>{`
+          @keyframes pulse-slow {
+            0%,
+            100% {
+              opacity: 0.1;
+              transform: scale(1);
+            }
+            50% {
+              opacity: 0.2;
+              transform: scale(1.05);
+            }
+          }
+          @keyframes pulse-slower {
+            0%,
+            100% {
+              opacity: 0.2;
+              transform: scale(1);
+            }
+            50% {
+              opacity: 0.3;
+              transform: scale(1.03);
+            }
+          }
 
-          <div className="text-center text-sm">
-            <Link
-              href="/login"
-              className="font-medium text-bordeaux hover:text-bordeaux-hover"
-            >
-              Terug naar inloggen
-            </Link>
-          </div>
-        </form>
-      </div>
+          .animate-pulse-slow {
+            animation: pulse-slow 8s infinite ease-in-out;
+          }
+          .animate-pulse-slower {
+            animation: pulse-slower 10s infinite ease-in-out;
+          }
+        `}</style>
     </div>
   );
 }

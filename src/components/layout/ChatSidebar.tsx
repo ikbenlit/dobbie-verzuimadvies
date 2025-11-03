@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { useUserStore } from '@/stores';
+import { usePathname, useRouter } from 'next/navigation';
+import { createClient } from '@/lib/supabase/client';
 import {
   MessageSquarePlus,
   FileText,
@@ -23,11 +23,25 @@ interface NavLink {
   icon: React.ReactNode;
 }
 
-export function ChatSidebar() {
+interface User {
+  id: string;
+  email: string;
+  full_name?: string;
+  account_type?: 'individual' | 'organization_member';
+  organization_id?: string;
+  subscription_status?: 'trial' | 'expired' | 'manual_active' | 'blocked';
+  role: string;
+}
+
+interface ChatSidebarProps {
+  user?: User;
+}
+
+export function ChatSidebar({ user: currentUser }: ChatSidebarProps) {
   const [isOpen, setIsOpen] = useState(true);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const pathname = usePathname();
-  const { user: currentUser, signOut } = useUserStore();
+  const router = useRouter();
 
   const navLinks: NavLink[] = [
     {
@@ -53,7 +67,16 @@ export function ChatSidebar() {
   ];
 
   const handleLogout = async () => {
-    await signOut();
+    try {
+      const supabase = createClient();
+      await supabase.auth.signOut();
+      // Use window.location for full page reload to clear all state
+      window.location.href = '/login';
+    } catch (error) {
+      console.error('Error signing out:', error);
+      // Redirect anyway to ensure user is logged out
+      window.location.href = '/login';
+    }
   };
 
   return (

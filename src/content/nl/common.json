@@ -1,0 +1,85 @@
+{
+  "nav": {
+    "logo": "DOBbie",
+    "links": [
+      {
+        "label": "Waarom DOBbie",
+        "href": "/#waarom"
+      },
+      {
+        "label": "Visie",
+        "href": "/#visie"
+      },
+      {
+        "label": "Prijzen",
+        "href": "/#prijzen"
+      },
+      {
+        "label": "FAQ",
+        "href": "/#faq"
+      }
+    ],
+    "startButton": "Inloggen"
+  },
+  "footer": {
+    "logo": "DOBbie",
+    "tagline": "Uw slimme partner in verzuimadvies.",
+    "sections": [
+      {
+        "title": "Snelle Links",
+        "links": [
+          {
+            "label": "Waarom DOBbie",
+            "href": "/#waarom"
+          },
+          {
+            "label": "Visie",
+            "href": "/#visie"
+          },
+          {
+            "label": "Prijzen",
+            "href": "/#prijzen"
+          },
+          {
+            "label": "FAQ",
+            "href": "/#faq"
+          }
+        ]
+      },
+      {
+        "title": "Contact",
+        "links": [
+          {
+            "label": "info@dobbie.nl",
+            "href": "mailto:info@dobbie.nl"
+          },
+          {
+            "label": "LinkedIn",
+            "href": "https://www.linkedin.com/company/dobbie"
+          }
+        ]
+      },
+      {
+        "title": "Legal",
+        "links": [
+          {
+            "label": "Privacybeleid",
+            "href": "/privacy"
+          },
+          {
+            "label": "Algemene Voorwaarden",
+            "href": "/terms"
+          }
+        ]
+      }
+    ],
+    "copyright": "DOBbie. Alle rechten voorbehouden."
+  },
+  "buttons": {
+    "tryDobbie": "Probeer DOBbie",
+    "moreInfo": "Meer Informatie",
+    "choosePlan": "Kies Plan",
+    "contactUs": "Neem Contact Op",
+    "startNow": "Start Nu"
+  }
+}

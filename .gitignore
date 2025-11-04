@@ -1,11 +1,11 @@
 node_modules
 
-# Output
-.output
-.wrangler
-/.svelte-kit
+# Next.js
+/.next/
+/out/
 /build
 .vercel
+.next/
 
 # OS
 .DS_Store
@@ -23,6 +23,10 @@ Thumbs.db
 credentials/
 credentials/google-service-account.json
 
-# Vite
-vite.config.js.timestamp-*
-vite.config.ts.timestamp-*
+# Backup files
+*.bak
+*.backup
+
+# IDE
+.vscode/
+.idea/

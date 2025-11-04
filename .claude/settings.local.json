@@ -13,13 +13,24 @@
       "Bash(npm run build:*)",
       "Bash(node:*)",
       "WebFetch(domain:resend.com)",
-      "WebFetch(domain:supabase.com)"
+      "WebFetch(domain:supabase.com)",
+      "Bash(git checkout:*)",
+      "Bash(pnpm install)",
+      "Bash(find:*)",
+      "Bash(pnpm run build:*)",
+      "Bash(pnpm add:*)",
+      "Bash(1)",
+      "Bash(pnpm run dev)",
+      "Bash(test:*)",
+      "WebSearch",
+      "Bash(cat:*)",
+      "Bash(git commit:*)"
     ],
     "deny": []
   },
+  "enableAllProjectMcpServers": true,
   "enabledMcpjsonServers": [
-    "supabase",
-    "browser",
-    "supabase-aio-scanner"
+    "supabase-aio-scanner",
+    "browser"
   ]
 }

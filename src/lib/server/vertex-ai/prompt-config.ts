@@ -1,4 +1,10 @@
-import baseSystemPromptContent from '$lib/server/prompts/chat_baseprompt.md?raw';
+import { readFileSync } from 'fs';
+import { join } from 'path';
+
+const baseSystemPromptContent = readFileSync(
+  join(process.cwd(), 'src/lib/server/prompts/chat_baseprompt.md'),
+  'utf-8'
+);
 
 export function createPromptWithContext(messages: Array<{ role: string; content: string }>) {
     // Filter system messages eruit, die behandelen we apart

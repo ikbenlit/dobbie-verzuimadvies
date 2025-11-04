@@ -1,0 +1,42 @@
+{
+  "sectionId": "pricing",
+  "title": "Professioneel verzuimadvies voor elke organisatie",
+  "description": "24/7 toegang tot expertise op het gebied van verzuim, Wet Poortwachter en personeelsbeleid",
+  "popularBadge": "Meest gekozen",
+  "tiers": [
+    {
+      "name": "Solo",
+      "monthlyPrice": 49,
+      "yearlyPrice": 349,
+      "description": "Voor individuele professionals",
+      "features": [
+        { "text": "24/7 toegang tot DOBbie", "included": true },
+        { "text": "Persoonsgebonden licentie", "included": true },
+        { "text": "10 voorbeeldvragen bij aanvang", "included": true },
+        { "text": "DOBbie draait in de browser", "included": true },
+        { "text": "Geen technische kennis nodig", "included": true },
+        { "text": "Binnen 14 dagen gratis annuleren", "included": true }
+      ],
+      "ctaText": "Ja, dit wil ik",
+      "ctaLink": "/register",
+      "popular": false,
+      "footnote": "* Na 12 maanden maandelijks opzegbaar"
+    },
+    {
+      "name": "Team",
+      "yearlyPrice": 269,
+      "monthlyPrice": 39,
+      "minUsers": 2,
+      "description": "Voor teams vanaf 2 gebruikers",
+      "features": [
+        { "text": "Alles van Solo", "included": true },
+        { "text": "Opstartflyer (PDF)", "included": true },
+        { "text": "Optioneel: incompany training", "included": true }
+      ],
+      "ctaText": "Ja, wij willen minimaal 2 accounts",
+      "ctaLink": "/register?plan=team",
+      "popular": true,
+      "footnote": "* Na 12 maanden maandelijks opzegbaar"
+    }
+  ]
+}

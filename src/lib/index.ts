@@ -1,4 +1,2 @@
-// export components, utils, stores, etc. from here
-
-export * from './stores/themeStore.js';
-export * from './stores/userStore.js';
+// This file is not used in Next.js - exports are handled individually
+// Keeping for backwards compatibility during migration

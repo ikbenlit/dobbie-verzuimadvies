@@ -1,0 +1,21 @@
+{
+  "badge": "Binnenkort beschikbaar",
+  "title": "Maak kennis met",
+  "titleHighlight": "DOBbie",
+  "subtitle": "De intelligente AI-assistent voor verzuimmanagement. Eerste hulp bij verzuim, direct in uw broekzak. Ontwikkeld door een bedrijfsarts, speciaal voor Nederlandse organisaties.",
+  "assistant": {
+    "title": "DOBbie AI-assistent",
+    "subtitle": "Eerste hulp bij verzuim",
+    "description": [
+      "Of het nu gaat om een eerste ziekmelding, een lastig re-integratiegesprek of complexe verzuimproblematiek - DOBbie helpt u de juiste stappen te zetten.",
+      "DOBbie is niet zomaar een chatbot. Het is een specialistische AI-assistent die is ontwikkeld om leidinggevenden, HR-professionals en ondernemers direct te ondersteunen bij verzuimgesprekken en re-integratietrajecten.",
+      "Gebaseerd op jarenlange expertise in bedrijfsgeneeskunde en toegespitst op de Nederlandse context, biedt DOBbie concrete, juridisch onderbouwde adviezen wanneer u die het meest nodig heeft."
+    ]
+  },
+  "interface": {
+    "placeholder": "DOBbie interface",
+    "comingSoon": "Screenshot volgt binnenkort",
+    "status": "DOBbie Online",
+    "statusMessage": "Klaar om u te helpen met verzuimadvies"
+  }
+}

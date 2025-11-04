@@ -1,61 +1,82 @@
-import { createClient } from '@supabase/supabase-js'
-import { env } from '$env/dynamic/public'
-import { goto } from '$app/navigation'
+'use client';
 
-// Fallback values voor development
-const supabaseUrl = env.PUBLIC_SUPABASE_URL || 'https://rcbokkgstwvlxwrpufsv.supabase.co'
-const supabaseAnonKey = env.PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJjYm9ra2dzdHd2bHh3cnB1ZnN2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAyNzQ4NDQsImV4cCI6MjA2NTg1MDg0NH0.7_1HeuRxkJoR5jJ5cmpKMkQ4AjTlvOW9Xppgy4wjNE8'
+import { createBrowserClient } from '@supabase/ssr';
+import { useRouter } from 'next/navigation';
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+let supabaseClient: ReturnType<typeof createBrowserClient> | null = null;
 
-// Auth helper functions
-export const auth = {
-  // Login functie
-  async signIn(email: string, password: string) {
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-    
-    if (error) {
-      console.error('Supabase auth error:', error.message);
-      throw error;
-    }
-    
-    return data;
-  },
+export function createClient() {
+  if (supabaseClient) return supabaseClient;
 
-  // Logout functie  
-  async signOut() {
-    const { error } = await supabase.auth.signOut();
-    if (error) {
-      console.error('Supabase signout error:', error.message);
-      throw error;
-    }
-    // Redirect naar login
-    await goto('/login');
-  },
+  supabaseClient = createBrowserClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  );
 
-  // Get current session
-  async getSession() {
-    const { data: { session }, error } = await supabase.auth.getSession();
-    if (error) {
-      console.error('Error getting session:', error.message);
-      return null;
-    }
-    return session;
-  },
+  return supabaseClient;
+}
 
-  // Get current user
-  async getUser() {
-    const { data: { user }, error } = await supabase.auth.getUser();
-    if (error) {
-      console.error('Error getting user:', error.message);
-      return null;
-    }
-    return user;
-  }
-};
+// Auth helper functions for client components
+export function useSupabaseAuth() {
+  const router = useRouter();
+  const supabase = createClient();
+
+  return {
+    // Login functie
+    async signIn(email: string, password: string) {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (error) {
+        console.error('Supabase auth error:', error.message);
+        throw error;
+      }
+
+      router.refresh();
+      return data;
+    },
+
+    // Logout functie
+    async signOut() {
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        console.error('Supabase signout error:', error.message);
+        throw error;
+      }
+      // Redirect naar login
+      router.push('/login');
+      router.refresh();
+    },
+
+    // Get current session
+    async getSession() {
+      const {
+        data: { session },
+        error,
+      } = await supabase.auth.getSession();
+      if (error) {
+        console.error('Error getting session:', error.message);
+        return null;
+      }
+      return session;
+    },
+
+    // Get current user
+    async getUser() {
+      const {
+        data: { user },
+        error,
+      } = await supabase.auth.getUser();
+      if (error) {
+        console.error('Error getting user:', error.message);
+        return null;
+      }
+      return user;
+    },
+  };
+}
 
 // Export default client voor direct gebruik
-export default supabase; 
+export default createClient;

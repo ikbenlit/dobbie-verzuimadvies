@@ -1,0 +1,29 @@
+{
+  "sectionId": "waarom",
+  "title": "Direct de juiste informatie",
+  "subtitle": "Professioneel advies over verzuim en re-integratie, direct beschikbaar wanneer u het nodig heeft. Efficiënt, betrouwbaar en altijd up-to-date met de laatste wet- en regelgeving.",
+  "badge": "Waarom DOBbie?",
+  "benefitsTitle": "Voordelen voor uw organisatie",
+  "image": {
+    "src": "/images/demo-dobbie.webp",
+    "alt": "Een voorbeeldscherm van de DoBbie chatbot die advies geeft over de Wet Verbetering Poortwachter."
+  },
+  "reasons": [
+    {
+      "title": "Altijd Actueel:",
+      "description": "Gebaseerd op de meest recente wet- en regelgeving."
+    },
+    {
+      "title": "Efficiënt & Snel:",
+      "description": "Bespaar kostbare tijd en krijg direct antwoord."
+    },
+    {
+      "title": "Betrouwbare Partner:",
+      "description": "Ontwikkeld door experts in verzuim en re-integratie."
+    },
+    {
+      "title": "Kostenbesparend:",
+      "description": "Verminder externe advieskosten met een betaalbaar abonnement."
+    }
+  ]
+}

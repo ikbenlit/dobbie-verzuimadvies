@@ -1,0 +1,41 @@
+{
+  "sectionId": "features",
+  "title": "Waarom DOBbie?",
+  "description": "Professioneel advies over verzuim en re-integratie, direct beschikbaar wanneer u het nodig heeft. Efficiënt, betrouwbaar en altijd up-to-date met de laatste wet- en regelgeving.",
+  "image": {
+    "src": "/images/demo-dobbie.webp",
+    "alt": "Een voorbeeldscherm van de DoBbie chatbot die advies geeft over de Wet Verbetering Poortwachter."
+  },
+  "features": [
+    {
+      "icon": "shield-check",
+      "title": "Wet- en Regelgeving",
+      "description": "Actueel advies volgens de Wet Verbetering Poortwachter en andere relevante wetgeving. Altijd compliant en up-to-date."
+    },
+    {
+      "icon": "clock",
+      "title": "24/7 Beschikbaar",
+      "description": "Direct toegang tot professioneel advies, ook buiten kantooruren. Snelle ondersteuning wanneer u het nodig heeft."
+    },
+    {
+      "icon": "clipboard",
+      "title": "Dossiervorming",
+      "description": "Gestructureerde vastlegging van alle stappen in het verzuimproces. Compliant met wet- en regelgeving en AVG."
+    },
+    {
+      "icon": "message-circle",
+      "title": "Professioneel Advies",
+      "description": "Concrete antwoorden op basis van jarenlange expertise in bedrijfsgeneeskunde en arbeidswetgeving."
+    },
+    {
+      "icon": "briefcase",
+      "title": "Procesondersteuning",
+      "description": "Stapsgewijze begeleiding bij verzuim en re-integratie. Van eerste ziekmelding tot volledige werkhervatting."
+    },
+    {
+      "icon": "sliders",
+      "title": "Maatwerk Oplossingen",
+      "description": "Gepersonaliseerd advies voor uw specifieke situatie. Rekening houdend met branche, bedrijfsgrootte en context."
+    }
+  ]
+}

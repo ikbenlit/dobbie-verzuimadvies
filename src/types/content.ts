@@ -89,14 +89,15 @@ export interface PricingFeature {
 
 export interface PricingTier {
   name: string;
-  price: number;
-  userRange?: string;
-  priceSuffix: string;
+  monthlyPrice: number;
+  yearlyPrice: number;
+  minUsers?: number;
   description: string;
   features: PricingFeature[];
   ctaText: string;
   ctaLink: string;
   popular?: boolean;
+  footnote?: string;
 }
 
 export interface PricingContent {

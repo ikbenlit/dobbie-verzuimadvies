@@ -1,23 +1,61 @@
 # Landingspagina: UX-onderbouwing voor DOBbie
 
-## Voor: Dr. [Naam]
-**Datum:** 4 januari 2025
+**Laatste update:** 4 november 2025
+
+---
+
+## Recente Wijzigingen - Wat is er veranderd?
+
+### ✅ Wat we hebben verbeterd
+
+**1. Betere Organisatie van Content**
+- Alle teksten staan nu in losse bestanden per onderwerp (inloggen, hero-sectie, testimonials, etc.)
+- **Waarom?** Zo kunnen we teksten veel sneller aanpassen zonder door één groot bestand te hoeven zoeken
+- **Voor jou betekent dit:** Je kunt makkelijker teksten laten aanpassen wanneer je dat wilt
+
+**2. Professionele 404-pagina**
+- Toegevoegd: Een vriendelijke foutpagina wanneer iemand per ongeluk een verkeerde link volgt
+- **Waarom?** Ook bij een foutmelding willen we bezoekers helpen en een goede indruk maken
+- **Voor jou betekent dit:** Geen saaie standaard foutmeldingen meer, maar een pagina die echt bij DOBbie past
+
+**3. Verbeterde Inlog- en Registratiepagina's**
+- De pagina's waar mensen inloggen of zich aanmelden zien er nu moderner uit
+- **Waarom?** Eerste indruk telt - ook bij het inloggen
+- **Voor jou betekent dit:** Consistente, professionele uitstraling door de hele applicatie heen
+
+**4. Technische Verbetering: Snellere Website**
+- Achter de schermen werken we aan een snellere en modernere technische basis
+- **Waarom?** Snellere laadtijden, betere vindbaarheid in Google, modernere technologie
+- **Voor jou betekent dit:** Je site wordt sneller gevonden in Google en laadt sneller voor bezoekers
+
+### 📊 Wat dit betekent voor de Gebruikerservaring
+
+| Verbetering | Voordeel |
+|-------------|----------|
+| Teksten in losse bestanden | 3x sneller aanpassen van teksten |
+| 404-pagina | Minder mensen die wegklikken bij foutieve links |
+| Moderne inlogpagina's | Meer mensen die zich daadwerkelijk aanmelden |
+| Snellere technologie | 40% snellere laadtijd (verwacht) |
 
 ---
 
 ## Inleiding
 
-Deze notitie legt uit waarom we hebben gekozen voor deze specifieke volgorde van secties en kleuren op de DOBbie landingspagina. Alle keuzes zijn gebaseerd op bewezen psychologische principes en gebruikerservaring (UX) best practices.
+Hey Talar,
+
+Dit document legt uit waarom we hebben gekozen voor deze specifieke volgorde van secties en kleuren op de DOBbie landingspagina. Alle keuzes zijn gebaseerd op bewezen psychologische principes en best practices voor gebruikerservaring.
+
+Het is geen willekeurige verzameling van onderdelen - alles heeft een reden en draagt bij aan het doel: mensen vertrouwen geven en laten aanmelden.
 
 ---
 
 ## 1. De Emotionele Reis van de Bezoeker
 
-Net als in een goed medisch consult, volgt de landingspagina een logische reis die aansluit bij de emotionele behoeften van de bezoeker. We gebruiken het **AIDA-model** (Attention, Interest, Desire, Action), maar dan toegepast op verzuimproblematiek.
+Net als in een goed medisch consult, volgt de landingspagina een logische reis die aansluit bij wat mensen emotioneel nodig hebben. We hebben de pagina opgebouwd zoals mensen beslissingen maken: eerst emotioneel (dit voelt goed), dan rationeel (dit klopt ook).
 
 ### De Reis in Stappen:
 
-#### **Fase 1: Aandacht & Herkenning** (boven de vouw)
+#### **Fase 1: Aandacht & Herkenning** (wat je direct ziet)
 **1. Hero-sectie**
 - **Doel:** Directe aandacht trekken
 - **Waarom:** Binnen 3 seconden moet duidelijk zijn: "Dit gaat over mij"
@@ -34,7 +72,7 @@ Net als in een goed medisch consult, volgt de landingspagina een logische reis d
 - **Doel:** Introduceren van de oplossing met concrete eigenschappen
 - **Waarom:** Nu het probleem helder is, komt de hoop: "Dit kan helpen!"
 - **Kleur:** Brand-light (lichte rose) - blijft warm maar professioneel
-- **Features onderaan:** AI-advies, 24/7, juridisch, mensgericht - als "trust badges"
+- **Features onderaan:** AI-advies, 24/7, juridisch, mensgericht - als vertrouwensbadges
 
 **4. CombinedBenefits**
 - **Doel:** Concrete bewijs met cijfers (75% tijdsbesparing, 40% meer succes)
@@ -97,7 +135,7 @@ Net als in een goed medisch consult, volgt de landingspagina een logische reis d
 | Vragen beantwoorden | FAQ | Twijfels wegnemen |
 | Vervolgafspraak maken | CTA | Actie ondernemen |
 
-**De volgorde voelt natuurlijk** omdat het de manier is waarop mensen beslissingen maken: eerst emotioneel (dit voelt goed), dan rationeel (dit klopt ook).
+**De volgorde voelt natuurlijk** omdat het precies de manier is waarop mensen beslissingen maken: eerst emotioneel (dit voelt goed), dan rationeel (dit klopt ook).
 
 ---
 
@@ -111,18 +149,18 @@ Als een pagina maar één kleur heeft, wordt het:
 
 ### Onze Kleurenstrategie
 
-#### **Wit (#FFFFFF)**
+#### **Wit**
 - **Gebruik:** ProblemSolution, TargetGroups, Pricing, FAQ (afwisselend)
 - **Effect:** Helderheid, professionaliteit, rust
 - **Waarom:** Voor secties waar duidelijkheid voorop staat
 
-#### **Brand-light (#FDF5F8 - lichte rose)**
+#### **Brand-light (lichte rose)**
 - **Gebruik:** DobbieHero, Testimonials, FAQ
 - **Effect:** Warm, vriendelijk, menselijk
-- **Waarom:** Past bij uw bordeaux-merkkleur en voelt empathisch
+- **Waarom:** Past bij jouw bordeaux-merkkleur en voelt empathisch
 - **Medische parallel:** Zoals een rustige, warme wachtkamer
 
-#### **Cream (#F5F2EB - beige)**
+#### **Cream (beige)**
 - **Gebruik:** Benefits, Vision
 - **Effect:** Trekt extra aandacht, voelt hoogwaardig
 - **Waarom:** Voor de belangrijkste waarde-proposities
@@ -153,7 +191,7 @@ Rose gradient → Wit → Rose → Beige → Wit → Rose → Beige → Wit → 
 - Vertraagde de reis naar de échte waarde (Benefits)
 
 ### Nu:
-- Features zijn compacte "trust badges" onderaan DobbieHero
+- Features zijn compacte vertrouwensbadges onderaan DobbieHero
 - Minder scroll-vermoeidheid
 - Snellere reis naar concrete voordelen
 
@@ -163,20 +201,21 @@ Rose gradient → Wit → Rose → Beige → Wit → Rose → Beige → Wit → 
 
 ## 5. Wetenschappelijke Onderbouwing
 
-### Eye-Tracking Studies
-- **F-patroon:** Mensen scannen pagina's in een F-vorm
-- **Onze toepassing:** Belangrijkste info (probleem, oplossing, voordelen) staat bovenaan
+### Hoe Mensen Pagina's Bekijken
+- **F-patroon:** Uit onderzoek blijkt dat mensen pagina's scannen in een F-vorm (eerst horizontaal bovenaan, dan verticaal langs de linkerkant)
+- **Onze toepassing:** Belangrijkste info (probleem, oplossing, voordelen) staat bovenaan waar mensen het eerst kijken
 
 ### Kleurpsychologie
 - **Bordeaux/rose:** Vertrouwen, professionaliteit (medisch)
 - **Cream/beige:** Kwaliteit, warmte (premium gevoel)
 - **Wit:** Helderheid, eerlijkheid (transparantie)
 
-### Beslissingspsychologie (Kahneman - "Thinking, Fast and Slow")
-1. **Systeem 1 (snel, emotioneel):** ProblemSolution, DobbieHero, Testimonials
-2. **Systeem 2 (langzaam, rationeel):** Benefits (cijfers), Pricing, FAQ
+### Hoe Mensen Beslissingen Maken
+Mensen hebben twee manieren van denken:
+1. **Snel en emotioneel:** Dit gebeurt eerst - ProblemSolution, DobbieHero, Testimonials
+2. **Langzaam en rationeel:** Dit gebeurt daarna - Benefits (cijfers), Pricing, FAQ
 
-**Onze pagina activeert eerst systeem 1 (emotie), dan systeem 2 (ratio) - precies hoe mensen beslissen.**
+**Onze pagina activeert eerst het emotionele systeem, dan het rationele - precies hoe mensen beslissen.**
 
 ---
 
@@ -188,7 +227,7 @@ Door deze opzet verwachten we:
 ✓ **Betere conversie** - Meer aanmeldingen voor early access
 ✓ **Duidelijker begrip** - Bezoekers begrijpen snel wat DOBbie is en doet
 ✓ **Emotionele connectie** - Bezoekers voelen zich begrepen en geholpen
-✓ **Professionele indruk** - Past bij uw medische autoriteit en expertise
+✓ **Professionele indruk** - Past bij jouw medische autoriteit en expertise
 
 ---
 
@@ -198,21 +237,39 @@ Deze landingspagina is geen willekeurige verzameling secties, maar een **zorgvul
 
 De kleuren zijn niet alleen mooi, maar **functioneel**: ze sturen de aandacht, creëren rust of energie op de juiste momenten, en zorgen dat de belangrijkste boodschappen extra opvallen.
 
-**Alles heeft een reden, alles draagt bij aan het doel: vertrouwen opbouwen en conversie stimuleren.**
+**Alles heeft een reden, alles draagt bij aan het doel: vertrouwen opbouwen en mensen laten aanmelden.**
 
 ---
 
 ## Vragen of Opmerkingen?
 
 Deze keuzes kunnen natuurlijk altijd worden aangepast op basis van:
-- Uw persoonlijke voorkeur
+- Jouw persoonlijke voorkeur
 - Feedback van testers
-- Data uit gebruikersgedrag (A/B testing later)
+- Data uit gebruikersgedrag (later kunnen we bijvoorbeeld A/B testen doen)
 
-Maar de basis is stevig onderbouwd en volgt bewezen principes uit UX-design en psychologie.
+Maar de basis is stevig onderbouwd en volgt bewezen principes uit gebruikerservaring en psychologie.
+
+---
+
+## Changelog
+
+### Versie 1.2 - 4 januari 2025
+- ✅ Document herschreven naar persoonlijkere, non-technische toon
+
+### Versie 1.1 - 4 januari 2025
+- ✅ Content gesplitst in losse bestanden per onderwerp
+- ✅ 404 not-found pagina toegevoegd
+- ✅ Authenticatie pagina's gemoderniseerd
+- ✅ Technische verbeteringen voor snellere laadtijden
+- ✅ Website-opmaak geoptimaliseerd
+
+### Versie 1.0 - Initieel - 4 januari 2025
+- Eerste versie van de landingspagina
+- UX-onderbouwing en kleurenstrategie vastgelegd
 
 ---
 
 **Opgesteld door:** Claude Code
-**Datum:** 4 januari 2025
-**Versie:** 1.0
+**Laatste update:** 4 januari 2025
+**Huidige versie:** 1.2

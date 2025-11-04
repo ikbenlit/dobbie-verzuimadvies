@@ -11,7 +11,7 @@ interface PricingCardProps {
   features: Array<{ text: string; included: boolean }>;
   ctaText: string;
   ctaLink: string;
-  popular: boolean;
+  popular?: boolean;
   footnote?: string;
   popularBadge?: string;
 }

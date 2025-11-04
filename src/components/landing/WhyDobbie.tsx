@@ -23,8 +23,8 @@ export default function WhyDobbie() {
         <div className="grid md:grid-cols-2 gap-10 items-center">
           <div>
             <Image
-              src={content.image.src}
-              alt={content.image.alt}
+              src={'/images/demo-dobbie.webp'}
+              alt={'Een voorbeeldscherm van de DoBbie chatbot.'}
               width={600}
               height={600}
               className="rounded-2xl shadow-xl w-full h-auto object-cover aspect-square"

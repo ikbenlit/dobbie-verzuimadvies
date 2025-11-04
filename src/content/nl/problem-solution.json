@@ -1,0 +1,88 @@
+{
+  "problem": {
+    "title": "Van stilstaan naar beweging.",
+    "paragraphs": [
+      {
+        "text": "Herken je dit?",
+        "highlight": "De bedrijfsarts zit vol. Leidinggevenden wachten. Vragen blijven liggen."
+      },
+      {
+        "text": "Soms wacht een medewerker",
+        "highlight": "weken",
+        "highlightColor": "red",
+        "continuation": "op iets wat medisch lijkt, maar eigenlijk ",
+        "emphasis": "communicatie, proces of misverstand",
+        "end": "is."
+      },
+      {
+        "text": "Ondertussen groeit de frustratie: bij de medewerker, de leidinggevende én bij jou. Voor je het weet ligt er weer een verzuimdossier stil, terwijl iedereen van goede wil is",
+        "end": "."
+      }
+    ],
+    "benefits": {
+      "title": "Dit zijn de gevolgen:",
+      "items": [
+        {
+          "text": "Bedrijfsarts en HR die blijven doorschuiven",
+          "emphasis": "doorschuiven"
+        },
+        {
+          "text": "Medewerkers die afhaken of frustreren",
+          "emphasis": "frustreren"
+        },
+        {
+          "text": "Onduidelijke communicatie over verwachtingen",
+          "emphasis": "verwachtingen"
+        }
+      ]
+    }
+  },
+  "solution": {
+    "title": "De wens van elke organisatie",
+    "paragraphs": [
+      {
+        "text": "Je hebt als HR het beleid op orde. De processen zijn uitgedacht.",
+        "highlight": "Je weet hoe het zou moeten gaan.",
+        "highlightColor": "green"
+      },
+      {
+        "text": "Maar dan komt de praktijk. Leidinggevenden die blijven wachten. Of een standaard verzuimmail sturen en verder niets. Die pas schakelen als het traject al vastloopt, of die alles doorschuiven naar de bedrijfsarts, omdat ze dat altijd zo doen.",
+        "emphasis": "Je zou willen dat het anders ging.",
+        "end": "."
+      },
+      {
+        "text": "Dat leidinggevenden hun rol in verzuimbegeleiding proactiever invullen. Dat ze niet alleen de verantwoordelijkheid hebben, maar ook het vertrouwen voelen om die te dragen. ",
+        "continuation": "Je wilt leidinggevenden die met kennis en zekerheid handelen. Die het gesprek aangaan, plannen maken en zorgen voor beweging.",
+        "emphasis": ""
+        
+      }
+    ],
+    "benefits": {
+      "title": "En je wilt zelf grip:",
+      "items": [
+        {
+          "text": "Geen eindeloze wachttijden, maar",
+          "emphasis": "snelheid"
+        },
+        {
+          "text": "Geen miscommunicatie, maar",
+          "emphasis": "duidelijkheid"
+        },
+        {
+          "text": "Geen overbelasting bedrijfsarts, maar",
+          "emphasis": "inzet waar het telt"
+        }
+      ]
+    }
+  },
+  "cta": {
+    "text": "Kortom: je wil",
+    "highlight": "daadkracht in het proces,",
+    "continuation": "zonder dat je daar nóg een systeem voor moet beheren.",
+    "action": {
+      "title": "Laat DOBbie het verschil maken.",
+      "subtitle": "Binnen 14 dagen kosteloos op als het niet past",
+      "buttonText": "Start nu gratis"
+    }
+  }
+}

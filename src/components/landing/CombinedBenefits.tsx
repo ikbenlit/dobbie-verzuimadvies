@@ -68,7 +68,7 @@ const results = [
 
 export default function CombinedBenefits() {
   return (
-    <section className="py-24 bg-white">
+    <section className="py-24 bg-cream">
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="text-center mb-12">
@@ -76,7 +76,7 @@ export default function CombinedBenefits() {
             Wat DOBbie in de praktijk oplevert
           </h2>
           <p className="text-lg text-brand-text max-w-2xl mx-auto">
-            Concrete resultaten die u direct kunt verwachten
+          In de testfase werden de volgende resultaten behaald.
           </p>
         </div>
 
@@ -87,8 +87,8 @@ export default function CombinedBenefits() {
           </h3>
           <div className="grid md:grid-cols-3 gap-8 mb-12">
             {stats.map((stat, index) => (
-              <div key={index} className="text-center group">
-                <div className={`inline-block ${stat.bgColor} rounded-full p-6 mb-4 ring-4 ${stat.ringColor} transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg`}>
+              <div key={index} className="text-center">
+                <div className={`inline-block ${stat.bgColor} rounded-full p-6 mb-4 ring-4 ${stat.ringColor}`}>
                   <div className={`text-4xl md:text-5xl font-bold ${stat.color}`}>
                     {stat.percentage}
                   </div>
@@ -112,9 +112,9 @@ export default function CombinedBenefits() {
               {results.map((result, index) => (
                 <div
                   key={index}
-                  className="flex items-start gap-3 p-4 bg-brand-light rounded-lg transition-all duration-300 hover:shadow-md hover:-translate-y-0.5 group"
+                  className="flex items-start gap-3 p-4 bg-brand-light rounded-lg"
                 >
-                  <div className={`${result.bgColor} rounded-full p-2 flex-shrink-0 transition-transform duration-300 group-hover:scale-110`}>
+                  <div className={`${result.bgColor} rounded-full p-2 flex-shrink-0`}>
                     <result.icon className={`w-5 h-5 ${result.color}`} />
                   </div>
                   <div className="flex-1">

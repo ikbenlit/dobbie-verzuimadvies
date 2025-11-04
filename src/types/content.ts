@@ -4,6 +4,8 @@ export interface HeroContent {
   badge: string;
   title: string;
   description: string;
+  descriptionHighlight?: string;
+  descriptionEnd?: string;
   primaryCta: {
     text: string;
     href: string;
@@ -80,11 +82,31 @@ export interface PricingPlan {
   isFeatured: boolean;
 }
 
+export interface PricingFeature {
+  text: string;
+  included: boolean;
+}
+
+export interface PricingTier {
+  name: string;
+  price: number;
+  userRange?: string;
+  priceSuffix: string;
+  description: string;
+  features: PricingFeature[];
+  ctaText: string;
+  ctaLink: string;
+  popular?: boolean;
+}
+
 export interface PricingContent {
   sectionId: string;
   title: string;
   description: string;
+  popularBadge: string;
   plans: PricingPlan[];
+  tiers: PricingTier[];
+  enterprise: PricingTier;
 }
 
 export interface FAQItem {
@@ -146,6 +168,144 @@ export interface HomeContent {
   stats: StatItem[];
 }
 
+// Dobbie Hero content
+export interface DobbieHeroContent {
+  badge: string;
+  title: string;
+  titleHighlight: string;
+  subtitle: string;
+  assistant: {
+    title: string;
+    subtitle: string;
+    description: string[];
+  };
+  interface: {
+    placeholder: string;
+    comingSoon: string;
+    status: string;
+    statusMessage: string;
+  };
+}
+
+// Problem Solution content
+export interface ProblemSolutionParagraph {
+  text?: string;
+  highlight?: string;
+  highlightColor?: string;
+  continuation?: string;
+  emphasis?: string;
+  end?: string;
+}
+
+export interface BenefitItem {
+  text: string;
+  emphasis: string;
+}
+
+export interface ProblemSolutionContent {
+  problem: {
+    title: string;
+    paragraphs: (string | ProblemSolutionParagraph)[];
+    quote?: string;
+    benefits?: {
+      title: string;
+      items: BenefitItem[];
+    };
+  };
+  solution: {
+    title: string;
+    paragraphs: (string | ProblemSolutionParagraph)[];
+    benefits: {
+      title: string;
+      items: BenefitItem[];
+    };
+  };
+  cta: {
+    text: string;
+    highlight: string;
+    continuation: string;
+    action?: {
+      title: string;
+      subtitle: string;
+      buttonText: string;
+    };
+  };
+}
+
+// Testimonials content
+export interface Testimonial {
+  quote: string;
+  author: string;
+  gradient: string;
+  bgColor: string;
+}
+
+export interface TestimonialsContent {
+  title: string;
+  subtitle: string;
+  testimonials: Testimonial[];
+}
+
+// Dobbie CTA content
+export interface DobbieCTAContent {
+  title: string;
+  reasons: string[];
+  support: {
+    intro: string;
+    badges: string[];
+    promise: string;
+  };
+  cta: {
+    emoji: string;
+    heading: string;
+    subtext: string;
+  };
+  buttons: {
+    primary: string;
+    secondary: string;
+  };
+}
+
+// Auth content
+export interface AuthPageFeatures {
+  title: string;
+  description: string;
+  items: string[];
+}
+
+export interface AuthForm {
+  emailLabel: string;
+  emailPlaceholder: string;
+  passwordLabel?: string;
+  passwordPlaceholder?: string;
+  submitButton: string;
+  submitButtonLoading: string;
+  [key: string]: any;
+}
+
+export interface AuthLinks {
+  [key: string]: string;
+}
+
+export interface AuthErrors {
+  [key: string]: string;
+}
+
+export interface AuthPageContent {
+  title: string;
+  subtitle: string;
+  features: AuthPageFeatures;
+  form: AuthForm;
+  links: AuthLinks;
+  errors: AuthErrors;
+}
+
+export interface AuthContent {
+  login: AuthPageContent;
+  register: AuthPageContent;
+  forgotPassword: AuthPageContent;
+}
+
 // Main content structure
 export interface SiteContent {
   home: HomeContent;
@@ -155,4 +315,9 @@ export interface SiteContent {
   pricing: PricingContent;
   faq: FAQContent;
   common: CommonContent;
+  auth: AuthContent;
+  dobbieHero: DobbieHeroContent;
+  problemSolution: ProblemSolutionContent;
+  testimonials: TestimonialsContent;
+  dobbieCTA: DobbieCTAContent;
 }

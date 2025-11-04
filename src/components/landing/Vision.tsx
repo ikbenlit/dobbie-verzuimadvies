@@ -5,7 +5,7 @@ export default function Vision() {
   const content = getVisionContent();
 
   return (
-    <section id={content.sectionId} className="py-24 bg-brand-light">
+    <section id={content.sectionId} className="py-24 bg-cream">
       <div className="container mx-auto px-4">
         <div className="grid md:grid-cols-2 gap-10 items-center">
           <div className="order-2 md:order-1">

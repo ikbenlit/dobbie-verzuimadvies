@@ -4,22 +4,22 @@
     "links": [
       {
         "label": "Waarom DOBbie",
-        "href": "#waarom"
+        "href": "/#waarom"
       },
       {
         "label": "Visie",
-        "href": "#visie"
+        "href": "/#visie"
       },
       {
         "label": "Prijzen",
-        "href": "#prijzen"
+        "href": "/#prijzen"
       },
       {
         "label": "FAQ",
-        "href": "#faq"
+        "href": "/#faq"
       }
     ],
-    "startButton": "Start Nu"
+    "startButton": "Inloggen"
   },
   "footer": {
     "logo": "DOBbie",
@@ -30,19 +30,19 @@
         "links": [
           {
             "label": "Waarom DOBbie",
-            "href": "#waarom"
+            "href": "/#waarom"
           },
           {
             "label": "Visie",
-            "href": "#visie"
+            "href": "/#visie"
           },
           {
             "label": "Prijzen",
-            "href": "#prijzen"
+            "href": "/#prijzen"
           },
           {
             "label": "FAQ",
-            "href": "#faq"
+            "href": "/#faq"
           }
         ]
       },

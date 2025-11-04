@@ -4,9 +4,11 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
+import { getAuthContent } from '@/lib/content';
 import { Eye, EyeOff, Loader2, Check } from 'lucide-react';
 
 export default function RegisterPage() {
+  const { register: content } = getAuthContent();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');
@@ -22,12 +24,12 @@ export default function RegisterPage() {
     e.preventDefault();
 
     if (!email || !password || !fullName) {
-      setError('Vul alle verplichte velden in.');
+      setError(content.errors.fillAllFields);
       return;
     }
 
     if (password.length < 8) {
-      setError('Wachtwoord moet minimaal 8 karakters bevatten.');
+      setError(content.errors.passwordTooShort);
       return;
     }
 
@@ -59,11 +61,11 @@ export default function RegisterPage() {
 
       // User-friendly error messages
       if (err.message?.includes('User already registered')) {
-        setError('Dit e-mailadres is al geregistreerd. Probeer in te loggen.');
+        setError(content.errors.userExists);
       } else if (err.message?.includes('Password should be')) {
-        setError('Wachtwoord voldoet niet aan de vereisten.');
+        setError(content.errors.passwordRequirements);
       } else {
-        setError(err.message || 'Er is een fout opgetreden. Probeer het opnieuw.');
+        setError(err.message || content.errors.genericError);
       }
     } finally {
       setLoading(false);
@@ -72,8 +74,38 @@ export default function RegisterPage() {
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row">
-      {/* Linkerkant - Registratie Formulier (md:w-2/5) */}
-      <div className="relative w-full md:w-2/5 bg-[#F5F2EB] flex items-center justify-center p-8 order-2 md:order-1 overflow-hidden">
+      {/* Linkerkant - Feature Showcase (md:w-2/5) */}
+      <div className="w-full md:w-2/5 p-8 md:p-12 flex items-center relative overflow-hidden order-2 md:order-1 bg-cover bg-center" style={{backgroundImage: 'url(/images/demo-dobbie.webp)'}}>
+        {/* Dark overlay for text readability */}
+        <div className="absolute inset-0 bg-black/40 z-0" />
+
+        <div className="relative z-10 max-w-xl mx-auto flex flex-col items-center justify-center h-full">
+          <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 border border-white/20 shadow-2xl">
+            <h2 className="font-serif text-[28px] font-bold mb-4 text-center md:text-left text-white drop-shadow-lg">
+              {content.features.title}
+            </h2>
+            <p className="text-[15px] mb-8 text-center md:text-left text-white drop-shadow-md">
+              {content.features.description}
+            </p>
+
+            <div className="space-y-4 w-full">
+              {content.features.items.map((item, index) => (
+                <div key={index} className="flex items-center p-4 rounded-md bg-white/90 backdrop-blur-md shadow-lg">
+                  <div className="bg-[#E9B046] rounded-full w-8 h-8 flex items-center justify-center mr-4 flex-shrink-0">
+                    <Check className="h-5 w-5 text-white" />
+                  </div>
+                  <p className="text-[15px] text-brand-text">
+                    {item}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Rechterkant - Registratie Formulier (md:w-3/5) */}
+      <div className="relative w-full md:w-3/5 bg-[#F5F2EB] flex items-center justify-center p-8 order-1 md:order-2 overflow-hidden">
         {/* Achtergrond decoratie */}
         <div className="absolute -top-20 -left-24 w-72 h-72 bg-[#771138] rounded-full opacity-10 blur-3xl -z-10 animate-pulse-slow" />
         <div className="absolute -bottom-24 -right-20 w-80 h-80 bg-[#E9B046] rounded-full opacity-20 blur-3xl -z-10 animate-pulse-slower" />
@@ -82,10 +114,10 @@ export default function RegisterPage() {
           {/* Logo en welkomstbericht */}
           <div className="text-center mb-8">
             <h1 className="font-serif text-[28px] font-bold text-[#771138] mb-2">
-              Start je gratis trial
+              {content.title}
             </h1>
             <p className="text-[#3D3D3D] text-[15px]">
-              30 dagen gratis toegang tot DOBbie - De Online Bedrijfsarts
+              {content.subtitle}
             </p>
           </div>
 
@@ -95,7 +127,7 @@ export default function RegisterPage() {
               <div className="flex items-center">
                 <Check className="h-5 w-5 mr-2" />
                 <p className="text-[14px] font-medium">
-                  Account succesvol aangemaakt! Je wordt doorgestuurd naar de login pagina...
+                  {content.form.successMessage}
                 </p>
               </div>
             </div>
@@ -107,7 +139,7 @@ export default function RegisterPage() {
                 htmlFor="fullName"
                 className="block text-[15px] font-semibold text-[#3D3D3D] mb-2"
               >
-                Volledige naam *
+                {content.form.fullNameLabel}
               </label>
               <input
                 type="text"
@@ -115,7 +147,7 @@ export default function RegisterPage() {
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
                 className="bg-white border border-[#D1D5DB] rounded-md px-4 py-3 w-full focus:border-[#771138] focus:outline-none focus:ring-2 focus:ring-[#771138]/20 transition-all duration-300 ease-in-out"
-                placeholder="Jan Jansen"
+                placeholder={content.form.fullNamePlaceholder}
                 required
               />
             </div>
@@ -125,7 +157,7 @@ export default function RegisterPage() {
                 htmlFor="email"
                 className="block text-[15px] font-semibold text-[#3D3D3D] mb-2"
               >
-                E-mailadres *
+                {content.form.emailLabel}
               </label>
               <input
                 type="email"
@@ -133,7 +165,7 @@ export default function RegisterPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="bg-white border border-[#D1D5DB] rounded-md px-4 py-3 w-full focus:border-[#771138] focus:outline-none focus:ring-2 focus:ring-[#771138]/20 transition-all duration-300 ease-in-out"
-                placeholder="naam@bedrijf.nl"
+                placeholder={content.form.emailPlaceholder}
                 required
               />
             </div>
@@ -143,7 +175,7 @@ export default function RegisterPage() {
                 htmlFor="organization"
                 className="block text-[15px] font-semibold text-[#3D3D3D] mb-2"
               >
-                Organisatie
+                {content.form.organizationLabel}
               </label>
               <input
                 type="text"
@@ -151,7 +183,7 @@ export default function RegisterPage() {
                 value={organization}
                 onChange={(e) => setOrganization(e.target.value)}
                 className="bg-white border border-[#D1D5DB] rounded-md px-4 py-3 w-full focus:border-[#771138] focus:outline-none focus:ring-2 focus:ring-[#771138]/20 transition-all duration-300 ease-in-out"
-                placeholder="Naam van je organisatie (optioneel)"
+                placeholder={content.form.organizationPlaceholder}
               />
             </div>
 
@@ -160,7 +192,7 @@ export default function RegisterPage() {
                 htmlFor="password"
                 className="block text-[15px] font-semibold text-[#3D3D3D] mb-2"
               >
-                Wachtwoord *
+                {content.form.passwordLabel}
               </label>
               <div className="relative">
                 <input
@@ -169,7 +201,7 @@ export default function RegisterPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="bg-white border border-[#D1D5DB] rounded-md px-4 py-3 w-full pr-12 focus:border-[#771138] focus:outline-none focus:ring-2 focus:ring-[#771138]/20 transition-all duration-300 ease-in-out"
-                  placeholder="Minimaal 8 karakters"
+                  placeholder={content.form.passwordPlaceholder}
                   required
                   minLength={8}
                 />
@@ -195,10 +227,10 @@ export default function RegisterPage() {
               {loading ? (
                 <>
                   <Loader2 className="animate-spin -ml-1 mr-3 h-5 w-5" />
-                  Account aanmaken...
+                  {content.form.submitButtonLoading}
                 </>
               ) : (
-                'Start gratis trial'
+                content.form.submitButton
               )}
             </button>
 
@@ -208,81 +240,33 @@ export default function RegisterPage() {
 
             <div className="text-center space-y-2">
               <p className="text-[14px] text-[#707070]">
-                Al een account?{' '}
+                {content.links.hasAccount}{' '}
                 <Link
                   href="/login"
                   className="text-[#771138] hover:text-[#5A0D29] font-semibold transition-colors duration-200"
                 >
-                  Inloggen
+                  {content.links.login}
                 </Link>
               </p>
               <Link
                 href="/"
                 className="block text-[14px] text-[#707070] hover:text-[#3D3D3D] transition-colors duration-200"
               >
-                Terug naar home
+                {content.links.backToHome}
               </Link>
             </div>
 
             <p className="text-center text-[12px] text-[#707070] pt-4">
-              Door je aan te melden ga je akkoord met onze{' '}
+              {content.links.termsPrefix}{' '}
               <Link href="/terms" className="text-[#771138] hover:text-[#5A0D29] underline">
-                algemene voorwaarden
+                {content.links.termsLink}
               </Link>{' '}
-              en{' '}
+              {content.links.termsAnd}{' '}
               <Link href="/privacy" className="text-[#771138] hover:text-[#5A0D29] underline">
-                privacybeleid
+                {content.links.privacyLink}
               </Link>
             </p>
           </form>
-        </div>
-      </div>
-
-      {/* Rechterkant - Feature Showcase (md:w-3/5) */}
-      <div className="w-full md:w-3/5 text-white p-8 md:p-12 flex items-center relative overflow-hidden order-1 md:order-2 bg-[#771138]">
-        <div className="relative z-10 max-w-xl mx-auto flex flex-col items-center justify-center h-full">
-          <h2 className="font-serif text-[28px] font-bold mb-4 text-center md:text-left text-white">
-            Start vandaag nog met DOBbie
-          </h2>
-          <p className="text-[15px] mb-8 text-center md:text-left text-white opacity-90">
-            Krijg direct toegang tot professioneel advies over verzuim,
-            Wet Poortwachter en personeelsbeleid. Geen creditcard nodig.
-          </p>
-
-          <div className="space-y-4 mb-8 w-full max-w-md">
-            <div className="flex items-center p-4 rounded-md bg-white/10 backdrop-blur-md">
-              <div className="bg-[#E9B046] rounded-full w-8 h-8 flex items-center justify-center mr-4 flex-shrink-0">
-                <Check className="h-5 w-5 text-white" />
-              </div>
-              <p className="text-[15px] text-white">
-                30 dagen gratis proberen
-              </p>
-            </div>
-            <div className="flex items-center p-4 rounded-md bg-white/10 backdrop-blur-md">
-              <div className="bg-[#E9B046] rounded-full w-8 h-8 flex items-center justify-center mr-4 flex-shrink-0">
-                <Check className="h-5 w-5 text-white" />
-              </div>
-              <p className="text-[15px] text-white">
-                Directe toegang tot alle functionaliteiten
-              </p>
-            </div>
-            <div className="flex items-center p-4 rounded-md bg-white/10 backdrop-blur-md">
-              <div className="bg-[#E9B046] rounded-full w-8 h-8 flex items-center justify-center mr-4 flex-shrink-0">
-                <Check className="h-5 w-5 text-white" />
-              </div>
-              <p className="text-[15px] text-white">
-                Geen creditcard nodig tijdens trial
-              </p>
-            </div>
-            <div className="flex items-center p-4 rounded-md bg-white/10 backdrop-blur-md">
-              <div className="bg-[#E9B046] rounded-full w-8 h-8 flex items-center justify-center mr-4 flex-shrink-0">
-                <Check className="h-5 w-5 text-white" />
-              </div>
-              <p className="text-[15px] text-white">
-                Cancel op elk moment zonder verplichtingen
-              </p>
-            </div>
-          </div>
         </div>
       </div>
 

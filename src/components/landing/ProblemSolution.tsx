@@ -1,6 +1,40 @@
 import { AlertCircle, CheckCircle2 } from 'lucide-react';
+import Link from 'next/link';
+import { getProblemSolutionContent } from '@/lib/content';
+import type { ProblemSolutionParagraph } from '@/types/content';
+
+// Helper functie om paragrafen te renderen
+function renderParagraph(paragraph: string | ProblemSolutionParagraph, index: number) {
+  // Als het een string is, render het gewoon
+  if (typeof paragraph === 'string') {
+    return <p key={index}>{paragraph}</p>;
+  }
+
+  // Als het een object is met speciale formatting
+  const { text, highlight, highlightColor, continuation, emphasis, end } = paragraph;
+
+  return (
+    <p key={index}>
+      {text && <>{text} </>}
+      {highlight && highlightColor === 'red' && (
+        <strong className="text-red-600">{highlight}</strong>
+      )}
+      {highlight && highlightColor === 'green' && (
+        <strong className="text-green-600">{highlight}</strong>
+      )}
+      {highlight && !highlightColor && (
+        <strong>{highlight}</strong>
+      )}
+      {continuation && <> {continuation}</>}
+      {emphasis && <strong>{emphasis}</strong>}
+      {end && <>{end}</>}
+    </p>
+  );
+}
 
 export default function ProblemSolution() {
+  const content = getProblemSolutionContent();
+
   return (
     <section className="py-24 bg-white">
       <div className="container mx-auto px-4">
@@ -12,24 +46,31 @@ export default function ProblemSolution() {
                 <AlertCircle className="w-6 h-6 text-red-600" />
               </div>
               <h3 className="font-serif text-2xl font-bold text-bordeaux-hover">
-                Hoe verzuim onnodig stilvalt
+                {content.problem.title}
               </h3>
             </div>
 
             <div className="space-y-4 text-brand-text leading-relaxed">
-              <p>
-                U herkent het vast: <strong>De bedrijfsarts zit vol. Leidinggevenden wachten. Vragen blijven liggen.</strong>
-              </p>
-              <p>
-                En voor u het weet ligt er weer een verzuimdossier stil, terwijl iedereen van goede wil is.
-              </p>
-              <p>
-                Soms wacht een medewerker <strong className="text-red-600">weken</strong> op iets wat medisch lijkt,
-                maar eigenlijk <strong>communicatie, proces of misverstand</strong> is.
-              </p>
-              <p className="text-sm italic border-l-4 border-red-200 pl-4 py-2 bg-red-50">
-                Ondertussen groeit de frustratie – bij de medewerker, de leidinggevende én bij u.
-              </p>
+              {content.problem.paragraphs.map((paragraph, index) =>
+                renderParagraph(paragraph, index)
+              )}
+              {content.problem.quote && (
+                <p className="text-sm italic border-l-4 border-red-200 pl-4 py-2 bg-red-50">
+                  {content.problem.quote}
+                </p>
+              )}
+              {content.problem.benefits && (
+                <div className="bg-red-50 border-l-4 border-red-500 pl-4 py-3 space-y-2">
+                  <p className="font-bold text-bordeaux-hover">{content.problem.benefits.title}</p>
+                  <ul className="text-sm space-y-1">
+                    {content.problem.benefits.items.map((item, index) => (
+                      <li key={index}>
+                        ✗ {item.text} <strong>{item.emphasis}</strong>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
           </div>
 
@@ -40,27 +81,22 @@ export default function ProblemSolution() {
                 <CheckCircle2 className="w-6 h-6 text-green-600" />
               </div>
               <h3 className="font-serif text-2xl font-bold text-bordeaux-hover">
-                Wat je eigenlijk zou willen
+                {content.solution.title}
               </h3>
             </div>
 
             <div className="space-y-4 text-brand-text leading-relaxed">
-              <p>
-                U zou willen dat <strong className="text-green-600">leidinggevenden hun rol serieuzer nemen</strong>.
-              </p>
-              <p>
-                Dat ze niet alleen de verantwoordelijkheid hebben, maar ook <strong>het vertrouwen voelen om die te dragen</strong>.
-              </p>
-              <p>
-                U wilt leidinggevenden die met <strong>kennis en zekerheid</strong> handelen.
-                Die het gesprek aangaan, plannen maken en zorgen voor beweging.
-              </p>
+              {content.solution.paragraphs.map((paragraph, index) =>
+                renderParagraph(paragraph, index)
+              )}
               <div className="bg-green-50 border-l-4 border-green-500 pl-4 py-3 space-y-2">
-                <p className="font-bold text-bordeaux-hover">En u wilt zelf grip:</p>
+                <p className="font-bold text-bordeaux-hover">{content.solution.benefits.title}</p>
                 <ul className="text-sm space-y-1">
-                  <li>✓ Geen eindeloze wachttijden, maar <strong>snelheid</strong></li>
-                  <li>✓ Geen miscommunicatie, maar <strong>duidelijkheid</strong></li>
-                  <li>✓ Geen overbelasting bedrijfsarts, maar <strong>inzet waar het telt</strong></li>
+                  {content.solution.benefits.items.map((item, index) => (
+                    <li key={index}>
+                      ✓ {item.text} <strong>{item.emphasis}</strong>
+                    </li>
+                  ))}
                 </ul>
               </div>
             </div>
@@ -70,9 +106,26 @@ export default function ProblemSolution() {
         {/* CTA */}
         <div className="text-center mt-12">
           <p className="text-xl font-bold text-bordeaux-hover">
-            Kortom: u wilt <span className="text-teal">daadkracht in het proces</span> –
-            zonder dat u daar nóg een systeem voor moet beheren.
+            {content.cta.text} <span className="text-teal">{content.cta.highlight}</span> {content.cta.continuation}
           </p>
+
+          {/* Call to Action met knop */}
+          {content.cta.action && (
+            <div className="mt-8 bg-gradient-to-br from-teal/10 to-bordeaux/10 rounded-2xl p-8 max-w-2xl mx-auto">
+              <h4 className="text-2xl font-bold text-bordeaux-hover mb-2">
+                {content.cta.action.title}
+              </h4>
+              <p className="text-brand-text mb-6">
+                {content.cta.action.subtitle}
+              </p>
+              <Link
+                href="/register"
+                className="inline-block bg-teal hover:bg-teal-hover text-white font-semibold px-8 py-3 rounded-lg transition-colors duration-200"
+              >
+                {content.cta.action.buttonText}
+              </Link>
+            </div>
+          )}
         </div>
       </div>
     </section>

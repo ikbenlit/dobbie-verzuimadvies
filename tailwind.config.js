@@ -42,7 +42,7 @@ export default {
         // Brand colors voor mockup
         'brand': {
           dark: '#5A0D29',      // Donkere bordeaux
-          light: '#F5F2EB',     // Cream achtergrond
+          light: '#FDF5F8',     // Zeer lichte bordeaux/rose tint
           text: '#3D3D3D',      // Primaire tekst kleur
           accent: '#E9B046',    // Gold accent
           secondary: '#2C5F5D', // Teal secundaire accent

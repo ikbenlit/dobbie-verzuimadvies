@@ -21,8 +21,8 @@ export default function Hero() {
               {hero.title}
             </h1>
             <p className="mt-6 text-lg text-brand-text max-w-xl mx-auto md:mx-0 leading-relaxed">
-              U hoeft niet langer te wachten op overvolle bedrijfsartsen of te twijfelen of u juist handelt.
-              <strong className="text-bordeaux-hover"> DOBbie is uw AI-verzuimbuddy die 24/7 klaarstaat</strong> voor leidinggevenden.
+            Je hoeft niet langer te wachten op overvolle bedrijfsartsen of te twijfelen of je juist handelt.
+              <strong className="text-bordeaux-hover"> DOBbie is jouw AI-verzuimbuddy die 24/7 klaarstaat</strong> voor alles rondom verzuim en duurzame inzetbaarheid. 
             </p>
             <div className="mt-10 flex flex-col sm:flex-row justify-center md:justify-start items-center gap-4">
               <Link

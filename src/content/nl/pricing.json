@@ -1,45 +1,42 @@
 {
-  "sectionId": "prijzen",
-  "title": "Kies het plan dat bij u past",
-  "description": "Transparante prijzen voor elke organisatie. Start vandaag nog met het optimaliseren van uw verzuimbeleid.",
-  "plans": [
+  "sectionId": "pricing",
+  "title": "Professioneel verzuimadvies voor elke organisatie",
+  "description": "24/7 toegang tot expertise op het gebied van verzuim, Wet Poortwachter en personeelsbeleid",
+  "popularBadge": "Meest gekozen",
+  "tiers": [
     {
-      "plan": "Basis",
-      "price": "49",
-      "period": "maand",
+      "name": "Solo",
+      "monthlyPrice": 49,
+      "yearlyPrice": 349,
+      "description": "Voor individuele professionals",
       "features": [
-        "Onbeperkt vragen stellen",
-        "Toegang voor 1 gebruiker",
-        "Basis kennisbank",
-        "Email ondersteuning"
+        { "text": "24/7 toegang tot DOBbie", "included": true },
+        { "text": "Persoonsgebonden licentie", "included": true },
+        { "text": "10 voorbeeldvragen bij aanvang", "included": true },
+        { "text": "DOBbie draait in de browser", "included": true },
+        { "text": "Geen technische kennis nodig", "included": true },
+        { "text": "Binnen 14 dagen gratis annuleren", "included": true }
       ],
-      "isFeatured": false
+      "ctaText": "Ja, dit wil ik",
+      "ctaLink": "/register",
+      "popular": false,
+      "footnote": "* Na 12 maanden maandelijks opzegbaar"
     },
     {
-      "plan": "Professioneel",
-      "price": "99",
-      "period": "maand",
+      "name": "Team",
+      "yearlyPrice": 269,
+      "monthlyPrice": 39,
+      "minUsers": 2,
+      "description": "Voor teams vanaf 2 gebruikers",
       "features": [
-        "Alles in Basis",
-        "Toegang voor 5 gebruikers",
-        "Uitgebreide kennisbank",
-        "Prioriteit ondersteuning",
-        "Maandelijkse updates"
+        { "text": "Alles van Solo", "included": true },
+        { "text": "Opstartflyer (PDF)", "included": true },
+        { "text": "Optioneel: incompany training", "included": true }
       ],
-      "isFeatured": true
-    },
-    {
-      "plan": "Enterprise",
-      "price": "Contact",
-      "period": "ons",
-      "features": [
-        "Alles in Professioneel",
-        "Onbeperkt aantal gebruikers",
-        "API-toegang",
-        "Persoonlijke onboarding",
-        "Dedicated accountmanager"
-      ],
-      "isFeatured": false
+      "ctaText": "Ja, wij willen minimaal 2 accounts",
+      "ctaLink": "/register?plan=team",
+      "popular": true,
+      "footnote": "* Na 12 maanden maandelijks opzegbaar"
     }
   ]
 }

@@ -37,7 +37,7 @@ const features = [
 
 export default function DobbieFeatures() {
   return (
-    <section className="py-16 bg-brand-light">
+    <section className="py-16 bg-white">
       <div className="container mx-auto px-4">
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
           {features.map((feature, index) => (

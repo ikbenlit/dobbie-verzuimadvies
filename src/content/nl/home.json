@@ -1,8 +1,10 @@
 {
   "hero": {
-    "badge": "Online Verzuimadvies",
+    "badge": "Ontwikkeld door een bedrijfsarts",
     "title": "24/7 AI Verzuimadvies voor Leidinggevenden",
-    "description": "Direct antwoord op al uw vragen over verzuim, re-integratie en arbeidsgerelateerde zaken. Efficiënt, betrouwbaar en altijd beschikbaar.",
+    "description": "Je hoeft niet langer te wachten op overvolle bedrijfsartsen of te twijfelen of je juist handelt.",
+    "descriptionHighlight": "DOBbie is jouw AI-verzuimbuddy die 24/7 klaarstaat",
+    "descriptionEnd": "voor alles rondom verzuim en duurzame inzetbaarheid.",
     "primaryCta": {
       "text": "Probeer DOBbie",
       "href": "/chat"

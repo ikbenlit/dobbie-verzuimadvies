@@ -1,0 +1,24 @@
+{
+  "title": "Wat anderen zeggen",
+  "subtitle": "DOBbie is getest en wordt al ingezet door organisaties in verschillende branches.",
+  "testimonials": [
+    {
+      "quote": "Sinds DOBbie is er veel minder onzekerheid bij onze teamleiders.",
+      "author": "HR-adviseur",
+      "gradient": "from-bordeaux to-bordeaux-hover",
+      "bgColor": "bg-bordeaux/5"
+    },
+    {
+      "quote": "Ik gebruik DOBbie voordat ik contact opneem met de arbodienst – dat scheelt tijd én vragen.",
+      "author": "Leidinggevende",
+      "gradient": "from-gold to-gold-light",
+      "bgColor": "bg-gold/5"
+    },
+    {
+      "quote": "Veel vragen die eerst op mijn spreekuur kwamen, worden nu al opgelost. Ik kan me richten op medische beoordeling.",
+      "author": "Bedrijfsarts",
+      "gradient": "from-teal to-teal-dark",
+      "bgColor": "bg-teal/5"
+    }
+  ]
+}

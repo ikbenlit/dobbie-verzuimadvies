@@ -41,7 +41,7 @@ export default {
         // Brand colors
         'brand': {
           dark: '#5A0D29',
-          light: '#F5F2EB',
+          light: '#FDF5F8',     // Zeer lichte bordeaux/rose tint
           text: '#3D3D3D',
           accent: '#E9B046',
           secondary: '#2C5F5D',

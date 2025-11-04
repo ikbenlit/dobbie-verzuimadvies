@@ -48,8 +48,8 @@ export default function FooterNew() {
           ))}
         </div>
 
-        <div className="border-t border-white/20 pt-6 text-center text-sm text-white/70">
-          <p>
+        <div className="border-t border-white/20 pt-6 text-center">
+          <p className="text-sm text-white">
             &copy; {currentYear} {footer.copyright}
           </p>
         </div>

@@ -1,0 +1,24 @@
+{
+  "title": "Kies voor DOBbie als je:",
+  "reasons": [
+    "leidinggevenden wilt die met vertrouwen handelen",
+    "meer ruimte bij de bedrijfsarts wenst",
+    "beweging in het traject wilt",
+    "verlangt naar rust, eigenaarschap en duidelijkheid in jullie verzuimbeleid",
+    "simpel een oplossing wilt die werkt, zonder gedoe"
+  ],
+  "support": {
+    "intro": "DOBbie ondersteunt.",
+    "badges": ["24/7", "Veilig", "Praktisch"],
+    "promise": "Zodat het niet vastloopt, maar beweegt."
+  },
+  "cta": {
+    "emoji": "",
+    "heading": "Start vandaag nog",
+    "subtext": "Maand of jaar. Kosteloos opzegbaar binnen 14 dagen"
+  },
+  "buttons": {
+    "primary": "Start nu gratis",
+    "secondary": "Plan een demo"
+  }
+}

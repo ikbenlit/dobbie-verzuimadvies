@@ -4,9 +4,11 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useSupabaseAuth } from '@/lib/supabase/client';
+import { getAuthContent } from '@/lib/content';
 import { Eye, EyeOff, Loader2, Check } from 'lucide-react';
 
 export default function LoginPage() {
+  const { login: content } = getAuthContent();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -20,7 +22,7 @@ export default function LoginPage() {
     e.preventDefault();
 
     if (!email || !password) {
-      setError('Vul alle velden in.');
+      setError(content.errors.fillAllFields);
       return;
     }
 
@@ -36,13 +38,13 @@ export default function LoginPage() {
 
       // User-friendly error messages
       if (err.message?.includes('Invalid login credentials')) {
-        setError('Onjuiste inloggegevens. Controleer je e-mailadres en wachtwoord.');
+        setError(content.errors.invalidCredentials);
       } else if (err.message?.includes('Email not confirmed')) {
-        setError('Je account is nog niet bevestigd. Controleer je e-mail.');
+        setError(content.errors.emailNotConfirmed);
       } else if (err.message?.includes('Too many requests')) {
-        setError('Te veel login pogingen. Probeer het later opnieuw.');
+        setError(content.errors.tooManyRequests);
       } else {
-        setError('Er is een fout opgetreden. Probeer het opnieuw.');
+        setError(content.errors.genericError);
       }
     } finally {
       setLoading(false);
@@ -51,8 +53,38 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row">
-      {/* Linkerkant - Login Formulier (md:w-2/5) */}
-      <div className="relative w-full md:w-2/5 bg-[#F5F2EB] flex items-center justify-center p-8 order-2 md:order-1 overflow-hidden">
+      {/* Linkerkant - Feature Showcase (md:w-2/5) */}
+      <div className="w-full md:w-2/5 p-8 md:p-12 flex items-center relative overflow-hidden order-2 md:order-1 bg-cover bg-center" style={{backgroundImage: 'url(/images/demo-dobbie.webp)'}}>
+        {/* Dark overlay for text readability */}
+        <div className="absolute inset-0 bg-black/40 z-0" />
+
+        <div className="relative z-10 max-w-xl mx-auto flex flex-col items-center justify-center h-full">
+          <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 border border-white/20 shadow-2xl">
+            <h2 className="font-serif text-[28px] font-bold mb-4 text-center md:text-left text-white drop-shadow-lg">
+              {content.features.title}
+            </h2>
+            <p className="text-[15px] mb-8 text-center md:text-left text-white drop-shadow-md">
+              {content.features.description}
+            </p>
+
+            <div className="space-y-4 w-full">
+              {content.features.items.map((item, index) => (
+                <div key={index} className="flex items-center p-4 rounded-md bg-white/90 backdrop-blur-md shadow-lg">
+                  <div className="bg-[#E9B046] rounded-full w-8 h-8 flex items-center justify-center mr-4 flex-shrink-0">
+                    <Check className="h-5 w-5 text-white" />
+                  </div>
+                  <p className="text-[15px] text-brand-text">
+                    {item}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Rechterkant - Login Formulier (md:w-3/5) */}
+      <div className="relative w-full md:w-3/5 bg-[#F5F2EB] flex items-center justify-center p-8 order-1 md:order-2 overflow-hidden">
         {/* Achtergrond decoratie */}
         <div className="absolute -top-20 -left-24 w-72 h-72 bg-[#771138] rounded-full opacity-10 blur-3xl -z-10 animate-pulse-slow" />
         <div className="absolute -bottom-24 -right-20 w-80 h-80 bg-[#E9B046] rounded-full opacity-20 blur-3xl -z-10 animate-pulse-slower" />
@@ -61,10 +93,10 @@ export default function LoginPage() {
           {/* Logo en welkomstbericht */}
           <div className="text-center mb-8">
             <h1 className="font-serif text-[28px] font-bold text-[#771138] mb-2">
-              Welkom terug
+              {content.title}
             </h1>
             <p className="text-[#3D3D3D] text-[15px]">
-              Log in om verder te gaan met DOBbie - De Online Bedrijfsarts
+              {content.subtitle}
             </p>
           </div>
 
@@ -74,7 +106,7 @@ export default function LoginPage() {
                 htmlFor="email"
                 className="block text-[15px] font-semibold text-[#3D3D3D] mb-2"
               >
-                E-mailadres
+                {content.form.emailLabel}
               </label>
               <input
                 type="email"
@@ -82,7 +114,7 @@ export default function LoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="bg-white border border-[#D1D5DB] rounded-md px-4 py-3 w-full focus:border-[#771138] focus:outline-none focus:ring-2 focus:ring-[#771138]/20 transition-all duration-300 ease-in-out"
-                placeholder="naam@voorbeeld.nl"
+                placeholder={content.form.emailPlaceholder}
                 required
               />
             </div>
@@ -92,7 +124,7 @@ export default function LoginPage() {
                 htmlFor="password"
                 className="block text-[15px] font-semibold text-[#3D3D3D] mb-2"
               >
-                Wachtwoord
+                {content.form.passwordLabel}
               </label>
               <div className="relative">
                 <input
@@ -101,7 +133,7 @@ export default function LoginPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="bg-white border border-[#D1D5DB] rounded-md px-4 py-3 w-full pr-12 focus:border-[#771138] focus:outline-none focus:ring-2 focus:ring-[#771138]/20 transition-all duration-300 ease-in-out"
-                  placeholder="••••••••"
+                  placeholder={content.form.passwordPlaceholder}
                   required
                 />
                 <button
@@ -128,14 +160,14 @@ export default function LoginPage() {
                   className="mr-2 h-4 w-4 accent-[#771138] border-[#D1D5DB] rounded"
                 />
                 <label htmlFor="remember" className="text-[14px] text-[#707070]">
-                  Onthouden
+                  {content.form.rememberMe}
                 </label>
               </div>
               <Link
                 href="/forgot-password"
                 className="text-[14px] font-semibold text-[#771138] hover:text-[#5A0D29] transition-colors duration-200"
               >
-                Wachtwoord vergeten?
+                {content.form.forgotPassword}
               </Link>
             </div>
 
@@ -147,10 +179,10 @@ export default function LoginPage() {
               {loading ? (
                 <>
                   <Loader2 className="animate-spin -ml-1 mr-3 h-5 w-5" />
-                  Bezig met inloggen...
+                  {content.form.submitButtonLoading}
                 </>
               ) : (
-                'Inloggen'
+                content.form.submitButton
               )}
             </button>
 
@@ -160,72 +192,22 @@ export default function LoginPage() {
 
             <div className="text-center space-y-2">
               <p className="text-[14px] text-[#707070]">
-                Nog geen account?{' '}
+                {content.links.noAccount}{' '}
                 <Link
                   href="/register"
                   className="text-[#771138] hover:text-[#5A0D29] font-semibold transition-colors duration-200"
                 >
-                  Registreren
+                  {content.links.register}
                 </Link>
               </p>
               <Link
                 href="/"
                 className="block text-[14px] text-[#707070] hover:text-[#3D3D3D] transition-colors duration-200"
               >
-                Terug naar home
+                {content.links.backToHome}
               </Link>
             </div>
           </form>
-
-          <div className="mt-6 bg-[#F5F2EB] text-[#3D3D3D] p-4 rounded-md shadow-sm text-[14px] text-center">
-            <div className="font-semibold mb-1">Test inloggegevens:</div>
-            <div>
-              <span className="font-medium">E-mail:</span> demo@dobbie.nl
-            </div>
-            <div>
-              <span className="font-medium">Wachtwoord:</span> dobbie123
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Rechterkant - Feature Showcase (md:w-3/5) */}
-      <div className="w-full md:w-3/5 text-white p-8 md:p-12 flex items-center relative overflow-hidden order-1 md:order-2 bg-[#771138]">
-        <div className="relative z-10 max-w-xl mx-auto flex flex-col items-center justify-center h-full">
-          <h2 className="font-serif text-[28px] font-bold mb-4 text-center md:text-left text-white">
-            24/7 professioneel advies over verzuim
-          </h2>
-          <p className="text-[15px] mb-8 text-center md:text-left text-white opacity-90">
-            DOBbie - De Online Bedrijfsarts helpt u met professionele begeleiding
-            bij verzuim, Wet Poortwachter en personeelsbeleid.
-          </p>
-
-          <div className="space-y-4 mb-8 w-full max-w-md">
-            <div className="flex items-center p-4 rounded-md bg-white/10 backdrop-blur-md">
-              <div className="bg-[#E9B046] rounded-full w-8 h-8 flex items-center justify-center mr-4 flex-shrink-0">
-                <Check className="h-5 w-5 text-white" />
-              </div>
-              <p className="text-[15px] text-white">
-                Direct antwoord op al uw vragen over verzuim
-              </p>
-            </div>
-            <div className="flex items-center p-4 rounded-md bg-white/10 backdrop-blur-md">
-              <div className="bg-[#E9B046] rounded-full w-8 h-8 flex items-center justify-center mr-4 flex-shrink-0">
-                <Check className="h-5 w-5 text-white" />
-              </div>
-              <p className="text-[15px] text-white">
-                Actuele kennis van wet- en regelgeving
-              </p>
-            </div>
-            <div className="flex items-center p-4 rounded-md bg-white/10 backdrop-blur-md">
-              <div className="bg-[#E9B046] rounded-full w-8 h-8 flex items-center justify-center mr-4 flex-shrink-0">
-                <Check className="h-5 w-5 text-white" />
-              </div>
-              <p className="text-[15px] text-white">
-                Professionele ondersteuning bij verzuimbeleid
-              </p>
-            </div>
-          </div>
         </div>
       </div>
 

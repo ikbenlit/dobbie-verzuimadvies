@@ -1,24 +1,57 @@
 import Image from 'next/image';
-import { Bot, Sparkles } from 'lucide-react';
+import { Bot, Sparkles, Clock, Shield, Users } from 'lucide-react';
+import { getDobbieHeroContent } from '@/lib/content';
+
+const features = [
+  {
+    icon: Bot,
+    title: "AI-gedreven advies",
+    description: "Intelligente analyses gebaseerd op Nederlandse wetgeving en medische consensus",
+    iconColor: "text-bordeaux",
+    bgColor: "bg-bordeaux/10"
+  },
+  {
+    icon: Clock,
+    title: "24/7 beschikbaar",
+    description: "Directe ondersteuning wanneer u het nodig heeft, ook buiten kantooruren",
+    iconColor: "text-teal",
+    bgColor: "bg-teal/10"
+  },
+  {
+    icon: Shield,
+    title: "Juridisch onderbouwd",
+    description: "Alle adviezen gebaseerd op geldende Nederlandse wet- en regelgeving",
+    iconColor: "text-teal-dark",
+    bgColor: "bg-teal/10"
+  },
+  {
+    icon: Users,
+    title: "Mensgerichte benadering",
+    description: "Focus op empathische communicatie en verbindend leiderschap",
+    iconColor: "text-gold",
+    bgColor: "bg-gold/10"
+  }
+];
 
 export default function DobbieHero() {
+  const content = getDobbieHeroContent();
+
   return (
-    <section className="py-24 bg-white">
+    <section className="py-24 bg-brand-light">
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="text-center mb-12">
           <div className="inline-block bg-gradient-to-r from-gold/20 to-gold-light/20 backdrop-blur-sm rounded-full px-4 py-1.5 mb-4 shadow-sm border border-gold/30">
             <p className="text-sm text-bordeaux-hover font-medium flex items-center gap-1">
               <Sparkles className="w-3 h-3 text-gold" />
-              Binnenkort beschikbaar
+              {content.badge}
             </p>
           </div>
           <h2 className="font-serif text-3xl md:text-5xl font-bold text-bordeaux-hover">
-            Maak kennis met <span className="text-transparent bg-clip-text bg-gradient-to-r from-bordeaux to-bordeaux-hover">DOBbie</span>
+            {content.title} <span className="text-transparent bg-clip-text bg-gradient-to-r from-bordeaux to-bordeaux-hover">{content.titleHighlight}</span>
           </h2>
           <p className="mt-4 text-lg text-brand-text max-w-2xl mx-auto">
-            De intelligente AI-assistent voor verzuimmanagement. Eerste hulp bij verzuim,
-            direct in uw broekzak. Ontwikkeld door een bedrijfsarts, speciaal voor Nederlandse organisaties.
+            {content.subtitle}
           </p>
         </div>
 
@@ -30,51 +63,59 @@ export default function DobbieHero() {
                 <Bot className="w-6 h-6 text-white" />
               </div>
               <div>
-                <h3 className="text-2xl font-bold text-bordeaux-hover">DOBbie AI-assistent</h3>
-                <p className="text-brand-text">Eerste hulp bij verzuim</p>
+                <h3 className="text-2xl font-bold text-bordeaux-hover">{content.assistant.title}</h3>
+                <p className="text-brand-text">{content.assistant.subtitle}</p>
               </div>
             </div>
 
             <div className="space-y-4 text-brand-text leading-relaxed">
-              <p className="text-lg">
-                DOBbie is niet zomaar een chatbot. Het is een specialistische AI-assistent
-                die is ontwikkeld om leidinggevenden, HR-professionals en ondernemers
-                direct te ondersteunen bij verzuimgesprekken en re-integratietrajecten.
-              </p>
-              <p>
-                Gebaseerd op jarenlange expertise in bedrijfsgeneeskunde en toegespitst op
-                de Nederlandse context, biedt DOBbie concrete, juridisch onderbouwde adviezen
-                wanneer u die het meest nodig heeft.
-              </p>
-              <p>
-                Of het nu gaat om een eerste ziekmelding, een lastig re-integratiegesprek of
-                complexe verzuimproblematiek - DOBbie helpt u de juiste stappen te zetten.
-              </p>
+              {content.assistant.description.map((paragraph, index) => (
+                <p key={index} className={index === 0 ? "text-lg" : ""}>
+                  {paragraph}
+                </p>
+              ))}
             </div>
           </div>
 
           <div className="flex justify-center">
             <div className="relative w-full max-w-md aspect-square bg-white rounded-2xl shadow-xl overflow-hidden">
-              {/* TODO: Vervang met screenshot van DOBbie chat interface */}
-              {/* <Image src="/images/dobbie-interface.webp" alt="DOBbie AI chat interface" width={600} height={600} /> */}
-              <div className="absolute inset-0 bg-gradient-to-br from-gold/10 via-bordeaux-hover/5 to-bordeaux-hover/10 flex items-center justify-center">
-                <div className="text-center p-8">
-                  <div className="relative">
-                    <Bot className="w-24 h-24 text-gold mx-auto mb-4 drop-shadow-lg" />
-                    <div className="absolute inset-0 bg-gold/20 blur-2xl"></div>
-                  </div>
-                  <p className="text-sm font-medium text-bordeaux-hover">DOBbie interface</p>
-                  <p className="text-xs text-brand-text mt-1">Screenshot volgt binnenkort</p>
-                </div>
-              </div>
-              <div className="absolute bottom-4 left-4 text-white bg-bordeaux-hover/80 rounded-lg px-3 py-2">
+              <Image
+                src="/images/demo-dobbie.webp"
+                alt="DOBbie AI chat interface demo"
+                fill
+                className="object-cover"
+                priority
+              />
+              <div className="absolute bottom-4 left-4 right-4 text-white bg-bordeaux-hover/90 backdrop-blur-sm rounded-lg px-4 py-3 shadow-lg">
                 <div className="flex items-center space-x-2 mb-1">
                   <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                  <span className="text-sm font-medium">DOBbie Online</span>
+                  <span className="text-sm font-medium">{content.interface.status}</span>
                 </div>
-                <p className="text-xs opacity-90">Klaar om u te helpen met verzuimadvies</p>
+                <p className="text-sm font-medium text-white">{content.interface.statusMessage}</p>
               </div>
             </div>
+          </div>
+        </div>
+
+        {/* Compact Features Row */}
+        <div className="mt-16 pt-8 border-t border-gray-200">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {features.map((feature, index) => (
+              <div
+                key={index}
+                className="flex flex-col items-center text-center p-4 rounded-lg transition-all duration-300 hover:bg-white/50 group"
+              >
+                <div className={`w-10 h-10 ${feature.bgColor} rounded-full flex items-center justify-center mb-3 transition-transform duration-300 group-hover:scale-110`}>
+                  <feature.icon className={`w-5 h-5 ${feature.iconColor}`} />
+                </div>
+                <p className="text-m font-semibold text-bordeaux-hover mb-2">
+                  {feature.title}
+                </p>
+                <p className="text-ms text-brand-text leading-relaxed">
+                  {feature.description}
+                </p>
+              </div>
+            ))}
           </div>
         </div>
       </div>

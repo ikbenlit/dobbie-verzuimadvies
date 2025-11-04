@@ -35,8 +35,8 @@ export default function DobbieBenefits() {
           </h3>
           <div className="grid md:grid-cols-3 gap-8">
             {benefits.map((benefit, index) => (
-              <div key={index} className="text-center group">
-                <div className={`inline-block ${benefit.bgColor} rounded-full p-6 mb-4 ring-4 ${benefit.ringColor} transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg`}>
+              <div key={index} className="text-center">
+                <div className={`inline-block ${benefit.bgColor} rounded-full p-6 mb-4 ring-4 ${benefit.ringColor}`}>
                   <div className={`text-4xl md:text-5xl font-bold ${benefit.color}`}>
                     {benefit.percentage}
                   </div>

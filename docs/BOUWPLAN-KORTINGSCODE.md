@@ -117,9 +117,9 @@
 | E2 | Mollie Setup | Mollie package + client configuratie | ✅ Completed | 3 | Environment variables nodig |
 | E3 | Kortingscode Validatie | Validatie logica + API endpoint | ✅ Completed | 2 | Frontend + backend validatie |
 | E4 | Checkout Pagina | UI voor plan selectie + kortingscode input | ✅ Completed | 3 | Real-time prijs update |
-| E5 | Payment API | Payment creation + success/cancel pagina's | ⏳ To Do | 3 | Mollie integration |
-| E6 | Webhook Handler | Mollie webhook + subscription activatie | ⏳ To Do | 4 | Email trigger |
-| E7 | Email Templates | Welkomstmail met kortingscode info | ⏳ To Do | 2 | Resend API |
+| E5 | Payment API | Payment creation + success/cancel pagina's | ✅ Completed | 3 | Mollie integration |
+| E6 | Webhook Handler | Mollie webhook + subscription activatie | ✅ Completed | 4 | Email trigger |
+| E7 | Email Templates | Welkomstmail met kortingscode info | ✅ Completed | 2 | Resend API |
 | E8 | Integratie & Testing | CTA knoppen + end-to-end testing | ⏳ To Do | 3 | Test data aanmaken |
 | E9 | Admin Dashboard | Admin interface voor discount codes beheer | ⏳ To Do | 4 | Voor non-technische gebruikers |
 
@@ -255,9 +255,9 @@ const basePrices = {
 
 | Story ID | Beschrijving | Acceptatiecriteria | Status | Afhankelijkheden | Story Points |
 |----------|--------------|---------------------|--------|------------------|--------------|
-| E5.S1 | Payment creation endpoint | `POST /api/payment/create` maakt Mollie payment aan | ⏳ | E2.S3, E3.S1 | 5 |
-| E5.S2 | Success pagina | `/checkout/success` toont bevestiging | ⏳ | E5.S1 | 2 |
-| E5.S3 | Cancel pagina | `/checkout/cancel` toont annulering | ⏳ | E5.S1 | 1 |
+| E5.S1 | Payment creation endpoint | `POST /api/payment/create` maakt Mollie payment aan | ✅ | E2.S3, E3.S1 | 5 |
+| E5.S2 | Success pagina | `/checkout/success` toont bevestiging | ✅ | E5.S1 | 2 |
+| E5.S3 | Cancel pagina | `/checkout/cancel` toont annulering | ✅ | E5.S1 | 1 |
 
 **Technical Notes:**
 - Payment creation flow:
@@ -278,10 +278,10 @@ const basePrices = {
 
 | Story ID | Beschrijving | Acceptatiecriteria | Status | Afhankelijkheden | Story Points |
 |----------|--------------|---------------------|--------|------------------|--------------|
-| E6.S1 | Webhook endpoint | `POST /api/webhooks/mollie` ontvangt en verwerkt events | ⏳ | E5.S1 | 3 |
-| E6.S2 | Subscription aanmaken | Subscription wordt aangemaakt na succesvolle betaling | ⏳ | E6.S1, E1.S2 | 3 |
-| E6.S3 | Kortingscode increment | `current_uses` wordt atomic verhoogd | ⏳ | E6.S2, E1.S3 | 2 |
-| E6.S4 | Email trigger | Welkomstmail wordt verstuurd na betaling | ⏳ | E6.S2, E7.S1 | 2 |
+| E6.S1 | Webhook endpoint | `POST /api/webhooks/mollie` ontvangt en verwerkt events | ✅ | E5.S1 | 3 |
+| E6.S2 | Subscription aanmaken | Subscription wordt aangemaakt na succesvolle betaling | ✅ | E6.S1, E1.S2 | 3 |
+| E6.S3 | Kortingscode increment | `current_uses` wordt atomic verhoogd | ✅ | E6.S2, E1.S3 | 2 |
+| E6.S4 | Email trigger | Welkomstmail wordt verstuurd na betaling | ✅ | E6.S2, E7.S1 | 2 |
 
 **Technical Notes:**
 - Webhook events: `payment.paid`, `payment.failed`, `payment.canceled`
@@ -303,8 +303,8 @@ const basePrices = {
 
 | Story ID | Beschrijving | Acceptatiecriteria | Status | Afhankelijkheden | Story Points |
 |----------|--------------|---------------------|--------|------------------|--------------|
-| E7.S1 | Welkomstmail template | Email template met betaling bevestiging + korting info | ⏳ | — | 3 |
-| E7.S2 | Email helper functie | Helper functie voor email verzending via Resend | ⏳ | E7.S1 | 2 |
+| E7.S1 | Welkomstmail template | Email template met betaling bevestiging + korting info | ✅ | — | 3 |
+| E7.S2 | Email helper functie | Helper functie voor email verzending via Resend | ✅ | E7.S1 | 2 |
 
 **Technical Notes:**
 - Email bevat:

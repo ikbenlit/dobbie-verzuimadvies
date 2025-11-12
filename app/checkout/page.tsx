@@ -35,6 +35,10 @@ export default function CheckoutPage() {
   const [validating, setValidating] = useState(false);
   const [validationError, setValidationError] = useState<string | null>(null);
   
+  // State voor payment creation
+  const [creatingPayment, setCreatingPayment] = useState(false);
+  const [paymentError, setPaymentError] = useState<string | null>(null);
+  
   // Update URL wanneer plan of billing verandert
   useEffect(() => {
     const params = new URLSearchParams();
@@ -126,6 +130,47 @@ export default function CheckoutPage() {
   const basePrice = getBasePrice(plan, billing);
   const finalPrice = appliedDiscount ? appliedDiscount.finalPrice : basePrice;
   const discountAmount = appliedDiscount ? appliedDiscount.discountAmount : 0;
+  
+  // Handle payment creation
+  const handleCreatePayment = useCallback(async () => {
+    setCreatingPayment(true);
+    setPaymentError(null);
+    
+    try {
+      const response = await fetch('/api/payment/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          plan,
+          billing,
+          discountCode: appliedDiscount?.code || null,
+        }),
+      });
+      
+      const data = await response.json();
+      
+      if (!response.ok || !data.success) {
+        throw new Error(data.error || 'Er ging iets mis bij het aanmaken van de betaling');
+      }
+      
+      if (data.paymentUrl) {
+        // Redirect naar Mollie payment pagina
+        window.location.href = data.paymentUrl;
+      } else {
+        throw new Error('Geen payment URL ontvangen');
+      }
+    } catch (error) {
+      console.error('Error creating payment:', error);
+      setPaymentError(
+        error instanceof Error 
+          ? error.message 
+          : 'Er ging iets mis bij het aanmaken van de betaling. Probeer het later opnieuw.'
+      );
+      setCreatingPayment(false);
+    }
+  }, [plan, billing, appliedDiscount]);
   
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-bordeaux/5 via-gold/5 to-teal/5">
@@ -342,15 +387,34 @@ export default function CheckoutPage() {
                 discountCode={appliedDiscount?.code}
               />
               
-              {/* Betaal knop (disabled voor nu, wordt geactiveerd in E5) */}
-              <button
-                type="button"
-                disabled
-                className="w-full bg-bordeaux text-white py-4 px-6 rounded-lg font-semibold flex items-center justify-center gap-2 hover:bg-bordeaux-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg"
-              >
-                <CreditCard className="w-5 h-5" />
-                Betaal met Mollie
-              </button>
+              {/* Betaal knop */}
+              <div className="space-y-2">
+                <button
+                  type="button"
+                  onClick={handleCreatePayment}
+                  disabled={creatingPayment}
+                  className="w-full bg-bordeaux text-white py-4 px-6 rounded-lg font-semibold flex items-center justify-center gap-2 hover:bg-bordeaux-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg"
+                >
+                  {creatingPayment ? (
+                    <>
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                      Betaling aanmaken...
+                    </>
+                  ) : (
+                    <>
+                      <CreditCard className="w-5 h-5" />
+                      Betaal met Mollie
+                    </>
+                  )}
+                </button>
+                
+                {paymentError && (
+                  <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700">
+                    <X className="w-5 h-5 flex-shrink-0" />
+                    <span className="text-sm font-medium">{paymentError}</span>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>

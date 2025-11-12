@@ -1,11 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import Header from '@/components/landing/Header';
 import FooterNew from '@/components/landing/FooterNew';
-import { XCircle, ArrowLeft, ArrowRight, CreditCard, HelpCircle } from 'lucide-react';
+import { XCircle, ArrowRight, CreditCard, HelpCircle } from 'lucide-react';
 
 interface PaymentData {
   id: string;
@@ -24,7 +24,7 @@ interface PaymentData {
   };
 }
 
-export default function CheckoutCancelPage() {
+function CheckoutCancelContent() {
   const searchParams = useSearchParams();
   const paymentId = searchParams.get('payment_id') || searchParams.get('paymentId');
   
@@ -212,6 +212,26 @@ export default function CheckoutCancelPage() {
       
       <FooterNew />
     </div>
+  );
+}
+
+export default function CheckoutCancelPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex flex-col bg-gradient-to-br from-bordeaux/5 via-gold/5 to-teal/5">
+        <Header />
+        <main className="flex-grow pt-32 pb-20">
+          <div className="container mx-auto max-w-2xl px-4">
+            <div className="bg-white rounded-lg shadow-md p-12 text-center">
+              <p className="text-brand-text">Laden...</p>
+            </div>
+          </div>
+        </main>
+        <FooterNew />
+      </div>
+    }>
+      <CheckoutCancelContent />
+    </Suspense>
   );
 }
 

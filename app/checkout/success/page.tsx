@@ -1,11 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Header from '@/components/landing/Header';
 import FooterNew from '@/components/landing/FooterNew';
-import { CheckCircle, Loader2, XCircle, ArrowRight, CreditCard } from 'lucide-react';
+import { CheckCircle, Loader2, XCircle, ArrowRight } from 'lucide-react';
 
 interface PaymentData {
   id: string;
@@ -25,7 +25,7 @@ interface PaymentData {
   paidAt?: string | null;
 }
 
-export default function CheckoutSuccessPage() {
+function CheckoutSuccessContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const paymentId = searchParams.get('payment_id') || searchParams.get('paymentId');
@@ -278,6 +278,27 @@ export default function CheckoutSuccessPage() {
       
       <FooterNew />
     </div>
+  );
+}
+
+export default function CheckoutSuccessPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex flex-col bg-gradient-to-br from-bordeaux/5 via-gold/5 to-teal/5">
+        <Header />
+        <main className="flex-grow pt-32 pb-20">
+          <div className="container mx-auto max-w-2xl px-4">
+            <div className="bg-white rounded-lg shadow-md p-12 text-center">
+              <Loader2 className="w-16 h-16 text-bordeaux mx-auto mb-4 animate-spin" />
+              <p className="text-brand-text">Laden...</p>
+            </div>
+          </div>
+        </main>
+        <FooterNew />
+      </div>
+    }>
+      <CheckoutSuccessContent />
+    </Suspense>
   );
 }
 

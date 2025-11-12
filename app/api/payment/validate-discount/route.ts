@@ -9,10 +9,10 @@ import type { PlanType, BillingPeriod } from '@/lib/payment/types';
 const validateDiscountSchema = z.object({
   code: z.string().min(1, 'Kortingscode is verplicht').max(50),
   plan: z.enum(['solo', 'team'], {
-    errorMap: () => ({ message: 'Plan moet solo of team zijn' }),
+    message: 'Plan moet solo of team zijn',
   }),
   billing: z.enum(['monthly', 'yearly'], {
-    errorMap: () => ({ message: 'Billing moet monthly of yearly zijn' }),
+    message: 'Billing moet monthly of yearly zijn',
   }),
 });
 

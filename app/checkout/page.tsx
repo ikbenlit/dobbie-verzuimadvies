@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Header from '@/components/landing/Header';
 import FooterNew from '@/components/landing/FooterNew';
@@ -9,7 +9,7 @@ import type { PlanType, BillingPeriod } from '@/lib/payment/types';
 import { CreditCard, Check, X, Loader2, Tag } from 'lucide-react';
 import PriceDisplay from '@/components/checkout/PriceDisplay';
 
-export default function CheckoutPage() {
+function CheckoutContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   
@@ -422,6 +422,26 @@ export default function CheckoutPage() {
       
       <FooterNew />
     </div>
+  );
+}
+
+export default function CheckoutPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex flex-col bg-gradient-to-br from-bordeaux/5 via-gold/5 to-teal/5">
+        <Header />
+        <main className="flex-grow pt-32 pb-20">
+          <div className="container mx-auto max-w-4xl px-4">
+            <div className="bg-white rounded-lg shadow-md p-12 text-center">
+              <p className="text-brand-text">Laden...</p>
+            </div>
+          </div>
+        </main>
+        <FooterNew />
+      </div>
+    }>
+      <CheckoutContent />
+    </Suspense>
   );
 }
 

@@ -10,10 +10,10 @@ import type { PlanType, BillingPeriod } from '@/lib/payment/types';
  */
 const createPaymentSchema = z.object({
   plan: z.enum(['solo', 'team'], {
-    errorMap: () => ({ message: 'Plan moet solo of team zijn' }),
+    message: 'Plan moet solo of team zijn',
   }),
   billing: z.enum(['monthly', 'yearly'], {
-    errorMap: () => ({ message: 'Billing moet monthly of yearly zijn' }),
+    message: 'Billing moet monthly of yearly zijn',
   }),
   discountCode: z.string().optional(),
 });
@@ -71,11 +71,9 @@ export async function POST(request: NextRequest) {
 
     // 3. Valideer kortingscode (indien aanwezig) - dubbele validatie voor security
     let finalPrice: number;
-    let originalPrice: number;
+    const originalPrice = getBasePrice(plan as PlanType, billing as BillingPeriod);
     let discountAmount = 0;
     let appliedDiscountCode: string | null = null;
-
-    originalPrice = getBasePrice(plan as PlanType, billing as BillingPeriod);
 
     if (discountCode && discountCode.trim()) {
       const normalizedCode = discountCode.trim().toUpperCase();

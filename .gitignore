@@ -1,5 +1,8 @@
 node_modules
 
+.cursor
+.claude
+
 # Next.js
 /.next/
 /out/

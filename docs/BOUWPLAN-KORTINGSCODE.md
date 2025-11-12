@@ -116,7 +116,7 @@
 | E1 | Database Setup | Discount codes tabel + subscriptions uitbreiding | ✅ Completed | 3 | Migratie bestand aanmaken |
 | E2 | Mollie Setup | Mollie package + client configuratie | ✅ Completed | 3 | Environment variables nodig |
 | E3 | Kortingscode Validatie | Validatie logica + API endpoint | ✅ Completed | 2 | Frontend + backend validatie |
-| E4 | Checkout Pagina | UI voor plan selectie + kortingscode input | ⏳ To Do | 3 | Real-time prijs update |
+| E4 | Checkout Pagina | UI voor plan selectie + kortingscode input | ✅ Completed | 3 | Real-time prijs update |
 | E5 | Payment API | Payment creation + success/cancel pagina's | ⏳ To Do | 3 | Mollie integration |
 | E6 | Webhook Handler | Mollie webhook + subscription activatie | ⏳ To Do | 4 | Email trigger |
 | E7 | Email Templates | Welkomstmail met kortingscode info | ⏳ To Do | 2 | Resend API |
@@ -211,9 +211,9 @@ const basePrices = {
 
 | Story ID | Beschrijving | Acceptatiecriteria | Status | Afhankelijkheden | Story Points |
 |----------|--------------|---------------------|--------|------------------|--------------|
-| E4.S1 | Checkout pagina component | `/checkout` pagina toont plan selectie + billing toggle | ⏳ | E3.S2 | 5 |
-| E4.S2 | Kortingscode input | Input veld met "Toepassen" knop + real-time validatie | ⏳ | E4.S1 | 3 |
-| E4.S3 | Prijs display component | Toont originele prijs, korting, finale prijs + bespaarbedrag | ⏳ | E4.S2 | 2 |
+| E4.S1 | Checkout pagina component | `/checkout` pagina toont plan selectie + billing toggle | ✅ | E3.S2 | 5 |
+| E4.S2 | Kortingscode input | Input veld met "Toepassen" knop + real-time validatie | ✅ | E4.S1 | 3 |
+| E4.S3 | Prijs display component | Toont originele prijs, korting, finale prijs + bespaarbedrag | ✅ | E4.S2 | 2 |
 
 **Technical Notes:**
 - URL structuur: `/checkout?plan=solo&billing=yearly&coupon=CODE`

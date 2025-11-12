@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@google-cloud/vertexai": "^1.10.0",
+    "@mollie/api-client": "^4.3.3",
     "@supabase/ssr": "^0.5.2",
     "@supabase/supabase-js": "^2.50.0",
     "@vercel/functions": "^2.1.0",

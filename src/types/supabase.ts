@@ -19,6 +19,7 @@ export interface Database {
           trial_start_date: string | null
           trial_end_date: string | null
           is_trial_active: boolean
+          subscription_status: 'active' | 'inactive' | 'expired' | null
           created_at: string
           updated_at: string
         }
@@ -31,6 +32,7 @@ export interface Database {
           trial_start_date?: string | null
           trial_end_date?: string | null
           is_trial_active?: boolean
+          subscription_status?: 'active' | 'inactive' | 'expired' | null
           created_at?: string
           updated_at?: string
         }
@@ -43,6 +45,7 @@ export interface Database {
           trial_start_date?: string | null
           trial_end_date?: string | null
           is_trial_active?: boolean
+          subscription_status?: 'active' | 'inactive' | 'expired' | null
           created_at?: string
           updated_at?: string
         }

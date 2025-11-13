@@ -279,9 +279,15 @@ export interface AuthForm {
   emailPlaceholder: string;
   passwordLabel?: string;
   passwordPlaceholder?: string;
+  fullNameLabel?: string;
+  fullNamePlaceholder?: string;
+  organizationLabel?: string;
+  organizationPlaceholder?: string;
+  rememberMe?: string;
+  forgotPassword?: string;
   submitButton: string;
   submitButtonLoading: string;
-  [key: string]: any;
+  successMessage?: string;
 }
 
 export interface AuthLinks {

@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { createClient } from '@/lib/supabase/client';
-import type { User as SupabaseUser, Session } from '@supabase/supabase-js';
+import type { Session } from '@supabase/supabase-js';
 
 // Extended User interface for DoBbie-specific data
 export interface User {
@@ -98,7 +98,6 @@ export const useUserStore = create<UserStoreState>()(
             if (!profileError && profile) {
               console.log('Profile data loaded:', profile);
 
-              const profileData = profile as any;
               // Update session with profile data
               const updatedSession = {
                 ...data.session,
@@ -106,11 +105,11 @@ export const useUserStore = create<UserStoreState>()(
                   ...data.session.user,
                   user_metadata: {
                     ...data.session.user.user_metadata,
-                    subscription_status: profileData.subscription_status,
-                    full_name: profileData.full_name,
-                    account_type: profileData.account_type,
-                    organization_id: profileData.organization_id,
-                    role: profileData.user_type || 'user',
+                    subscription_status: profile.subscription_status,
+                    full_name: profile.full_name,
+                    account_type: profile.account_type,
+                    organization_id: profile.organization_id,
+                    role: profile.user_type || 'user',
                   },
                 },
               };

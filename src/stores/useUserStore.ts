@@ -10,7 +10,7 @@ export interface User {
   full_name?: string;
   account_type?: 'individual' | 'organization_member';
   organization_id?: string;
-  subscription_status?: 'trial' | 'expired' | 'manual_active' | 'blocked';
+  subscription_status?: 'inactive' | 'active' | 'expired' | 'blocked';
   role: string;
 }
 

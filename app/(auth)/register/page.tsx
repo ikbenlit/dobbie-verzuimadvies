@@ -51,11 +51,14 @@ export default function RegisterPage() {
 
       if (signUpError) throw signUpError;
 
-      // Show success message
-      setSuccess(true);
-      setTimeout(() => {
-        router.push('/login');
-      }, 2000);
+      // E2.S1 & E2.S2: Auto-login check en redirect naar checkout
+      if (data.session) {
+        // Automatisch ingelogd - redirect naar checkout
+        router.push('/checkout?new=true');
+      } else {
+        // Email confirmation vereist - redirect naar login met return URL
+        router.push('/login?redirect=/checkout&new=true');
+      }
     } catch (err: any) {
       console.error('Registration error:', err);
 

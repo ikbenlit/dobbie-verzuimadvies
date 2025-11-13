@@ -118,6 +118,22 @@ export async function POST(request: NextRequest) {
 
           console.log(`[Webhook] Successfully created subscription for payment ${paymentId}`);
           
+          // E4.S1 - Update subscription_status naar 'active'
+          const { error: profileError } = await supabase
+            .from('profiles')
+            .update({ 
+              subscription_status: 'active',
+              updated_at: new Date().toISOString()
+            })
+            .eq('id', metadata.userId);
+
+          if (profileError) {
+            console.error('[Webhook] Error updating profile status:', profileError);
+            // Continue - subscription is al aangemaakt, maar log error voor monitoring
+          } else {
+            console.log(`[Webhook] Updated profile ${metadata.userId} subscription_status to 'active'`);
+          }
+          
           // E6.S3 - Increment discount code uses (als er een code is gebruikt)
           if (metadata.discountCode && metadata.discountCode.trim()) {
             try {

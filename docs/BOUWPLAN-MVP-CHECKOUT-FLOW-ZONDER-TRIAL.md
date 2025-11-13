@@ -69,8 +69,8 @@ De trial functionaliteit wordt tijdelijk uitgeschakeld (niet verwijderd) voor la
 | E1 | Trial Uitschakelen | Trial functionaliteit tijdelijk uitzetten | ✅ Voltooid | 2 | Voor latere cleanup |
 | E2 | Registratie Flow | Auto-login + redirect naar checkout | ✅ Voltooid | 2 | Stap 2A implementatie |
 | E3 | Checkout Auth Check | Auth check + redirect logica | ✅ Voltooid | 4 | Stap 2B implementatie |
-| E4 | Subscription Status Update | Webhook update naar 'active' | ⏳ To Do | 2 | Na betaling activeren |
-| E5 | Chat Access Control | Alleen 'active' users toegang | ⏳ To Do | 2 | Protect /chat route |
+| E4 | Subscription Status Update | Webhook update naar 'active' | ✅ Voltooid | 2 | Na betaling activeren |
+| E5 | Chat Access Control | Alleen 'active' users toegang | ✅ Voltooid | 2 | Protect /chat route |
 | E6 | Testing & Validation | Smoke tests en validatie | ⏳ To Do | 2 | Manual testing |
 
 ---
@@ -82,8 +82,8 @@ De trial functionaliteit wordt tijdelijk uitgeschakeld (niet verwijderd) voor la
 
 | Story ID | Beschrijving | Acceptatiecriteria | Status | Afhankelijkheden | Story Points |
 |----------|--------------|---------------------|--------|------------------|--------------|
-| E1.S1 | Trial checks uitschakelen | Geen trial status checks meer in code | ⏳ | — | 2 |
-| E1.S2 | Default status naar 'inactive' | Nieuwe users krijgen 'inactive' status | ⏳ | E1.S1 | 1 |
+| E1.S1 | Trial checks uitschakelen | Geen trial status checks meer in code | ✅ | — | 2 |
+| E1.S2 | Default status naar 'inactive' | Nieuwe users krijgen 'inactive' status | ✅ | E1.S1 | 1 |
 
 **Technical Notes:**
 - **Trial checks:** Geen trial checks gevonden in huidige `app/chat/layout.tsx` (mogelijk al verwijderd)
@@ -120,8 +120,8 @@ CHECK (subscription_status IN (
 
 | Story ID | Beschrijving | Acceptatiecriteria | Status | Afhankelijkheden | Story Points |
 |----------|--------------|---------------------|--------|------------------|--------------|
-| E2.S1 | Auto-login na registratie | User automatisch ingelogd na signUp | ⏳ | — | 3 |
-| E2.S2 | Redirect naar checkout | Na registratie → /checkout?new=true | ⏳ | E2.S1 | 1 |
+| E2.S1 | Auto-login na registratie | User automatisch ingelogd na signUp | ✅ | — | 3 |
+| E2.S2 | Redirect naar checkout | Na registratie → /checkout?new=true | ✅ | E2.S1 | 1 |
 
 **Technical Notes:**
 - **Implementatie:** Gebruik direct `supabase.auth.signUp()` in `app/(auth)/register/page.tsx` (huidige implementatie)
@@ -169,10 +169,10 @@ if (data.session) {
 
 | Story ID | Beschrijving | Acceptatiecriteria | Status | Afhankelijkheden | Story Points |
 |----------|--------------|---------------------|--------|------------------|--------------|
-| E3.S1 | Auth check in checkout | Check auth status bij mount | ⏳ | — | 2 |
-| E3.S2 | Redirect naar login | Als niet ingelogd: redirect met return URL | ⏳ | E3.S1 | 2 |
-| E3.S3 | Login redirect parameter | Login page ondersteunt redirect parameter | ⏳ | E3.S2 | 2 |
-| E3.S4 | Auth callback redirect | Auth callback handler ondersteunt redirect parameter | ⏳ | E3.S3 | 1 |
+| E3.S1 | Auth check in checkout | Check auth status bij mount | ✅ | — | 2 |
+| E3.S2 | Redirect naar login | Als niet ingelogd: redirect met return URL | ✅ | E3.S1 | 2 |
+| E3.S3 | Login redirect parameter | Login page ondersteunt redirect parameter | ✅ | E3.S2 | 2 |
+| E3.S4 | Auth callback redirect | Auth callback handler ondersteunt redirect parameter | ✅ | E3.S3 | 1 |
 
 **Technical Notes:**
 - **Implementatie:** Client-side auth check in `useEffect` bij mount (checkout is geen protected route in middleware)
@@ -249,8 +249,8 @@ const next = requestUrl.searchParams.get('next') || requestUrl.searchParams.get(
 
 | Story ID | Beschrijving | Acceptatiecriteria | Status | Afhankelijkheden | Story Points |
 |----------|--------------|---------------------|--------|------------------|--------------|
-| E4.S1 | Webhook status update | Update profiles.subscription_status naar 'active' | ⏳ | E6.S2 (Kortingscode plan) | 3 |
-| E4.S2 | Expired user reactivatie | Expired users worden gereactiveerd na betaling | ⏳ | E4.S1 | 1 |
+| E4.S1 | Webhook status update | Update profiles.subscription_status naar 'active' | ✅ | E6.S2 (Kortingscode plan) | 3 |
+| E4.S2 | Expired user reactivatie | Expired users worden gereactiveerd na betaling | ✅ | E4.S1 | 1 |
 
 **Technical Notes:**
 - **Integratie met Kortingscode plan:** Deze epic werkt samen met Epic 6 uit `BOUWPLAN-KORTINGSCODE.md`
@@ -294,8 +294,8 @@ if (profileError) {
 
 | Story ID | Beschrijving | Acceptatiecriteria | Status | Afhankelijkheden | Story Points |
 |----------|--------------|---------------------|--------|------------------|--------------|
-| E5.S1 | Subscription check in layout | Check subscription_status uit profiles table | ⏳ | E4.S1 | 3 |
-| E5.S2 | Redirect naar checkout | Als 'inactive' of 'expired': redirect naar checkout | ⏳ | E5.S1 | 2 |
+| E5.S1 | Subscription check in layout | Check subscription_status uit profiles table | ✅ | E4.S1 | 3 |
+| E5.S2 | Redirect naar checkout | Als 'inactive' of 'expired': redirect naar checkout | ✅ | E5.S1 | 2 |
 
 **Technical Notes:**
 - **Waarom database query (niet user_metadata):**
@@ -549,4 +549,6 @@ const userData = {
 | v1.1 | 20-01-2025 | Development Team | Verduidelijkingen: webhook integratie, query parameters, registratie flow |
 | v1.2 | 20-01-2025 | Development Team | Verduidelijking: subscription_status uit database (niet user_metadata), login redirect, trial checks, email confirmation flow |
 | v1.3 | 20-01-2025 | Development Team | Team review feedback: auth callback redirect, database error fallback, bestaande trial users, test setup, webhook idempotency |
+| v1.4 | 20-01-2025 | Development Team | Implementatie voltooid: Epic 1 (Trial uitschakelen), Epic 2 (Registratie Flow), Epic 3 (Checkout Auth Check) - Status bijgewerkt naar ✅ Voltooid |
+| v1.5 | 20-01-2025 | Development Team | Implementatie voltooid: Epic 4 (Subscription Status Update), Epic 5 (Chat Access Control) - Alle code implementaties compleet |
 

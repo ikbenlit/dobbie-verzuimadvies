@@ -66,9 +66,9 @@ De trial functionaliteit wordt tijdelijk uitgeschakeld (niet verwijderd) voor la
 
 | Epic ID | Titel | Doel | Status | Stories | Opmerkingen |
 |---------|-------|------|--------|---------|-------------|
-| E1 | Trial Uitschakelen | Trial functionaliteit tijdelijk uitzetten | ⏳ To Do | 2 | Voor latere cleanup |
-| E2 | Registratie Flow | Auto-login + redirect naar checkout | ⏳ To Do | 2 | Stap 2A implementatie |
-| E3 | Checkout Auth Check | Auth check + redirect logica | ⏳ To Do | 3 | Stap 2B implementatie |
+| E1 | Trial Uitschakelen | Trial functionaliteit tijdelijk uitzetten | ✅ Voltooid | 2 | Voor latere cleanup |
+| E2 | Registratie Flow | Auto-login + redirect naar checkout | ✅ Voltooid | 2 | Stap 2A implementatie |
+| E3 | Checkout Auth Check | Auth check + redirect logica | ✅ Voltooid | 4 | Stap 2B implementatie |
 | E4 | Subscription Status Update | Webhook update naar 'active' | ⏳ To Do | 2 | Na betaling activeren |
 | E5 | Chat Access Control | Alleen 'active' users toegang | ⏳ To Do | 2 | Protect /chat route |
 | E6 | Testing & Validation | Smoke tests en validatie | ⏳ To Do | 2 | Manual testing |

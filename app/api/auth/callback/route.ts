@@ -4,7 +4,8 @@ import { createClient } from '@/lib/supabase/server';
 export async function GET(request: NextRequest) {
   const requestUrl = new URL(request.url);
   const code = requestUrl.searchParams.get('code');
-  const next = requestUrl.searchParams.get('next') || '/chat';
+  // E3.S4: Ondersteun zowel 'next' als 'redirect' parameter voor backward compatibility
+  const next = requestUrl.searchParams.get('next') || requestUrl.searchParams.get('redirect') || '/chat';
 
   if (code) {
     const supabase = await createClient();

@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
+import { createClient } from '@/lib/supabase/client';
 import Header from '@/components/landing/Header';
 import FooterNew from '@/components/landing/FooterNew';
 import { getBasePrice } from '@/lib/payment/pricing';
@@ -12,6 +13,7 @@ import PriceDisplay from '@/components/checkout/PriceDisplay';
 function CheckoutContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
+  const supabase = createClient();
   
   // Haal query parameters op (plan, billing, coupon)
   const planParam = searchParams.get('plan') as PlanType | null;
@@ -38,6 +40,34 @@ function CheckoutContent() {
   // State voor payment creation
   const [creatingPayment, setCreatingPayment] = useState(false);
   const [paymentError, setPaymentError] = useState<string | null>(null);
+  
+  // E3.S1 & E3.S2: Auth check bij mount - redirect naar login als niet ingelogd
+  useEffect(() => {
+    const checkAuth = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        // Behoud alle query parameters bij redirect
+        const checkoutParams = new URLSearchParams();
+        checkoutParams.set('plan', plan);
+        checkoutParams.set('billing', billing);
+        if (discountCode) {
+          checkoutParams.set('coupon', discountCode);
+        }
+        if (searchParams.get('new')) {
+          checkoutParams.set('new', 'true');
+        }
+        if (searchParams.get('renew')) {
+          checkoutParams.set('renew', 'true');
+        }
+        
+        // Build login redirect URL
+        const loginParams = new URLSearchParams();
+        loginParams.set('redirect', `/checkout?${checkoutParams.toString()}`);
+        router.push(`/login?${loginParams.toString()}`);
+      }
+    };
+    checkAuth();
+  }, [plan, billing, discountCode, searchParams, router, supabase]);
   
   // Update URL wanneer plan of billing verandert
   useEffect(() => {

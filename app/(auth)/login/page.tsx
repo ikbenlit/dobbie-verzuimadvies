@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useSupabaseAuth } from '@/lib/supabase/client';
 import { getAuthContent } from '@/lib/content';
 import { Eye, EyeOff, Loader2, Check } from 'lucide-react';
@@ -16,7 +16,11 @@ export default function LoginPage() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { signIn } = useSupabaseAuth();
+  
+  // E3.S3: Haal redirect parameter op
+  const redirectParam = searchParams.get('redirect');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,8 +35,10 @@ export default function LoginPage() {
 
     try {
       await signIn(email, password);
+      // E3.S3: Gebruik redirect parameter of default naar /chat
+      const redirectUrl = redirectParam || '/chat';
       // Force full page reload to ensure cookies are set before middleware runs
-      window.location.href = '/chat';
+      window.location.href = redirectUrl;
     } catch (err: any) {
       console.error('Login error:', err);
 

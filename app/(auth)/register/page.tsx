@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
@@ -17,8 +17,52 @@ export default function RegisterPage() {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [checkingAuth, setCheckingAuth] = useState(true);
   const router = useRouter();
   const supabase = createClient();
+
+  // Check if user is already logged in and redirect accordingly
+  useEffect(() => {
+    const checkExistingUser = async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        
+        if (user) {
+          // User is logged in, check subscription status
+          const { data: profile, error: profileError } = await supabase
+            .from('profiles')
+            .select('subscription_status')
+            .eq('id', user.id)
+            .single();
+
+          if (profileError) {
+            console.error('Error checking subscription status:', profileError);
+            // Fail-open: allow registration form to show
+            setCheckingAuth(false);
+            return;
+          }
+
+          // Redirect based on subscription status
+          if (profile?.subscription_status === 'active') {
+            // Active user: redirect to chat
+            window.location.href = '/chat';
+          } else {
+            // Inactive user: redirect to checkout
+            window.location.href = '/checkout?renew=true';
+          }
+        } else {
+          // No user logged in, show registration form
+          setCheckingAuth(false);
+        }
+      } catch (err) {
+        console.error('Error checking auth status:', err);
+        // Fail-open: allow registration form to show
+        setCheckingAuth(false);
+      }
+    };
+
+    checkExistingUser();
+  }, [supabase]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -53,11 +97,11 @@ export default function RegisterPage() {
 
       // E2.S1 & E2.S2: Auto-login check en redirect naar checkout
       if (data.session) {
-        // Automatisch ingelogd - redirect naar checkout
-        router.push('/checkout?new=true');
+        // Automatisch ingelogd - redirect naar checkout met full page reload
+        window.location.href = '/checkout?new=true';
       } else {
         // Email confirmation vereist - redirect naar login met return URL
-        router.push('/login?redirect=/checkout&new=true');
+        window.location.href = '/login?redirect=/checkout&new=true';
       }
     } catch (err: any) {
       console.error('Registration error:', err);
@@ -74,6 +118,18 @@ export default function RegisterPage() {
       setLoading(false);
     }
   };
+
+  // Show loading state while checking auth
+  if (checkingAuth) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#F5F2EB]">
+        <div className="text-center">
+          <Loader2 className="animate-spin h-8 w-8 text-[#771138] mx-auto mb-4" />
+          <p className="text-[#3D3D3D]">Laden...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row">

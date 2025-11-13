@@ -183,14 +183,6 @@ function CheckoutCancelContent() {
                 <CreditCard className="w-5 h-5" />
                 Opnieuw proberen
               </Link>
-              
-              <Link
-                href="/chat"
-                className="flex-1 flex items-center justify-center gap-2 px-6 py-4 bg-gray-200 text-gray-800 rounded-lg font-semibold hover:bg-gray-300 transition-colors"
-              >
-                <ArrowRight className="w-5 h-5" />
-                Naar dashboard
-              </Link>
             </div>
 
             {/* Contact Section */}

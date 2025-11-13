@@ -40,7 +40,7 @@ export default function Header() {
         </nav>
 
         <Link
-          href="/chat"
+          href="/register"
           className="hidden md:inline-block bg-teal text-white font-bold py-2 px-6 rounded-full hover:bg-teal-dark transition-all"
         >
           {nav.startButton}

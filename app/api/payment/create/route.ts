@@ -216,6 +216,13 @@ async function createMonthlySubscription(
     // 2. Create first payment met sequenceType: 'first' (creates SEPA mandate)
     const description = `${plan === 'solo' ? 'Solo' : 'Team'} Maandelijks Abonnement - Eerste maand`;
 
+    // Check if running on localhost (webhooks won't work locally)
+    const isLocalhost = siteUrl.includes('localhost') || siteUrl.includes('127.0.0.1');
+
+    if (isLocalhost) {
+      console.log(`[Monthly Subscription] Running on localhost - webhooks will be skipped`);
+    }
+
     console.log(`[Monthly Subscription] Creating first payment for customer ${customerId}`);
     const firstPayment = await mollieClient.customerPayments.create({
       customerId,
@@ -226,7 +233,8 @@ async function createMonthlySubscription(
       description,
       redirectUrl: `${siteUrl}/checkout/success`,
       cancelUrl: `${siteUrl}/checkout/cancel`,
-      webhookUrl: `${siteUrl}/api/webhooks/mollie`,
+      // Only add webhook URL if not running on localhost
+      ...(isLocalhost ? {} : { webhookUrl: `${siteUrl}/api/webhooks/mollie` }),
       sequenceType: SequenceType.first, // Creates SEPA mandate!
       metadata: {
         ...metadata,
@@ -317,6 +325,13 @@ async function createYearlyPayment(
     // Maak Mollie payment aan (one-time payment)
     const description = `${plan === 'solo' ? 'Solo' : 'Team'} Jaarlijks Abonnement`;
 
+    // Check if running on localhost (webhooks won't work locally)
+    const isLocalhost = siteUrl.includes('localhost') || siteUrl.includes('127.0.0.1');
+
+    if (isLocalhost) {
+      console.log(`[Yearly Payment] Running on localhost - webhooks will be skipped`);
+    }
+
     console.log(`[Yearly Payment] Creating yearly payment for user ${user.id} with contract dates`);
     const payment = await mollieClient.payments.create({
       amount: {
@@ -326,7 +341,8 @@ async function createYearlyPayment(
       description,
       redirectUrl: `${siteUrl}/checkout/success`,
       cancelUrl: `${siteUrl}/checkout/cancel`,
-      webhookUrl: `${siteUrl}/api/webhooks/mollie`,
+      // Only add webhook URL if not running on localhost
+      ...(isLocalhost ? {} : { webhookUrl: `${siteUrl}/api/webhooks/mollie` }),
       metadata: {
         ...metadata,
         subscriptionType: 'yearly', // Markeer als yearly one-time payment

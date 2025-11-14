@@ -45,6 +45,12 @@ function CheckoutContent() {
   // E3.S1 & E3.S2: Auth check bij mount - redirect naar login als niet ingelogd
   useEffect(() => {
     const checkAuth = async () => {
+      // Wacht kort bij nieuwe users zodat session cookies kunnen laden
+      const isNewUser = searchParams.get('new') === 'true';
+      if (isNewUser) {
+        await new Promise(resolve => setTimeout(resolve, 300));
+      }
+
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
         // Behoud alle query parameters bij redirect
@@ -60,7 +66,7 @@ function CheckoutContent() {
         if (searchParams.get('renew')) {
           checkoutParams.set('renew', 'true');
         }
-        
+
         // Build login redirect URL
         const loginParams = new URLSearchParams();
         loginParams.set('redirect', `/checkout?${checkoutParams.toString()}`);

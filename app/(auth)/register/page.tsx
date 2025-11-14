@@ -102,7 +102,9 @@ export default function RegisterPage() {
       const billing = urlParams.get('billing') || 'yearly';
 
       if (data.session) {
-        // Automatisch ingelogd - redirect naar checkout met plan parameters
+        // Automatisch ingelogd - wacht even zodat session cookies zijn gezet
+        // Dan redirect naar checkout met plan parameters
+        await new Promise(resolve => setTimeout(resolve, 500));
         window.location.href = `/checkout?plan=${plan}&billing=${billing}&new=true`;
       } else {
         // Email confirmation vereist - redirect naar login met return URL en plan parameters

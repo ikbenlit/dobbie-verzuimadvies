@@ -96,12 +96,17 @@ export default function RegisterPage() {
       if (signUpError) throw signUpError;
 
       // E2.S1 & E2.S2: Auto-login check en redirect naar checkout
+      // Behoud plan en billing parameters uit URL
+      const urlParams = new URLSearchParams(window.location.search);
+      const plan = urlParams.get('plan') || 'solo';
+      const billing = urlParams.get('billing') || 'yearly';
+
       if (data.session) {
-        // Automatisch ingelogd - redirect naar checkout met full page reload
-        window.location.href = '/checkout?new=true';
+        // Automatisch ingelogd - redirect naar checkout met plan parameters
+        window.location.href = `/checkout?plan=${plan}&billing=${billing}&new=true`;
       } else {
-        // Email confirmation vereist - redirect naar login met return URL
-        window.location.href = '/login?redirect=/checkout&new=true';
+        // Email confirmation vereist - redirect naar login met return URL en plan parameters
+        window.location.href = `/login?redirect=/checkout?plan=${plan}%26billing=${billing}%26new=true`;
       }
     } catch (err: any) {
       console.error('Registration error:', err);
@@ -281,7 +286,7 @@ export default function RegisterPage() {
             <button
               type="submit"
               disabled={loading || success}
-              className="w-full font-bold text-[16px] rounded-md py-[14px] px-[28px] text-white transition-all duration-300 ease-in-out disabled:opacity-70 bg-[#771138] hover:bg-[#5A0D29] flex items-center justify-center"
+              className="w-full font-bold text-[16px] rounded-full py-[14px] px-[28px] text-white transition-all duration-300 ease-in-out disabled:opacity-70 bg-[#771138] hover:bg-[#5A0D29] flex items-center justify-center"
             >
               {loading ? (
                 <>

@@ -296,7 +296,7 @@ function CheckoutContent() {
                   <button
                     type="button"
                     onClick={() => setBilling('monthly')}
-                    className={`flex-1 p-4 rounded-lg border-2 transition-all font-semibold ${
+                    className={`flex-1 p-4 rounded-full border-2 transition-all font-semibold ${
                       billing === 'monthly'
                         ? 'border-bordeaux bg-bordeaux text-white'
                         : 'border-gray-300 bg-white text-bordeaux-hover hover:bg-cream'
@@ -304,12 +304,12 @@ function CheckoutContent() {
                   >
                     Maandelijks
                   </button>
-                  
+
                   {/* Yearly */}
                   <button
                     type="button"
                     onClick={() => setBilling('yearly')}
-                    className={`flex-1 p-4 rounded-lg border-2 transition-all font-semibold ${
+                    className={`flex-1 p-4 rounded-full border-2 transition-all font-semibold ${
                       billing === 'yearly'
                         ? 'border-bordeaux bg-bordeaux text-white'
                         : 'border-gray-300 bg-white text-bordeaux-hover hover:bg-cream'
@@ -360,7 +360,7 @@ function CheckoutContent() {
                       type="button"
                       onClick={handleValidateDiscount}
                       disabled={validating || !discountCode.trim()}
-                      className="px-6 py-3 bg-bordeaux text-white rounded-lg font-semibold hover:bg-bordeaux-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                      className="px-6 py-3 bg-bordeaux text-white rounded-full font-semibold hover:bg-bordeaux-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                     >
                       {validating ? (
                         <>
@@ -427,7 +427,7 @@ function CheckoutContent() {
                   type="button"
                   onClick={handleCreatePayment}
                   disabled={creatingPayment}
-                  className="w-full bg-bordeaux text-white py-4 px-6 rounded-lg font-semibold flex items-center justify-center gap-2 hover:bg-bordeaux-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg"
+                  className="w-full bg-bordeaux text-white py-4 px-6 rounded-full font-semibold flex items-center justify-center gap-2 hover:bg-bordeaux-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg"
                 >
                   {creatingPayment ? (
                     <>

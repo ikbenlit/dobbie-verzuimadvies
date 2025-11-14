@@ -1,11 +1,12 @@
 /**
  * Mollie Customer Management
- * 
+ *
  * Deze module beheert Mollie Customer objecten voor recurring subscriptions.
  * Customers worden gekoppeld aan users via profiles.mollie_customer_id.
  */
 
 import { mollieClient } from './client';
+import type { Customer } from '@mollie/api-client';
 import { createClient } from '@/lib/supabase/server';
 
 /**
@@ -13,7 +14,7 @@ import { createClient } from '@/lib/supabase/server';
  * Cache wordt gebruikt binnen dezelfde module lifecycle (per request in Next.js)
  * Key: userId, Value: Mollie Customer object
  */
-const customerCache = new Map<string, Awaited<ReturnType<typeof mollieClient.customers.get>>>();
+const customerCache = new Map<string, Customer>();
 
 /**
  * Maak een Mollie Customer aan voor een user, of retourneer bestaande customer ID
@@ -157,7 +158,7 @@ export async function createMollieCustomer(userId: string): Promise<string> {
 export async function getMollieCustomer(
   userId: string,
   useCache: boolean = true
-): Promise<Awaited<ReturnType<typeof mollieClient.customers.get>> | null> {
+): Promise<Customer | null> {
   // 1. Check cache eerst
   if (useCache && customerCache.has(userId)) {
     const cachedCustomer = customerCache.get(userId);

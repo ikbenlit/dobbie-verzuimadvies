@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { mollieClient } from '@/lib/mollie/client';
+import { SequenceType } from '@mollie/api-client';
 import { createClient } from '@/lib/supabase/server';
 import { validateDiscountCode, getBasePrice } from '@/lib/payment';
 import { calculateContractDates } from '@/lib/payment/contract';
@@ -226,7 +227,7 @@ async function createMonthlySubscription(
       redirectUrl: `${siteUrl}/checkout/success`,
       cancelUrl: `${siteUrl}/checkout/cancel`,
       webhookUrl: `${siteUrl}/api/webhooks/mollie`,
-      sequenceType: 'first', // Creates SEPA mandate!
+      sequenceType: SequenceType.first, // Creates SEPA mandate!
       metadata: {
         ...metadata,
         subscriptionType: 'monthly', // Markeer als monthly subscription

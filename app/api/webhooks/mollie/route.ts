@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { mollieClient } from '@/lib/mollie/client';
+import type { Subscription } from '@mollie/api-client';
 import { createClient } from '@/lib/supabase/server';
 import {
   createOneTimeSubscription,
@@ -178,11 +179,11 @@ async function handlePaymentWebhook(paymentId: string): Promise<NextResponse> {
             if (customerId) {
               try {
                 // Haal actieve mandates op voor deze customer
-                const mandates = await mollieClient.customerMandates.list({
+                const mandatesPage = await mollieClient.customerMandates.page({
                   customerId,
                 });
                 // Neem de eerste actieve mandate
-                const activeMandate = mandates.find(
+                const activeMandate = mandatesPage.find(
                   (m) => m.status === 'valid' || m.status === 'pending'
                 );
                 if (activeMandate) {
@@ -455,8 +456,10 @@ async function handleSubscriptionWebhook(subscriptionId: string): Promise<NextRe
 
     // 2. Haal subscription op bij Mollie (altijd de source of truth)
     const mollieSubscription = await mollieClient.customerSubscriptions.get(
-      dbSubscription.mollie_customer_id,
-      subscriptionId
+      subscriptionId,
+      {
+        customerId: dbSubscription.mollie_customer_id,
+      }
     );
 
     console.log(
@@ -532,14 +535,12 @@ async function handleSubscriptionWebhook(subscriptionId: string): Promise<NextRe
 
 /**
  * Handle active subscription status
- * 
+ *
  * Maandelijkse betaling geslaagd - subscription blijft actief
  * Update next_billing_date voor volgende maand
  */
 async function handleActiveSubscription(
-  subscription: Awaited<
-    ReturnType<typeof mollieClient.customerSubscriptions.get>
-  >,
+  subscription: Subscription,
   userId: string
 ): Promise<void> {
   console.log(
@@ -577,14 +578,12 @@ async function handleActiveSubscription(
 
 /**
  * Handle canceled subscription status
- * 
+ *
  * User heeft geannuleerd (alleen na contractperiode)
  * Update profile status naar 'inactive'
  */
 async function handleCanceledSubscription(
-  subscription: Awaited<
-    ReturnType<typeof mollieClient.customerSubscriptions.get>
-  >,
+  subscription: Subscription,
   userId: string
 ): Promise<void> {
   console.log(
@@ -619,15 +618,13 @@ async function handleCanceledSubscription(
 
 /**
  * Handle suspended subscription status
- * 
+ *
  * Betaling mislukt - grace period
  * Profile status blijft 'active' maar subscription is suspended
  * Optioneel: Email notification naar user over failed payment
  */
 async function handleSuspendedSubscription(
-  subscription: Awaited<
-    ReturnType<typeof mollieClient.customerSubscriptions.get>
-  >,
+  subscription: Subscription,
   userId: string
 ): Promise<void> {
   console.log(

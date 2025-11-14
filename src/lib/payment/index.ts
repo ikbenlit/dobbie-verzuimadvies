@@ -5,4 +5,5 @@
 export * from './types';
 export * from './pricing';
 export * from './discount';
+export * from './contract';
 

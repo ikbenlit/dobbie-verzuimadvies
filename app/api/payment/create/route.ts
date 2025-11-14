@@ -3,7 +3,11 @@ import { z } from 'zod';
 import { mollieClient } from '@/lib/mollie/client';
 import { createClient } from '@/lib/supabase/server';
 import { validateDiscountCode, getBasePrice } from '@/lib/payment';
+import { calculateContractDates } from '@/lib/payment/contract';
+import { createMollieCustomer } from '@/lib/mollie/customer';
 import type { PlanType, BillingPeriod } from '@/lib/payment/types';
+import type { User } from '@supabase/supabase-js';
+import type { SupabaseClient } from '@supabase/supabase-js';
 
 /**
  * Request body schema voor payment creation
@@ -107,9 +111,212 @@ export async function POST(request: NextRequest) {
                     (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 
                     'http://localhost:3000');
 
-    // 5. Maak Mollie payment aan
-    const description = `${plan === 'solo' ? 'Solo' : 'Team'} ${billing === 'monthly' ? 'Maandelijks' : 'Jaarlijks'} Abonnement`;
+    // 5. Prepare metadata voor beide flows
+    const metadata = {
+      userId: user.id,
+      plan,
+      billing,
+      discountCode: appliedDiscountCode || '',
+      discountAmount: discountAmount.toString(),
+      originalPrice: originalPrice.toString(),
+      finalPrice: finalPrice.toString(),
+    };
 
+    // 6. Route based on billing type
+    // E3.S1: Split payment flow tussen monthly (subscription) en yearly (one-time)
+    if (billing === 'monthly') {
+      return await createMonthlySubscription(
+        user,
+        plan as PlanType,
+        finalPrice,
+        metadata,
+        siteUrl,
+        supabase
+      );
+    } else {
+      return await createYearlyPayment(
+        user,
+        plan as PlanType,
+        finalPrice,
+        metadata,
+        siteUrl,
+        supabase
+      );
+    }
+  } catch (error) {
+    console.error('Error creating payment:', error);
+
+    // Mollie API errors
+    if (error && typeof error === 'object' && 'message' in error) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: `Betalingsfout: ${error.message}`,
+        },
+        { status: 500 }
+      );
+    }
+
+    return NextResponse.json(
+      {
+        success: false,
+        error: 'Er ging iets mis bij het aanmaken van de betaling. Probeer het later opnieuw.',
+      },
+      { status: 500 }
+    );
+  }
+}
+
+/**
+ * Metadata type voor payment creation
+ */
+interface PaymentMetadata {
+  userId: string;
+  plan: string;
+  billing: string;
+  discountCode: string;
+  discountAmount: string;
+  originalPrice: string;
+  finalPrice: string;
+}
+
+/**
+ * E3.S2: Routing functie voor monthly subscription payment
+ * 
+ * Deze functie maakt een eerste payment aan voor een monthly subscription.
+ * De eerste payment creëert een SEPA mandate via sequenceType: 'first'.
+ * 
+ * Flow:
+ * 1. Create/get Mollie customer
+ * 2. Create first payment met sequenceType: 'first' (creates mandate)
+ * 3. Store payment in database
+ * 4. Return payment URL
+ * 
+ * @param user - Authenticated user
+ * @param plan - Plan type (solo/team)
+ * @param finalPrice - Final price after discount
+ * @param metadata - Payment metadata
+ * @param siteUrl - Site URL for redirects
+ * @param supabase - Supabase client
+ */
+async function createMonthlySubscription(
+  user: User,
+  plan: PlanType,
+  finalPrice: number,
+  metadata: PaymentMetadata,
+  siteUrl: string,
+  supabase: SupabaseClient
+): Promise<NextResponse> {
+  try {
+    // 1. Create/get Mollie customer (E2.S1)
+    console.log(`[Monthly Subscription] Creating/getting customer for user ${user.id}`);
+    const customerId = await createMollieCustomer(user.id);
+
+    // 2. Create first payment met sequenceType: 'first' (creates SEPA mandate)
+    const description = `${plan === 'solo' ? 'Solo' : 'Team'} Maandelijks Abonnement - Eerste maand`;
+
+    console.log(`[Monthly Subscription] Creating first payment for customer ${customerId}`);
+    const firstPayment = await mollieClient.customerPayments.create({
+      customerId,
+      amount: {
+        value: finalPrice.toFixed(2),
+        currency: 'EUR',
+      },
+      description,
+      redirectUrl: `${siteUrl}/checkout/success`,
+      cancelUrl: `${siteUrl}/checkout/cancel`,
+      webhookUrl: `${siteUrl}/api/webhooks/mollie`,
+      sequenceType: 'first', // Creates SEPA mandate!
+      metadata: {
+        ...metadata,
+        subscriptionType: 'monthly', // Markeer als monthly subscription
+      },
+    });
+
+    console.log(`[Monthly Subscription] First payment created: ${firstPayment.id}`);
+
+    // 3. Store payment in database
+    const { error: dbError } = await supabase
+      .from('payments')
+      .insert({
+        user_id: user.id,
+        mollie_payment_id: firstPayment.id,
+        amount: finalPrice,
+        currency: 'EUR',
+        status: 'open',
+        description,
+      });
+
+    if (dbError) {
+      console.error('[Monthly Subscription] Error saving payment to database:', dbError);
+      // Payment is al aangemaakt bij Mollie, maar niet opgeslagen in DB
+      // Dit is niet ideaal, maar we kunnen de gebruiker nog steeds doorsturen
+      // De webhook kan dit later oplossen
+    } else {
+      console.log(`[Monthly Subscription] Payment ${firstPayment.id} saved to database`);
+    }
+
+    // 4. Return payment URL voor redirect
+    return NextResponse.json({
+      success: true,
+      paymentUrl: firstPayment.getCheckoutUrl(),
+      paymentId: firstPayment.id,
+    });
+  } catch (error) {
+    console.error('[Monthly Subscription] Error creating monthly subscription:', error);
+
+    // Mollie API errors
+    if (error && typeof error === 'object' && 'message' in error) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: `Betalingsfout: ${error.message}`,
+        },
+        { status: 500 }
+      );
+    }
+
+    return NextResponse.json(
+      {
+        success: false,
+        error: 'Er ging iets mis bij het aanmaken van de maandelijkse betaling. Probeer het later opnieuw.',
+      },
+      { status: 500 }
+    );
+  }
+}
+
+/**
+ * E3.S3: Routing functie voor yearly one-time payment
+ * 
+ * Deze functie bevat de bestaande one-time payment logica met contract dates.
+ * Yearly payments hebben ook een 12-maanden contractperiode met 14-dagen opt-out.
+ * 
+ * @param user - Authenticated user
+ * @param plan - Plan type (solo/team)
+ * @param finalPrice - Final price after discount
+ * @param metadata - Payment metadata
+ * @param siteUrl - Site URL for redirects
+ * @param supabase - Supabase client
+ */
+async function createYearlyPayment(
+  user: User,
+  plan: PlanType,
+  finalPrice: number,
+  metadata: PaymentMetadata,
+  siteUrl: string,
+  supabase: SupabaseClient
+): Promise<NextResponse> {
+  try {
+    // E3.S3: Bereken contract dates voor yearly payment
+    // Contract start = vandaag (bij succesvolle betaling)
+    const contractStartDate = new Date();
+    const contractDates = calculateContractDates(contractStartDate);
+
+    // Maak Mollie payment aan (one-time payment)
+    const description = `${plan === 'solo' ? 'Solo' : 'Team'} Jaarlijks Abonnement`;
+
+    console.log(`[Yearly Payment] Creating yearly payment for user ${user.id} with contract dates`);
     const payment = await mollieClient.payments.create({
       amount: {
         value: finalPrice.toFixed(2),
@@ -120,17 +327,18 @@ export async function POST(request: NextRequest) {
       cancelUrl: `${siteUrl}/checkout/cancel`,
       webhookUrl: `${siteUrl}/api/webhooks/mollie`,
       metadata: {
-        userId: user.id,
-        plan,
-        billing,
-        discountCode: appliedDiscountCode || '',
-        discountAmount: discountAmount.toString(),
-        originalPrice: originalPrice.toString(),
-        finalPrice: finalPrice.toString(),
+        ...metadata,
+        subscriptionType: 'yearly', // Markeer als yearly one-time payment
+        // E3.S3: Contract dates toevoegen aan metadata
+        contractStartDate: contractDates.contract_start_date.toISOString(),
+        contractEndDate: contractDates.contract_end_date.toISOString(),
+        optOutDeadline: contractDates.opt_out_deadline.toISOString(),
       },
     });
 
-    // 6. Sla payment referentie op in database
+    console.log(`[Yearly Payment] Payment created: ${payment.id}`);
+
+    // Sla payment referentie op in database
     const { error: dbError } = await supabase
       .from('payments')
       .insert({
@@ -138,7 +346,7 @@ export async function POST(request: NextRequest) {
         mollie_payment_id: payment.id,
         amount: finalPrice,
         currency: 'EUR',
-        status: 'open', // Mollie payment status: open, canceled, pending, authorized, expired, failed, paid
+        status: 'open',
         description,
       });
 
@@ -149,14 +357,14 @@ export async function POST(request: NextRequest) {
       // De webhook kan dit later oplossen
     }
 
-    // 7. Return payment URL voor redirect
+    // Return payment URL voor redirect
     return NextResponse.json({
       success: true,
       paymentUrl: payment.getCheckoutUrl(),
       paymentId: payment.id,
     });
   } catch (error) {
-    console.error('Error creating payment:', error);
+    console.error('Error creating yearly payment:', error);
 
     // Mollie API errors
     if (error && typeof error === 'object' && 'message' in error) {

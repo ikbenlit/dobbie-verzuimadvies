@@ -195,14 +195,14 @@ contractEnd.setMonth(contractEnd.getMonth() + 12);
 
 | Epic ID | Titel | Doel | Stories | Story Points | Status |
 |---------|-------|------|---------|--------------|--------|
-| E0 | Database Schema Updates | Contract & opt-out tracking toevoegen aan database | 2 | 5 | ⏳ To Do |
-| E1 | TypeScript Types & Helpers | Type definitions en contract helper functies | 2 | 3 | ⏳ To Do |
-| E2 | Mollie Customer Management | Customer creation en opslag in database | 2 | 8 | ⏳ To Do |
-| E3 | Betaalflow Splitsen | Scheiding monthly (subscription) vs yearly (one-time) | 3 | 13 | ⏳ To Do |
-| E4 | Webhook Updates | Payment + subscription event handling | 4 | 21 | ⏳ To Do |
-| E5.S1 | Checkout: Contract info display | Contract voorwaarden tonen in checkout | 1 | 3 | ⏳ To Do |
-| E7 | Testing & QA | Test scenarios en debugging | 3 | 13 | ⏳ To Do |
-| E8 | Deployment | Pre-deployment checks en rollout | 3 | 8 | ⏳ To Do |
+| E0 | Database Schema Updates | Contract & opt-out tracking toevoegen aan database | 2 | 5 | ✅ Done |
+| E1 | TypeScript Types & Helpers | Type definitions en contract helper functies | 2 | 3 | ✅ Done |
+| E2 | Mollie Customer Management | Customer creation en opslag in database | 2 | 8 | ✅ Done |
+| E3 | Betaalflow Splitsen | Scheiding monthly (subscription) vs yearly (one-time) | 3 | 13 | ✅ Done |
+| E4 | Webhook Updates | Payment + subscription event handling | 4 | 21 | 🔵 To Do |
+| E5.S1 | Checkout: Contract info display | Contract voorwaarden tonen in checkout | 1 | 3 | 🔵 To Do |
+| E7 | Testing & QA | Test scenarios en debugging | 3 | 13 | 🔵 To Do |
+| E8 | Deployment | Pre-deployment checks en rollout | 3 | 8 | 🔵 To Do |
 
 **MVP Totaal:** 8 Epics (waarvan 1 partial), 20 Stories, **~74 Story Points (~74 uur)**
 
@@ -222,9 +222,9 @@ contractEnd.setMonth(contractEnd.getMonth() + 12);
 
 | Epic ID | Titel | Doel | Stories | Story Points | Status |
 |---------|-------|------|---------|--------------|--------|
-| E5.S2 | Account subscription page | User-facing subscription management pagina | 1 | 8 | ⏳ Post-MVP |
-| E5.S3 | Subscription cancellation UI | Cancellation flow voor users | 1 | 2 | ⏳ Post-MVP |
-| E6 | Refund Process | Support documentation en helpers | 2 | 3 | ⏳ Post-MVP |
+| E5.S2 | Account subscription page | User-facing subscription management pagina | 1 | 8 | 🟣 Post-MVP |
+| E5.S3 | Subscription cancellation UI | Cancellation flow voor users | 1 | 2 | 🟣 Post-MVP |
+| E6 | Refund Process | Support documentation en helpers | 2 | 3 | 🟣 Post-MVP |
 
 **Post-MVP Totaal:** 3 Stories, **~13 Story Points (~13 uur)**
 
@@ -247,8 +247,8 @@ contractEnd.setMonth(contractEnd.getMonth() + 12);
 
 | Story ID | Beschrijving | Acceptatiecriteria | Status | Afhankelijkheden | Story Points |
 |----------|--------------|---------------------|--------|------------------|--------------|
-| E0.S1 | Migratie: Contract fields toevoegen | - `subscriptions` tabel heeft contract_start_date, contract_end_date, opt_out_deadline<br>- `can_cancel` column met trigger werkt<br>- `is_recurring` boolean toegevoegd<br>- Bestaande subscriptions blijven werken | ✅ | — | 3 |
-| E0.S2 | Migratie: Mollie customer tracking | - `profiles` tabel heeft `mollie_customer_id`<br>- `subscriptions` tabel heeft `mollie_customer_id`, `mollie_mandate_id`<br>- `mollie_subscription_id` renamed naar `mollie_reference_id`<br>- Indexes toegevoegd | ✅ | E0.S1 | 2 |
+| E0.S1 | Migratie: Contract fields toevoegen | - `subscriptions` tabel heeft contract_start_date, contract_end_date, opt_out_deadline<br>- `can_cancel` column met trigger werkt<br>- `is_recurring` boolean toegevoegd<br>- Bestaande subscriptions blijven werken | ✅ Done | — | 3 |
+| E0.S2 | Migratie: Mollie customer tracking | - `profiles` tabel heeft `mollie_customer_id`<br>- `subscriptions` tabel heeft `mollie_customer_id`, `mollie_mandate_id`<br>- `mollie_subscription_id` renamed naar `mollie_reference_id`<br>- Indexes toegevoegd | ✅ Done | E0.S1 | 2 |
 
 **Technical Notes:**
 - Gebruik `ALTER TABLE ADD COLUMN` (backwards compatible)
@@ -344,14 +344,31 @@ CREATE INDEX IF NOT EXISTS idx_subscriptions_mandate ON subscriptions(mollie_man
 
 | Story ID | Beschrijving | Acceptatiecriteria | Status | Afhankelijkheden | Story Points |
 |----------|--------------|---------------------|--------|------------------|--------------|
-| E1.S1 | Update payment types | - `SubscriptionWithContract` interface gedefineerd<br>- Alle contract fields getypt<br>- Backwards compatible met bestaande types | ⏳ | E0.S2 | 1 |
-| E1.S2 | Contract helper functies | - `calculateContractDates()` werkt correct<br>- `isInOptOutPeriod()` correct<br>- `isContractActive()` correct<br>- Unit tests geschreven | ⏳ | E1.S1 | 2 |
+| E1.S1 | Update payment types | - `SubscriptionWithContract` interface gedefineerd<br>- Alle contract fields getypt<br>- Backwards compatible met bestaande types | ✅ Done | E0.S2 | 1 |
+| E1.S2 | Contract helper functies | - `calculateContractDates()` werkt correct<br>- `isInOptOutPeriod()` correct<br>- `isContractActive()` correct<br>- Unit tests geschreven | ✅ Done | E1.S1 | 2 |
 
 **Technical Notes:**
 - Nieuwe file: `/src/lib/payment/contract.ts`
 - Update: `/src/lib/payment/types.ts`
 - Use `date-fns` voor datum manipulatie (`addMonths`, `addDays`)
 - Export via `/src/lib/payment/index.ts`
+
+**✅ E1.S1 Status:** Voltooid op 13-11-2025
+- `SubscriptionWithContract` interface toegevoegd aan `/src/lib/payment/types.ts`
+- `Subscription` basis interface toegevoegd (backwards compatible)
+- `SubscriptionStatus` type toegevoegd voor type safety
+- Alle contract fields correct getypt (contract_start_date, contract_end_date, opt_out_deadline, can_cancel)
+- Alle Mollie fields correct getypt (mollie_reference_id, mollie_customer_id, mollie_mandate_id, is_recurring)
+- JSDoc comments toegevoegd voor documentatie
+
+**✅ E1.S2 Status:** Voltooid op 13-11-2025
+- `calculateContractDates()` functie geïmplementeerd in `/src/lib/payment/contract.ts`
+- `isInOptOutPeriod()` functie geïmplementeerd
+- `isContractActive()` functie geïmplementeerd
+- `date-fns` package geïnstalleerd en geconfigureerd
+- Unit tests geschreven in `/src/lib/payment/__tests__/contract.test.ts` (18 test cases, alle slagen)
+- Jest configuratie aangemaakt (`jest.config.js`) voor TypeScript en ES modules
+- Contract helpers geëxporteerd via `/src/lib/payment/index.ts`
 
 **Code Structure:**
 ```typescript
@@ -393,8 +410,8 @@ export function calculateContractDates(startDate: Date) {
 
 | Story ID | Beschrijving | Acceptatiecriteria | Status | Afhankelijkheden | Story Points |
 |----------|--------------|---------------------|--------|------------------|--------------|
-| E2.S1 | Customer creation service | - `createMollieCustomer()` functie werkt<br>- Check op bestaande customer<br>- Customer ID opgeslagen in profiles<br>- Error handling voor Mollie API | ⏳ | E1.S2 | 5 |
-| E2.S2 | Customer retrieval helper | - `getMollieCustomer()` functie werkt<br>- Returns customer of null<br>- Caching voor repeated calls | ⏳ | E2.S1 | 3 |
+| E2.S1 | Customer creation service | - `createMollieCustomer()` functie werkt<br>- Check op bestaande customer<br>- Customer ID opgeslagen in profiles<br>- Error handling voor Mollie API | ✅ Done | E1.S2 | 5 |
+| E2.S2 | Customer retrieval helper | - `getMollieCustomer()` functie werkt<br>- Returns customer of null<br>- Caching voor repeated calls | ✅ Done | E2.S1 | 3 |
 
 **Technical Notes:**
 - Nieuwe file: `/src/lib/mollie/customer.ts`
@@ -447,9 +464,9 @@ export async function createMollieCustomer(userId: string) {
 
 | Story ID | Beschrijving | Acceptatiecriteria | Status | Afhankelijkheden | Story Points |
 |----------|--------------|---------------------|--------|------------------|--------------|
-| E3.S1 | Payment route routing logic | - `if (billing === 'monthly')` routing werkt<br>- Correct dispatch naar functies<br>- Request validation blijft werken | ⏳ | E2.S2 | 2 |
-| E3.S2 | Monthly subscription creation | - `createMonthlySubscription()` implementatie<br>- Customer creation call<br>- First payment met `sequenceType: 'first'`<br>- Metadata correct | ⏳ | E3.S1 | 8 |
-| E3.S3 | Yearly payment (refactor existing) | - `createYearlyPayment()` extracted<br>- Bestaande one-time logic behouden<br>- Contract dates toegevoegd aan metadata | ⏳ | E3.S1 | 3 |
+| E3.S1 | Payment route routing logic | - `if (billing === 'monthly')` routing werkt<br>- Correct dispatch naar functies<br>- Request validation blijft werken | ✅ Done | E2.S2 | 2 |
+| E3.S2 | Monthly subscription creation | - `createMonthlySubscription()` implementatie<br>- Customer creation call<br>- First payment met `sequenceType: 'first'`<br>- Metadata correct | ✅ Done | E3.S1 | 8 |
+| E3.S3 | Yearly payment (refactor existing) | - `createYearlyPayment()` extracted<br>- Bestaande one-time logic behouden<br>- Contract dates toegevoegd aan metadata | ✅ Done | E3.S1 | 3 |
 
 **Technical Notes:**
 - Update `/app/api/payment/create/route.ts`
@@ -526,10 +543,10 @@ async function createMonthlySubscription(user, plan, price, metadata) {
 
 | Story ID | Beschrijving | Acceptatiecriteria | Status | Afhankelijkheden | Story Points |
 |----------|--------------|---------------------|--------|------------------|--------------|
-| E4.S1 | Webhook event routing | - Detect `tr_` vs `sub_` prefixes<br>- Route naar juiste handler<br>- Unknown events loggen | ⏳ | E3.S3 | 3 |
-| E4.S2 | Payment webhook: recurring subscription | - `createRecurringSubscription()` werkt<br>- Mollie subscription aangemaakt<br>- Database subscription met contract fields<br>- Profile status update | ⏳ | E4.S1 | 8 |
-| E4.S3 | Payment webhook: one-time subscription | - `createOneTimeSubscription()` refactored<br>- Contract dates toegevoegd<br>- Bestaande logic behouden | ⏳ | E4.S1 | 3 |
-| E4.S4 | Subscription webhook handler | - `handleSubscriptionWebhook()` werkt<br>- Handles 'active', 'canceled', 'suspended'<br>- Updates database correct<br>- Email notifications (optional) | ⏳ | E4.S2 | 7 |
+| E4.S1 | Webhook event routing | - Detect `tr_` vs `sub_` prefixes<br>- Route naar juiste handler<br>- Unknown events loggen | 🔵 To Do | E3.S3 | 3 |
+| E4.S2 | Payment webhook: recurring subscription | - `createRecurringSubscription()` werkt<br>- Mollie subscription aangemaakt<br>- Database subscription met contract fields<br>- Profile status update | 🔵 To Do | E4.S1 | 8 |
+| E4.S3 | Payment webhook: one-time subscription | - `createOneTimeSubscription()` refactored<br>- Contract dates toegevoegd<br>- Bestaande logic behouden | 🔵 To Do | E4.S1 | 3 |
+| E4.S4 | Subscription webhook handler | - `handleSubscriptionWebhook()` werkt<br>- Handles 'active', 'canceled', 'suspended'<br>- Updates database correct<br>- Email notifications (optional) | 🔵 To Do | E4.S2 | 7 |
 
 **Technical Notes:**
 - Update `/app/api/webhooks/mollie/route.ts`
@@ -690,7 +707,7 @@ async function handleSubscriptionWebhook(subscriptionId: string) {
 
 | Story ID | Beschrijving | Acceptatiecriteria | Status | Afhankelijkheden | Story Points |
 |----------|--------------|---------------------|--------|------------------|--------------|
-| E5.S1 | Checkout page: Contract info display | - Contract voorwaarden getoond<br>- Verschillend voor monthly/yearly<br>- 12 maanden + 14 dagen duidelijk<br>- SEPA info voor monthly<br>- **Eenvoudige info box, geen interactieve elementen** | ⏳ | E4.S4 | 3 |
+| E5.S1 | Checkout page: Contract info display | - Contract voorwaarden getoond<br>- Verschillend voor monthly/yearly<br>- 12 maanden + 14 dagen duidelijk<br>- SEPA info voor monthly<br>- **Eenvoudige info box, geen interactieve elementen** | 🔵 To Do | E4.S4 | 3 |
 
 **Technical Notes:**
 - Update `/app/checkout/page.tsx` met contract info box
@@ -755,9 +772,9 @@ async function handleSubscriptionWebhook(subscriptionId: string) {
 
 | Story ID | Beschrijving | Acceptatiecriteria | Status | Afhankelijkheden | Story Points |
 |----------|--------------|---------------------|--------|------------------|--------------|
-| E7.S1 | Monthly subscription tests | - Eerste betaling succesvol → mandaat<br>- Eerste betaling faalt → geen sub<br>- Tweede betaling succesvol<br>- Tweede betaling faalt → suspended | ⏳ | E5.S1 | 5 |
-| E7.S2 | Yearly subscription tests | - Betaling succesvol → 12m active<br>- Annulering binnen 14 dagen<br>- Verlopen na 12 maanden | ⏳ | E7.S1 | 3 |
-| E7.S3 | Bug fixes & polish | - Alle gevonden bugs gefixt<br>- Edge cases handled<br>- Error messages user-friendly<br>- Performance check | ⏳ | E7.S2 | 5 |
+| E7.S1 | Monthly subscription tests | - Eerste betaling succesvol → mandaat<br>- Eerste betaling faalt → geen sub<br>- Tweede betaling succesvol<br>- Tweede betaling faalt → suspended | 🔵 To Do | E5.S1 | 5 |
+| E7.S2 | Yearly subscription tests | - Betaling succesvol → 12m active<br>- Annulering binnen 14 dagen<br>- Verlopen na 12 maanden | 🔵 To Do | E7.S1 | 3 |
+| E7.S3 | Bug fixes & polish | - Alle gevonden bugs gefixt<br>- Edge cases handled<br>- Error messages user-friendly<br>- Performance check | 🔵 To Do | E7.S2 | 5 |
 
 **Technical Notes:**
 - Gebruik Mollie test mode
@@ -794,9 +811,9 @@ async function handleSubscriptionWebhook(subscriptionId: string) {
 
 | Story ID | Beschrijving | Acceptatiecriteria | Status | Afhankelijkheden | Story Points |
 |----------|--------------|---------------------|--------|------------------|--------------|
-| E8.S1 | Pre-deployment checklist | - SEPA Direct Debit geactiveerd in Mollie<br>- Live API keys configured<br>- Webhook URL productie<br>- Migratie getest op staging | ⏳ | E7.S3 | 2 |
-| E8.S2 | Production deployment | - Database migratie run<br>- Code deployed naar Vercel<br>- Complete test flow in prod (test mode)<br>- Switch naar live mode | ⏳ | E8.S1 | 3 |
-| E8.S3 | Post-deployment monitoring | - Webhook logs monitoren (48 uur)<br>- Subscription creation rate check<br>- Mandate creation rate check<br>- Failed payment tracking | ⏳ | E8.S2 | 3 |
+| E8.S1 | Pre-deployment checklist | - SEPA Direct Debit geactiveerd in Mollie<br>- Live API keys configured<br>- Webhook URL productie<br>- Migratie getest op staging | 🔵 To Do | E7.S3 | 2 |
+| E8.S2 | Production deployment | - Database migratie run<br>- Code deployed naar Vercel<br>- Complete test flow in prod (test mode)<br>- Switch naar live mode | 🔵 To Do | E8.S1 | 3 |
+| E8.S3 | Post-deployment monitoring | - Webhook logs monitoren (48 uur)<br>- Subscription creation rate check<br>- Mandate creation rate check<br>- Failed payment tracking | 🔵 To Do | E8.S2 | 3 |
 
 **Technical Notes:**
 - Deployment via Vercel (automatic op `main` branch push)
@@ -882,7 +899,7 @@ If critical issues occur:
 
 | Story ID | Beschrijving | Acceptatiecriteria | Status | Afhankelijkheden | Story Points |
 |----------|--------------|---------------------|--------|------------------|--------------|
-| E5.S2 | Account subscription page | - Nieuwe route `/account/subscription`<br>- Contract status display<br>- Opt-out button (conditional op `can_cancel`)<br>- Next billing date getoond<br>- **Eenvoudige implementatie** | ⏳ | E5.S1 | 8 |
+| E5.S2 | Account subscription page | - Nieuwe route `/account/subscription`<br>- Contract status display<br>- Opt-out button (conditional op `can_cancel`)<br>- Next billing date getoond<br>- **Eenvoudige implementatie** | 🟣 Post-MVP | E5.S1 | 8 |
 
 **Technical Notes:**
 - Nieuwe file: `/app/account/subscription/page.tsx`
@@ -941,7 +958,7 @@ export default async function SubscriptionPage() {
 
 | Story ID | Beschrijving | Acceptatiecriteria | Status | Afhankelijkheden | Story Points |
 |----------|--------------|---------------------|--------|------------------|--------------|
-| E5.S3 | Subscription cancellation UI | - Cancel button (only after contract)<br>- Eenvoudige confirmation (geen complexe modal)<br>- API call naar cancellation endpoint<br>- Success/error handling<br>- **Basis functionaliteit is voldoende** | ⏳ | E5.S2 | 2 |
+| E5.S3 | Subscription cancellation UI | - Cancel button (only after contract)<br>- Eenvoudige confirmation (geen complexe modal)<br>- API call naar cancellation endpoint<br>- Success/error handling<br>- **Basis functionaliteit is voldoende** | 🟣 Post-MVP | E5.S2 | 2 |
 
 **Technical Notes:**
 - Eenvoudige button die API call doet
@@ -956,8 +973,8 @@ export default async function SubscriptionPage() {
 
 | Story ID | Beschrijving | Acceptatiecriteria | Status | Afhankelijkheden | Story Points |
 |----------|--------------|---------------------|--------|------------------|--------------|
-| E6.S1 | Support documentation | - Refund template document<br>- Step-by-step Mollie dashboard guide<br>- Database update queries<br>- Email template | ⏳ | E5.S1 | 2 |
-| E6.S2 | Refund eligibility helper | - `checkRefundEligibility()` functie<br>- Returns canRefund, daysRemaining, amount<br>- Voor support team gebruik | ⏳ | E6.S1 | 1 |
+| E6.S1 | Support documentation | - Refund template document<br>- Step-by-step Mollie dashboard guide<br>- Database update queries<br>- Email template | 🟣 Post-MVP | E5.S1 | 2 |
+| E6.S2 | Refund eligibility helper | - `checkRefundEligibility()` functie<br>- Returns canRefund, daysRemaining, amount<br>- Voor support team gebruik | 🟣 Post-MVP | E6.S1 | 1 |
 
 **Technical Notes:**
 - **Geen automatische refund API** (bewuste YAGNI keuze)
@@ -1319,6 +1336,8 @@ export default async function SubscriptionPage() {
 
 | Versie | Datum | Auteur | Wijziging |
 |--------|-------|--------|-----------|
+| v1.5 | 13-11-2025 | Development Team | Alle epic en story statussen bijgewerkt naar tekstuele statussen (To Do, In Progress, Done, Post-MVP) in plaats van emoji's. Epic 0-3 voltooid (Done), Epic 4-8 nog To Do. |
+| v1.4 | 13-11-2025 | Development Team | Epic 1 voltooid: E1.S1 (payment types) en E1.S2 (contract helpers) geïmplementeerd. Status updates toegevoegd aan Epic 1 sectie. Alle tests slagen (18/18). |
 | v1.3 | 13-11-2025 | Development Team | Database check uitgevoerd via Supabase MCP. Migratie SQL aangepast: `profiles.mollie_customer_id` bestaat al, alleen UNIQUE constraint nodig. Database check resultaten toegevoegd aan E0. |
 | v1.2 | 13-11-2025 | Development Team | Plan herarrangeerd op MVP vs Post-MVP basis. Duidelijke scheiding tussen must-have en nice-to-have features. |
 | v1.1 | 13-11-2025 | Development Team | Workflow alignment analyse toegevoegd (sectie 11), vereenvoudigingen geïmplementeerd (E5.S2/S3 optioneel), prioriteiten toegevoegd |
@@ -1326,6 +1345,6 @@ export default async function SubscriptionPage() {
 
 ---
 
-**Status:** Ready for Implementation
-**Next Action:** E0.S1 - Database migratie schrijven en testen (MVP)
+**Status:** In Progress
+**Next Action:** E4.S1 - Webhook Updates: Webhook event routing implementeren
 

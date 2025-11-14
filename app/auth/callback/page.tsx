@@ -17,7 +17,7 @@ function AuthCallbackContent() {
       const code = searchParams.get('code');
       const token = searchParams.get('token');
       const type = searchParams.get('type');
-      const next = searchParams.get('next') || searchParams.get('redirect') || '/chat';
+      const next = searchParams.get('next') || searchParams.get('redirect');
 
       try {
         // Handle code-based flow (OAuth, etc.)
@@ -31,8 +31,14 @@ function AuthCallbackContent() {
             return;
           }
 
-          // Success - redirect to destination
-          router.push(next);
+          // For password recovery, redirect to reset-password page
+          if (type === 'recovery') {
+            router.push('/reset-password');
+            return;
+          }
+
+          // Success - redirect to destination or default to /chat
+          router.push(next || '/chat');
           return;
         }
 
@@ -50,8 +56,14 @@ function AuthCallbackContent() {
             return;
           }
 
-          // Success - redirect to destination
-          router.push(next);
+          // For password recovery, redirect to reset-password page
+          if (type === 'recovery') {
+            router.push('/reset-password');
+            return;
+          }
+
+          // Success - redirect to destination or default to /chat
+          router.push(next || '/chat');
           return;
         }
 

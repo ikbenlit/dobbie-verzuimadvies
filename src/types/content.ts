@@ -275,10 +275,12 @@ export interface AuthPageFeatures {
 }
 
 export interface AuthForm {
-  emailLabel: string;
-  emailPlaceholder: string;
+  emailLabel?: string;
+  emailPlaceholder?: string;
   passwordLabel?: string;
   passwordPlaceholder?: string;
+  confirmPasswordLabel?: string;
+  confirmPasswordPlaceholder?: string;
   fullNameLabel?: string;
   fullNamePlaceholder?: string;
   organizationLabel?: string;
@@ -311,6 +313,7 @@ export interface AuthContent {
   login: AuthPageContent;
   register: AuthPageContent;
   forgotPassword: AuthPageContent;
+  resetPassword: AuthPageContent;
 }
 
 // Main content structure

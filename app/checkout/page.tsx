@@ -182,7 +182,7 @@ function CheckoutContent() {
         body: JSON.stringify({
           plan,
           billing,
-          discountCode: appliedDiscount?.code || null,
+          ...(appliedDiscount?.code && { discountCode: appliedDiscount.code }),
         }),
       });
       

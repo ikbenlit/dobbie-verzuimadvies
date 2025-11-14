@@ -9,6 +9,7 @@ import { getBasePrice } from '@/lib/payment/pricing';
 import type { PlanType, BillingPeriod } from '@/lib/payment/types';
 import { CreditCard, Check, X, Loader2, Tag } from 'lucide-react';
 import PriceDisplay from '@/components/checkout/PriceDisplay';
+import ContractInfo from '@/components/checkout/ContractInfo';
 
 function CheckoutContent() {
   const searchParams = useSearchParams();
@@ -408,6 +409,9 @@ function CheckoutContent() {
             
             {/* Rechts: Prijs Overzicht */}
             <div className="space-y-6">
+              {/* E5.S1: Contract Info Display */}
+              <ContractInfo billing={billing} />
+              
               <PriceDisplay
                 plan={plan}
                 billing={billing}

@@ -543,16 +543,56 @@ async function createMonthlySubscription(user, plan, price, metadata) {
 
 | Story ID | Beschrijving | Acceptatiecriteria | Status | Afhankelijkheden | Story Points |
 |----------|--------------|---------------------|--------|------------------|--------------|
-| E4.S1 | Webhook event routing | - Detect `tr_` vs `sub_` prefixes<br>- Route naar juiste handler<br>- Unknown events loggen | 🔵 To Do | E3.S3 | 3 |
-| E4.S2 | Payment webhook: recurring subscription | - `createRecurringSubscription()` werkt<br>- Mollie subscription aangemaakt<br>- Database subscription met contract fields<br>- Profile status update | 🔵 To Do | E4.S1 | 8 |
-| E4.S3 | Payment webhook: one-time subscription | - `createOneTimeSubscription()` refactored<br>- Contract dates toegevoegd<br>- Bestaande logic behouden | 🔵 To Do | E4.S1 | 3 |
-| E4.S4 | Subscription webhook handler | - `handleSubscriptionWebhook()` werkt<br>- Handles 'active', 'canceled', 'suspended'<br>- Updates database correct<br>- Email notifications (optional) | 🔵 To Do | E4.S2 | 7 |
+| E4.S1 | Webhook event routing | - Detect `tr_` vs `sub_` prefixes<br>- Route naar juiste handler<br>- Unknown events loggen | ✅ Done | E3.S3 | 3 |
+| E4.S2 | Payment webhook: recurring subscription | - `createRecurringSubscription()` werkt<br>- Mollie subscription aangemaakt<br>- Database subscription met contract fields<br>- Profile status update | ✅ Done | E4.S1 | 8 |
+| E4.S3 | Payment webhook: one-time subscription | - `createOneTimeSubscription()` refactored<br>- Contract dates toegevoegd<br>- Bestaande logic behouden | ✅ Done | E4.S1 | 3 |
+| E4.S4 | Subscription webhook handler | - `handleSubscriptionWebhook()` werkt<br>- Handles 'active', 'canceled', 'suspended'<br>- Updates database correct<br>- Email notifications (optional) | ✅ Done | E4.S2 | 7 |
 
 **Technical Notes:**
 - Update `/app/api/webhooks/mollie/route.ts`
 - Mollie webhook retries automatisch (max 10x over 24 uur)
 - Idempotency belangrijk (check bestaande subscription)
 - Webhook moet binnen 5 seconden responsen (Mollie timeout)
+
+**✅ E4.S1 Status:** Voltooid op 13-11-2025
+- Event routing geïmplementeerd op basis van ID prefix (`tr_`, `sub_`, `cst_`, `mdt_`)
+- Bestaande payment handling logica gerefactord naar `handlePaymentWebhook()` functie
+- Placeholder `handleSubscriptionWebhook()` functie aangemaakt voor E4.S4
+- Unknown events worden gelogd maar retourneren altijd 200 OK (voorkomt Mollie retries)
+- Alle bestaande functionaliteit behouden (backwards compatible)
+
+**✅ E4.S2 Status:** Voltooid op 13-11-2025
+- `createRecurringSubscription()` functie geïmplementeerd in `/src/lib/payment/recurring-subscription.ts`
+- Mollie subscription creation via `mollieClient.customerSubscriptions.create()`
+- Database subscription record met alle contract fields (contract_start_date, contract_end_date, opt_out_deadline)
+- Contract dates berekend met `calculateContractDates()` helper
+- Profile status update naar 'active' geïntegreerd
+- Discount code increment en welcome email functionaliteit toegevoegd
+- Idempotency check geïmplementeerd (voorkomt dubbele subscriptions)
+- Webhook handler routing toegevoegd voor monthly subscriptions
+- CustomerId en mandateId ophalen via Mollie API (customerMandates.list)
+- `subscriptionExistsForPayment()` functie geüpdatet naar `mollie_reference_id` (na migratie E0.S2)
+
+**✅ E4.S3 Status:** Voltooid op 13-11-2025
+- `createOneTimeSubscription()` functie geïmplementeerd in `/src/lib/payment/subscription.ts`
+- Contract dates toegevoegd voor yearly subscriptions (contract_start_date, contract_end_date, opt_out_deadline)
+- Contract dates berekend met `calculateContractDates()` helper
+- `is_recurring` field expliciet gezet naar `false` voor one-time subscriptions
+- `mollie_customer_id` en `mollie_mandate_id` gezet naar `null` voor one-time subscriptions
+- Bestaande `createSubscription()` functie behouden als deprecated wrapper voor backwards compatibility
+- Webhook handler geüpdatet om `createOneTimeSubscription()` aan te roepen voor yearly subscriptions
+- Alle bestaande functionaliteit behouden (profile update, discount increment, welcome email)
+
+**✅ E4.S4 Status:** Voltooid op 13-11-2025
+- `handleSubscriptionWebhook()` functie volledig geïmplementeerd in `/app/api/webhooks/mollie/route.ts`
+- Subscription ophalen van Mollie via customer ID en subscription ID
+- Status handling geïmplementeerd voor 'active', 'canceled', 'suspended'
+- Database subscription record wordt geüpdatet bij status changes
+- `handleActiveSubscription()`: Update next_billing_date bij succesvolle maandelijkse betaling
+- `handleCanceledSubscription()`: Update profile status naar 'inactive' bij annulering
+- `handleSuspendedSubscription()`: Logging voor failed payments (grace period)
+- Email notifications optioneel gelaten (TODO comments voor toekomstige implementatie)
+- Error handling en idempotency checks geïmplementeerd
 
 **Event Types:**
 ```
@@ -707,12 +747,23 @@ async function handleSubscriptionWebhook(subscriptionId: string) {
 
 | Story ID | Beschrijving | Acceptatiecriteria | Status | Afhankelijkheden | Story Points |
 |----------|--------------|---------------------|--------|------------------|--------------|
-| E5.S1 | Checkout page: Contract info display | - Contract voorwaarden getoond<br>- Verschillend voor monthly/yearly<br>- 12 maanden + 14 dagen duidelijk<br>- SEPA info voor monthly<br>- **Eenvoudige info box, geen interactieve elementen** | 🔵 To Do | E4.S4 | 3 |
+| E5.S1 | Checkout page: Contract info display | - Contract voorwaarden getoond<br>- Verschillend voor monthly/yearly<br>- 12 maanden + 14 dagen duidelijk<br>- SEPA info voor monthly<br>- **Eenvoudige info box, geen interactieve elementen** | ✅ Done | E4.S4 | 3 |
 
 **Technical Notes:**
 - Update `/app/checkout/page.tsx` met contract info box
 - Eenvoudige implementatie: geen complexe hooks of state management nodig
 - Contract info = statische tekst, geen interactieve elementen
+
+**✅ E5.S1 Status:** Voltooid op 13-11-2025
+- `ContractInfo` component geïmplementeerd in `/src/components/checkout/ContractInfo.tsx`
+- Contract info box geïntegreerd in checkout pagina boven prijs overzicht
+- Verschillende content voor monthly vs yearly billing
+- 12 maanden contractperiode duidelijk vermeld
+- 14 dagen bedenktijd met volledige refund mogelijkheid vermeld
+- SEPA incasso info voor monthly subscriptions toegevoegd
+- Eenvoudige info box zonder interactieve elementen (statische tekst)
+- Gebruikt Lucide React Check icon voor visuele duidelijkheid
+- Styling consistent met rest van checkout pagina (Tailwind CSS)
 
 **UI Components (E5.S1 - Vereenvoudigd):**
 ```typescript
@@ -1336,6 +1387,11 @@ export default async function SubscriptionPage() {
 
 | Versie | Datum | Auteur | Wijziging |
 |--------|-------|--------|-----------|
+| v1.10 | 13-11-2025 | Development Team | E5.S1 voltooid: ContractInfo component geïmplementeerd en geïntegreerd in checkout pagina. Contract voorwaarden getoond voor monthly en yearly subscriptions. |
+| v1.9 | 13-11-2025 | Development Team | E4.S4 voltooid: handleSubscriptionWebhook() volledig geïmplementeerd. Status handling voor active, canceled, suspended. Database updates en error handling toegevoegd. |
+| v1.8 | 13-11-2025 | Development Team | E4.S3 voltooid: createOneTimeSubscription() functie geïmplementeerd met contract dates voor yearly subscriptions. Bestaande createSubscription() behouden als deprecated wrapper. |
+| v1.7 | 13-11-2025 | Development Team | E4.S2 voltooid: createRecurringSubscription() functie geïmplementeerd. Mollie subscription creation, database record met contract fields, webhook routing voor monthly subscriptions. |
+| v1.6 | 13-11-2025 | Development Team | E4.S1 voltooid: Webhook event routing geïmplementeerd. Payment handling gerefactord naar aparte functie, subscription handler placeholder toegevoegd. |
 | v1.5 | 13-11-2025 | Development Team | Alle epic en story statussen bijgewerkt naar tekstuele statussen (To Do, In Progress, Done, Post-MVP) in plaats van emoji's. Epic 0-3 voltooid (Done), Epic 4-8 nog To Do. |
 | v1.4 | 13-11-2025 | Development Team | Epic 1 voltooid: E1.S1 (payment types) en E1.S2 (contract helpers) geïmplementeerd. Status updates toegevoegd aan Epic 1 sectie. Alle tests slagen (18/18). |
 | v1.3 | 13-11-2025 | Development Team | Database check uitgevoerd via Supabase MCP. Migratie SQL aangepast: `profiles.mollie_customer_id` bestaat al, alleen UNIQUE constraint nodig. Database check resultaten toegevoegd aan E0. |
@@ -1346,5 +1402,5 @@ export default async function SubscriptionPage() {
 ---
 
 **Status:** In Progress
-**Next Action:** E4.S1 - Webhook Updates: Webhook event routing implementeren
+**Next Action:** E7.S1 - Monthly subscription tests - Test complete checkout flows in Mollie test mode
 

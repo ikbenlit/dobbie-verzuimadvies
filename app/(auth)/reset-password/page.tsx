@@ -64,7 +64,7 @@ export default function ResetPasswordPage() {
         throw updateError;
       }
 
-      setMessage(content.form.successMessage);
+      setMessage(content.form.successMessage || 'Wachtwoord succesvol bijgewerkt!');
       setPassword('');
       setConfirmPassword('');
 

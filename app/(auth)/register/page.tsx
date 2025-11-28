@@ -81,6 +81,10 @@ export default function RegisterPage() {
     setLoading(true);
 
     try {
+      // Build the callback URL for email confirmation
+      const origin = window.location.origin;
+      const callbackUrl = `${origin}/auth/callback`;
+
       // Register user
       const { data, error: signUpError } = await supabase.auth.signUp({
         email,
@@ -90,6 +94,7 @@ export default function RegisterPage() {
             full_name: fullName,
             organization: organization,
           },
+          emailRedirectTo: callbackUrl,
         },
       });
 

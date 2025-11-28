@@ -85,6 +85,8 @@ export default function RegisterPage() {
       const origin = window.location.origin;
       const callbackUrl = `${origin}/auth/callback`;
 
+      console.log('[Register] Using emailRedirectTo:', callbackUrl);
+
       // Register user
       const { data, error: signUpError } = await supabase.auth.signUp({
         email,

@@ -15,9 +15,11 @@ function AuthCallbackContent() {
 
       // Get parameters from URL
       const code = searchParams.get('code');
-      const token = searchParams.get('token');
+      const token = searchParams.get('token') || searchParams.get('token_hash');
       const type = searchParams.get('type');
       const next = searchParams.get('next') || searchParams.get('redirect');
+
+      console.log('Auth callback params:', { code, token: token?.substring(0, 20) + '...', type, next });
 
       try {
         // Handle code-based flow (OAuth, etc.)
@@ -44,17 +46,21 @@ function AuthCallbackContent() {
 
         // Handle token-based flow (email confirmation, magic links)
         if (token && type) {
-          const { error } = await supabase.auth.verifyOtp({
+          console.log('Attempting verifyOtp with token type:', type);
+
+          const { data, error } = await supabase.auth.verifyOtp({
             token_hash: token,
             type: type as 'signup' | 'recovery' | 'email',
           });
 
           if (error) {
-            console.error('Token verification error:', error);
-            setError('Verificatie mislukt. De link is mogelijk verlopen.');
+            console.error('Token verification error:', error.message, error);
+            setError(`Verificatie mislukt: ${error.message}`);
             setTimeout(() => router.push('/login'), 3000);
             return;
           }
+
+          console.log('verifyOtp success:', data?.user?.email);
 
           // For password recovery, redirect to reset-password page
           if (type === 'recovery') {

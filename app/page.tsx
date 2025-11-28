@@ -1,3 +1,4 @@
+import { redirect } from 'next/navigation';
 import {
   Header,
   Hero,
@@ -14,7 +15,19 @@ import {
 } from '@/components/landing';
 import ScrollToTopButton from '@/components/ui/ScrollToTopButton';
 
-export default function HomePage() {
+interface HomePageProps {
+  searchParams: Promise<{ code?: string; type?: string }>;
+}
+
+export default async function HomePage({ searchParams }: HomePageProps) {
+  const params = await searchParams;
+
+  // Handle auth callback codes that land on homepage
+  if (params.code) {
+    const callbackUrl = `/auth/callback?code=${params.code}${params.type ? `&type=${params.type}` : ''}`;
+    redirect(callbackUrl);
+  }
+
   return (
     <div className="overflow-x-hidden">
       <Header />

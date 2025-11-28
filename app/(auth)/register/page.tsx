@@ -114,8 +114,10 @@ export default function RegisterPage() {
         await new Promise(resolve => setTimeout(resolve, 500));
         window.location.href = `/checkout?plan=${plan}&billing=${billing}&new=true`;
       } else {
-        // Email confirmation vereist - redirect naar login met return URL en plan parameters
-        window.location.href = `/login?redirect=/checkout?plan=${plan}%26billing=${billing}%26new=true`;
+        // Email confirmation vereist - toon succes melding
+        setSuccess(true);
+        setLoading(false);
+        // Niet automatisch doorsturen - gebruiker moet eerst email bevestigen
       }
     } catch (err: any) {
       // Detailed logging for debugging
@@ -207,18 +209,32 @@ export default function RegisterPage() {
             </p>
           </div>
 
-          {/* Success Banner */}
-          {success && (
-            <div className="mb-6 bg-green-50 border border-green-200 text-green-800 p-4 rounded-md">
-              <div className="flex items-center">
-                <Check className="h-5 w-5 mr-2" />
-                <p className="text-[14px] font-medium">
-                  {content.form.successMessage}
-                </p>
+          {/* Success Banner - Email bevestiging vereist */}
+          {success ? (
+            <div className="text-center py-8">
+              <div className="mx-auto w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-6">
+                <Check className="h-8 w-8 text-green-600" />
+              </div>
+              <h2 className="text-xl font-bold text-[#3D3D3D] mb-3">
+                Bijna klaar!
+              </h2>
+              <p className="text-[#707070] mb-6">
+                We hebben een bevestigingsmail gestuurd naar <strong>{email}</strong>.
+                <br />
+                Klik op de link in de email om je account te activeren.
+              </p>
+              <div className="bg-[#F5F2EB] rounded-lg p-4 text-sm text-[#707070]">
+                <p>Geen email ontvangen? Check je spam folder of</p>
+                <button
+                  type="button"
+                  onClick={() => setSuccess(false)}
+                  className="text-[#771138] hover:text-[#5A0D29] font-semibold mt-1"
+                >
+                  probeer opnieuw te registreren
+                </button>
               </div>
             </div>
-          )}
-
+          ) : (
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
               <label
@@ -353,6 +369,7 @@ export default function RegisterPage() {
               </Link>
             </p>
           </form>
+          )}
         </div>
       </div>
 

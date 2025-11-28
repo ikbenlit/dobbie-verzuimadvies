@@ -22,13 +22,14 @@ export default function RegisterPage() {
   const supabase = createClient();
 
   // Check if user is already logged in and redirect accordingly
+  // Also clears stale sessions to prevent auth conflicts
   useEffect(() => {
     const checkExistingUser = async () => {
       try {
         const { data: { user } } = await supabase.auth.getUser();
-        
+
         if (user) {
-          // User is logged in, check subscription status
+          // User exists, check if they have a valid profile
           const { data: profile, error: profileError } = await supabase
             .from('profiles')
             .select('subscription_status')
@@ -36,18 +37,17 @@ export default function RegisterPage() {
             .single();
 
           if (profileError) {
-            console.error('Error checking subscription status:', profileError);
-            // Fail-open: allow registration form to show
+            // Profile doesn't exist or error - clear stale session and show register form
+            console.log('No valid profile found, clearing session for fresh registration');
+            await supabase.auth.signOut();
             setCheckingAuth(false);
             return;
           }
 
-          // Redirect based on subscription status
+          // Valid profile exists - redirect based on subscription status
           if (profile?.subscription_status === 'active') {
-            // Active user: redirect to chat
             window.location.href = '/chat';
           } else {
-            // Inactive user: redirect to checkout
             window.location.href = '/checkout?renew=true';
           }
         } else {
@@ -56,7 +56,8 @@ export default function RegisterPage() {
         }
       } catch (err) {
         console.error('Error checking auth status:', err);
-        // Fail-open: allow registration form to show
+        // Clear any potentially stale session data
+        await supabase.auth.signOut();
         setCheckingAuth(false);
       }
     };

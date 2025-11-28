@@ -50,6 +50,12 @@ function AuthCallbackContent() {
             return;
           }
 
+          // For email confirmation (signup), redirect to email-confirmed page
+          if (type === 'signup' || type === 'email') {
+            router.push('/email-confirmed');
+            return;
+          }
+
           // Success - redirect to checkout for new registrations, or specified destination
           router.push(next || '/checkout?plan=solo&billing=yearly');
           return;
@@ -76,6 +82,12 @@ function AuthCallbackContent() {
           // For password recovery, redirect to reset-password page
           if (type === 'recovery') {
             router.push('/reset-password');
+            return;
+          }
+
+          // For email confirmation (signup), redirect to email-confirmed page
+          if (type === 'signup' || type === 'email') {
+            router.push('/email-confirmed');
             return;
           }
 

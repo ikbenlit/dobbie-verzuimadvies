@@ -309,11 +309,33 @@ export interface AuthPageContent {
   errors: AuthErrors;
 }
 
+export interface RegisterSuccessBanner {
+  title: string;
+  message: string;
+  instruction: string;
+  noEmail: string;
+  tryAgain: string;
+}
+
+export interface RegisterPageContent extends AuthPageContent {
+  successBanner: RegisterSuccessBanner;
+}
+
+export interface EmailConfirmedContent {
+  title: string;
+  subtitle: string;
+  description: string;
+  features: AuthPageFeatures;
+  loginButton: string;
+  links: AuthLinks;
+}
+
 export interface AuthContent {
   login: AuthPageContent;
-  register: AuthPageContent;
+  register: RegisterPageContent;
   forgotPassword: AuthPageContent;
   resetPassword: AuthPageContent;
+  emailConfirmed: EmailConfirmedContent;
 }
 
 // Main content structure

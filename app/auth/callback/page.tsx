@@ -24,14 +24,25 @@ function AuthCallbackContent() {
       try {
         // Handle code-based flow (OAuth, etc.)
         if (code) {
-          const { error } = await supabase.auth.exchangeCodeForSession(code);
+          const { data, error } = await supabase.auth.exchangeCodeForSession(code);
 
           if (error) {
-            console.error('Auth callback error:', error);
+            console.error('Auth callback error:', error.message, error);
+
+            // Check if user is already logged in (code was already used)
+            const { data: { user } } = await supabase.auth.getUser();
+            if (user) {
+              console.log('User already authenticated, redirecting...');
+              router.push(next || '/checkout?plan=solo&billing=yearly');
+              return;
+            }
+
             setError('Authenticatie mislukt. Probeer opnieuw in te loggen.');
             setTimeout(() => router.push('/login'), 3000);
             return;
           }
+
+          console.log('Session exchange success:', data.user?.email);
 
           // For password recovery, redirect to reset-password page
           if (type === 'recovery') {
@@ -39,8 +50,8 @@ function AuthCallbackContent() {
             return;
           }
 
-          // Success - redirect to destination or default to /chat
-          router.push(next || '/chat');
+          // Success - redirect to checkout for new registrations, or specified destination
+          router.push(next || '/checkout?plan=solo&billing=yearly');
           return;
         }
 
@@ -68,8 +79,8 @@ function AuthCallbackContent() {
             return;
           }
 
-          // Success - redirect to destination or default to /chat
-          router.push(next || '/chat');
+          // Success - redirect to checkout for new registrations, or specified destination
+          router.push(next || '/checkout?plan=solo&billing=yearly');
           return;
         }
 

@@ -116,13 +116,26 @@ export default function RegisterPage() {
         window.location.href = `/login?redirect=/checkout?plan=${plan}%26billing=${billing}%26new=true`;
       }
     } catch (err: any) {
-      console.error('Registration error:', err);
+      // Detailed logging for debugging
+      console.error('Registration error:', {
+        message: err.message,
+        status: err.status,
+        code: err.code,
+        details: err.details,
+        hint: err.hint,
+        fullError: err,
+      });
 
       // User-friendly error messages
       if (err.message?.includes('User already registered')) {
         setError(content.errors.userExists);
       } else if (err.message?.includes('Password should be')) {
         setError(content.errors.passwordRequirements);
+      } else if (err.message?.includes('confirmation email') || err.message?.includes('sending email')) {
+        setError('Er kon geen bevestigingsmail worden verstuurd. Probeer het later opnieuw of neem contact op met support.');
+        console.error('Email sending failed - check Supabase SMTP configuration');
+      } else if (err.message?.includes('rate limit')) {
+        setError('Te veel registratiepogingen. Wacht een paar minuten en probeer opnieuw.');
       } else {
         setError(err.message || content.errors.genericError);
       }

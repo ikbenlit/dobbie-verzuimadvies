@@ -192,7 +192,10 @@ function CheckoutContent() {
         throw new Error(data.error || 'Er ging iets mis bij het aanmaken van de betaling');
       }
       
-      if (data.paymentUrl) {
+      if (data.freeActivation && data.redirectUrl) {
+        // Gratis activatie - redirect direct naar success pagina
+        window.location.href = data.redirectUrl;
+      } else if (data.paymentUrl) {
         // Redirect naar Mollie payment pagina
         window.location.href = data.paymentUrl;
       } else {
@@ -438,7 +441,12 @@ function CheckoutContent() {
                   {creatingPayment ? (
                     <>
                       <Loader2 className="w-5 h-5 animate-spin" />
-                      Betaling aanmaken...
+                      {finalPrice === 0 ? 'Activeren...' : 'Betaling aanmaken...'}
+                    </>
+                  ) : finalPrice === 0 ? (
+                    <>
+                      <Check className="w-5 h-5" />
+                      Activeer gratis
                     </>
                   ) : (
                     <>

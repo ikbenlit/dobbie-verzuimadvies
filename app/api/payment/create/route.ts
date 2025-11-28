@@ -123,7 +123,20 @@ export async function POST(request: NextRequest) {
       finalPrice: finalPrice.toString(),
     };
 
-    // 6. Route based on billing type
+    // 6. Check for free activation (100% discount)
+    // Mollie doesn't support €0 payments, so we activate directly
+    if (finalPrice === 0) {
+      return await activateFreeSubscription(
+        user,
+        plan as PlanType,
+        billing as BillingPeriod,
+        metadata,
+        siteUrl,
+        supabase
+      );
+    }
+
+    // 7. Route based on billing type
     // E3.S1: Split payment flow tussen monthly (subscription) en yearly (one-time)
     if (billing === 'monthly') {
       return await createMonthlySubscription(
@@ -399,6 +412,109 @@ async function createYearlyPayment(
         success: false,
         error: 'Er ging iets mis bij het aanmaken van de betaling. Probeer het later opnieuw.',
       },
+      { status: 500 }
+    );
+  }
+}
+
+/**
+ * Activate a free subscription (100% discount)
+ *
+ * This function handles the case where a discount code provides 100% off.
+ * Since Mollie doesn't support €0 payments, we activate the subscription directly.
+ *
+ * @param user - Authenticated user
+ * @param plan - Plan type (solo/team)
+ * @param billing - Billing period (monthly/yearly)
+ * @param metadata - Payment metadata
+ * @param siteUrl - Site URL for redirects
+ * @param supabase - Supabase client
+ */
+async function activateFreeSubscription(
+  user: User,
+  plan: PlanType,
+  billing: BillingPeriod,
+  metadata: PaymentMetadata,
+  siteUrl: string,
+  supabase: SupabaseClient
+): Promise<NextResponse> {
+  try {
+    console.log(`[Free Activation] Activating free subscription for user ${user.id}`);
+
+    // Calculate dates based on billing period
+    const now = new Date();
+    const nextBillingDate = new Date(now);
+    if (billing === 'monthly') {
+      nextBillingDate.setMonth(nextBillingDate.getMonth() + 1);
+    } else {
+      nextBillingDate.setFullYear(nextBillingDate.getFullYear() + 1);
+    }
+
+    // 1. Create subscription record
+    const { error: subError } = await supabase
+      .from('subscriptions')
+      .insert({
+        user_id: user.id,
+        mollie_reference_id: `free_${Date.now()}`, // Unique reference for free subscriptions
+        status: 'active',
+        plan_type: plan,
+        billing_period: billing,
+        amount: 0,
+        currency: 'EUR',
+        start_date: now.toISOString(),
+        next_billing_date: nextBillingDate.toISOString(),
+        is_recurring: false,
+        discount_code: metadata.discountCode || null,
+        discount_amount: parseFloat(metadata.discountAmount) || 0,
+        original_price: parseFloat(metadata.originalPrice) || 0,
+      });
+
+    if (subError) {
+      console.error('[Free Activation] Error creating subscription:', subError);
+      return NextResponse.json(
+        { success: false, error: 'Fout bij het activeren van je abonnement.' },
+        { status: 500 }
+      );
+    }
+
+    // 2. Update profile subscription status
+    const { error: profileError } = await supabase
+      .from('profiles')
+      .update({
+        subscription_status: 'active',
+        updated_at: now.toISOString()
+      })
+      .eq('id', user.id);
+
+    if (profileError) {
+      console.error('[Free Activation] Error updating profile:', profileError);
+      // Don't fail - subscription is already created
+    }
+
+    // 3. Increment discount code usage
+    if (metadata.discountCode) {
+      const { error: discountError } = await supabase.rpc('increment_discount_usage', {
+        code_to_increment: metadata.discountCode
+      });
+
+      if (discountError) {
+        console.error('[Free Activation] Error incrementing discount usage:', discountError);
+        // Don't fail - subscription is already active
+      }
+    }
+
+    console.log(`[Free Activation] Successfully activated free subscription for user ${user.id}`);
+
+    // 4. Return success with redirect URL (no payment URL needed)
+    return NextResponse.json({
+      success: true,
+      freeActivation: true,
+      redirectUrl: `${siteUrl}/checkout/success?free=true`,
+    });
+  } catch (error) {
+    console.error('[Free Activation] Unexpected error:', error);
+    return NextResponse.json(
+      { success: false, error: 'Er ging iets mis bij het activeren. Probeer het later opnieuw.' },
       { status: 500 }
     );
   }

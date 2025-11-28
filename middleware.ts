@@ -2,6 +2,18 @@ import { NextResponse, type NextRequest } from 'next/server';
 
 export async function middleware(request: NextRequest) {
   try {
+    // Handle auth code on any page - redirect to callback
+    const code = request.nextUrl.searchParams.get('code');
+    if (code && !request.nextUrl.pathname.startsWith('/auth/callback')) {
+      const callbackUrl = new URL('/auth/callback', request.url);
+      callbackUrl.searchParams.set('code', code);
+      // Preserve other params like 'next' or 'type'
+      const type = request.nextUrl.searchParams.get('type');
+      if (type) callbackUrl.searchParams.set('type', type);
+      console.log('[Middleware] Redirecting auth code to callback:', callbackUrl.toString());
+      return NextResponse.redirect(callbackUrl);
+    }
+
     // Check for Supabase auth tokens in cookies
     // Supabase uses multiple cookie patterns, check for the most common ones
     const cookies = request.cookies;

@@ -29,12 +29,18 @@ function CheckoutSuccessContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const paymentId = searchParams.get('payment_id') || searchParams.get('paymentId');
-  
-  const [loading, setLoading] = useState(true);
+  const isFreeActivation = searchParams.get('free') === 'true';
+
+  const [loading, setLoading] = useState(!isFreeActivation);
   const [payment, setPayment] = useState<PaymentData | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    // Skip payment fetch for free activations
+    if (isFreeActivation) {
+      return;
+    }
+
     if (!paymentId) {
       setError('Geen payment ID gevonden in de URL');
       setLoading(false);
@@ -93,7 +99,56 @@ function CheckoutSuccessContent() {
       
       <main className="flex-grow pt-32 pb-20">
         <div className="container mx-auto max-w-2xl px-4">
-          {loading && (
+          {/* Free Activation Success */}
+          {isFreeActivation && (
+            <div className="space-y-6">
+              <div className="bg-white rounded-lg shadow-md p-12 text-center">
+                <div className="mb-6">
+                  <div className="relative inline-block">
+                    <CheckCircle className="w-20 h-20 text-green-500 mx-auto" />
+                    <div className="absolute inset-0 bg-green-500/20 rounded-full animate-ping"></div>
+                  </div>
+                </div>
+                <h1 className="font-serif text-4xl font-bold text-bordeaux-hover mb-2">
+                  Welkom bij DOBbie!
+                </h1>
+                <p className="text-lg text-brand-text">
+                  Je account is geactiveerd. Je kunt nu direct aan de slag!
+                </p>
+              </div>
+
+              {/* Next Steps for Free Activation */}
+              <div className="bg-gradient-to-r from-bordeaux/10 to-teal/10 rounded-lg p-8 border border-bordeaux/20">
+                <h3 className="font-serif text-xl font-bold text-bordeaux-hover mb-4">
+                  Wat nu?
+                </h3>
+                <ul className="space-y-3 text-brand-text mb-6">
+                  <li className="flex items-start gap-3">
+                    <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+                    <span>Je account is geactiveerd met de Cyber Monday actie</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+                    <span>Je hebt nu volledige toegang tot DOBbie</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+                    <span>Start direct met je eerste vraag</span>
+                  </li>
+                </ul>
+
+                <Link
+                  href="/chat"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-bordeaux text-white rounded-lg font-semibold hover:bg-bordeaux-hover transition-colors shadow-md hover:shadow-lg"
+                >
+                  Start met DOBbie
+                  <ArrowRight className="w-5 h-5" />
+                </Link>
+              </div>
+            </div>
+          )}
+
+          {loading && !isFreeActivation && (
             <div className="bg-white rounded-lg shadow-md p-12 text-center">
               <Loader2 className="w-16 h-16 text-bordeaux mx-auto mb-4 animate-spin" />
               <h2 className="font-serif text-2xl font-bold text-bordeaux-hover mb-2">
@@ -105,7 +160,7 @@ function CheckoutSuccessContent() {
             </div>
           )}
 
-          {error && !loading && (
+          {error && !loading && !isFreeActivation && (
             <div className="bg-white rounded-lg shadow-md p-12 text-center">
               <XCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
               <h2 className="font-serif text-2xl font-bold text-bordeaux-hover mb-2">

@@ -97,7 +97,8 @@ export async function validateDiscountCode(
   // Alle checks geslaagd - bereken korting
   const originalPrice = getBasePrice(plan, billing);
   const discountAmount = calculateDiscountAmount(originalPrice, codeData);
-  const finalPrice = Math.max(0.01, originalPrice - discountAmount);
+  // Allow €0 for 100% discount codes (free activation)
+  const finalPrice = Math.max(0, originalPrice - discountAmount);
   
   // Bepaal discount type
   const discountType = codeData.discount_percentage !== null ? 'percentage' : 'amount';

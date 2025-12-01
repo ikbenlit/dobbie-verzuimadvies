@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 
 // Check if free access mode is enabled (Cyber Monday / promotional period)
-const FREE_ACCESS_MODE = process.env.NEXT_PUBLIC_FREE_ACCESS_MODE === 'true';
+const FREE_ACCESS_MODE = true; // Cyber Monday actie - zet op false om uit te schakelen
 
 function AuthCallbackContent() {
   const router = useRouter();

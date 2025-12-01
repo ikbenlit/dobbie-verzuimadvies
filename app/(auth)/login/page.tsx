@@ -8,7 +8,7 @@ import { getAuthContent } from '@/lib/content';
 import { Eye, EyeOff, Loader2, Check, Gift } from 'lucide-react';
 
 // Check if free access mode is enabled (Cyber Monday / promotional period)
-const FREE_ACCESS_MODE = process.env.NEXT_PUBLIC_FREE_ACCESS_MODE === 'true';
+const FREE_ACCESS_MODE = true; // Cyber Monday actie - zet op false om uit te schakelen
 
 function LoginForm() {
   const { login: content } = getAuthContent();

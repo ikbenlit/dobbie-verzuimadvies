@@ -3,9 +3,12 @@
 import { Suspense, useState } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useSupabaseAuth } from '@/lib/supabase/client';
+import { useSupabaseAuth, createClient } from '@/lib/supabase/client';
 import { getAuthContent } from '@/lib/content';
-import { Eye, EyeOff, Loader2, Check } from 'lucide-react';
+import { Eye, EyeOff, Loader2, Check, Gift } from 'lucide-react';
+
+// Check if free access mode is enabled (Cyber Monday / promotional period)
+const FREE_ACCESS_MODE = process.env.NEXT_PUBLIC_FREE_ACCESS_MODE === 'true';
 
 function LoginForm() {
   const { login: content } = getAuthContent();
@@ -15,12 +18,54 @@ function LoginForm() {
   const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
+  const [activatingFree, setActivatingFree] = useState(false);
   const searchParams = useSearchParams();
   const { signIn } = useSupabaseAuth();
-  
+  const supabase = createClient();
+
   // E3.S3: Haal redirect parameter op
   const redirectParam = searchParams.get('redirect');
+
+  // Helper function to activate free access
+  const activateFreeAccess = async (): Promise<boolean> => {
+    try {
+      setActivatingFree(true);
+      const response = await fetch('/api/auth/activate-free', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+      });
+      const data = await response.json();
+      return data.success;
+    } catch (err) {
+      console.error('Error activating free access:', err);
+      return false;
+    } finally {
+      setActivatingFree(false);
+    }
+  };
+
+  // Check if user needs free activation (no active subscription)
+  const checkAndActivateFreeAccess = async (userId: string): Promise<string> => {
+    if (!FREE_ACCESS_MODE) {
+      return redirectParam || '/chat';
+    }
+
+    // Check subscription status
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('subscription_status')
+      .eq('id', userId)
+      .single();
+
+    if (profile?.subscription_status === 'active') {
+      // Already active, just redirect
+      return '/chat';
+    }
+
+    // Not active, try to activate
+    await activateFreeAccess();
+    return '/chat'; // Always go to chat, activation happens in background
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,7 +79,15 @@ function LoginForm() {
     setLoading(true);
 
     try {
-      await signIn(email, password);
+      const { user } = await signIn(email, password);
+
+      // FREE ACCESS MODE: Check and activate if needed
+      if (FREE_ACCESS_MODE && user) {
+        const redirectUrl = await checkAndActivateFreeAccess(user.id);
+        window.location.href = redirectUrl;
+        return;
+      }
+
       // E3.S3: Gebruik redirect parameter of default naar /chat
       const redirectUrl = redirectParam || '/chat';
       // Force full page reload to ensure cookies are set before middleware runs
@@ -96,6 +149,21 @@ function LoginForm() {
         <div className="absolute -bottom-24 -right-20 w-80 h-80 bg-[#E9B046] rounded-full opacity-20 blur-3xl -z-10 animate-pulse-slower" />
 
         <div className="relative z-10 max-w-md w-full bg-white p-8 md:p-10 rounded-lg shadow-lg">
+          {/* FREE ACCESS BANNER */}
+          {FREE_ACCESS_MODE && (
+            <div className="mb-6 p-4 bg-gradient-to-r from-[#E9B046] to-[#D4A03A] rounded-lg text-white shadow-md">
+              <div className="flex items-center gap-3">
+                <div className="bg-white/20 rounded-full p-2">
+                  <Gift className="h-6 w-6" />
+                </div>
+                <div>
+                  <p className="font-bold text-lg">Cyber Monday Actie!</p>
+                  <p className="text-sm opacity-90">Log in voor gratis toegang</p>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Logo en welkomstbericht */}
           <div className="text-center mb-8">
             <h1 className="font-serif text-[28px] font-bold text-[#771138] mb-2">
@@ -179,13 +247,13 @@ function LoginForm() {
 
             <button
               type="submit"
-              disabled={loading}
+              disabled={loading || activatingFree}
               className="w-full font-bold text-[16px] rounded-full py-[14px] px-[28px] text-white transition-all duration-300 ease-in-out disabled:opacity-70 bg-[#771138] hover:bg-[#5A0D29] flex items-center justify-center"
             >
-              {loading ? (
+              {loading || activatingFree ? (
                 <>
                   <Loader2 className="animate-spin -ml-1 mr-3 h-5 w-5" />
-                  {content.form.submitButtonLoading}
+                  {activatingFree ? 'Account activeren...' : content.form.submitButtonLoading}
                 </>
               ) : (
                 content.form.submitButton

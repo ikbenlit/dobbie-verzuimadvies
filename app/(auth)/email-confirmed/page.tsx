@@ -1,11 +1,54 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { getAuthContent } from '@/lib/content';
-import { Check } from 'lucide-react';
+import { Check, Gift, Loader2 } from 'lucide-react';
+
+// Check if free access mode is enabled (Cyber Monday / promotional period)
+const FREE_ACCESS_MODE = process.env.NEXT_PUBLIC_FREE_ACCESS_MODE === 'true';
 
 export default function EmailConfirmedPage() {
   const { emailConfirmed: content } = getAuthContent();
+  const router = useRouter();
+  const [activating, setActivating] = useState(false);
+  const [activated, setActivated] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  // Auto-activate free access when in FREE_ACCESS_MODE
+  useEffect(() => {
+    if (FREE_ACCESS_MODE && !activated && !activating) {
+      activateFreeAccess();
+    }
+  }, []);
+
+  const activateFreeAccess = async () => {
+    try {
+      setActivating(true);
+      setError(null);
+      const response = await fetch('/api/auth/activate-free', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+      });
+      const data = await response.json();
+
+      if (data.success) {
+        setActivated(true);
+        // Redirect to chat after short delay
+        setTimeout(() => {
+          router.push('/chat');
+        }, 2000);
+      } else {
+        setError(data.error || 'Er ging iets mis bij het activeren');
+      }
+    } catch (err) {
+      console.error('Error activating free access:', err);
+      setError('Er ging iets mis. Probeer het later opnieuw.');
+    } finally {
+      setActivating(false);
+    }
+  };
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row">
@@ -48,25 +91,98 @@ export default function EmailConfirmedPage() {
         <div className="relative z-10 max-w-md w-full bg-white p-8 md:p-10 rounded-lg shadow-lg">
           {/* Success content */}
           <div className="text-center py-8">
-            <div className="mx-auto w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mb-6">
-              <Check className="h-10 w-10 text-green-600" />
-            </div>
-            <h1 className="font-serif text-[28px] font-bold text-[#771138] mb-3">
-              {content.title}
-            </h1>
-            <p className="text-[#3D3D3D] text-[15px] mb-2">
-              {content.subtitle}
-            </p>
-            <p className="text-[#707070] text-[14px] mb-8">
-              {content.description}
-            </p>
+            {/* FREE ACCESS MODE: Show activation state */}
+            {FREE_ACCESS_MODE ? (
+              <>
+                {activating ? (
+                  <>
+                    <div className="mx-auto w-20 h-20 bg-[#E9B046]/20 rounded-full flex items-center justify-center mb-6">
+                      <Loader2 className="h-10 w-10 text-[#E9B046] animate-spin" />
+                    </div>
+                    <h1 className="font-serif text-[28px] font-bold text-[#771138] mb-3">
+                      Account activeren...
+                    </h1>
+                    <p className="text-[#707070] text-[15px]">
+                      Een moment geduld, je gratis toegang wordt geactiveerd.
+                    </p>
+                  </>
+                ) : activated ? (
+                  <>
+                    <div className="mx-auto w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mb-6">
+                      <Check className="h-10 w-10 text-green-600" />
+                    </div>
+                    <h1 className="font-serif text-[28px] font-bold text-[#771138] mb-3">
+                      Je account is geactiveerd!
+                    </h1>
+                    <p className="text-[#707070] text-[15px] mb-4">
+                      Je wordt automatisch doorgestuurd naar DoBbie...
+                    </p>
+                    <div className="flex items-center justify-center gap-2 text-[#E9B046]">
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      <span className="text-sm">Doorsturen...</span>
+                    </div>
+                  </>
+                ) : error ? (
+                  <>
+                    <div className="mx-auto w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mb-6">
+                      <span className="text-3xl">!</span>
+                    </div>
+                    <h1 className="font-serif text-[28px] font-bold text-[#771138] mb-3">
+                      Oeps, er ging iets mis
+                    </h1>
+                    <p className="text-red-600 text-[15px] mb-6">{error}</p>
+                    <button
+                      onClick={activateFreeAccess}
+                      className="inline-block w-full font-bold text-[16px] rounded-full py-[14px] px-[28px] text-white transition-all duration-300 ease-in-out bg-[#771138] hover:bg-[#5A0D29] text-center"
+                    >
+                      Opnieuw proberen
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <div className="mx-auto w-20 h-20 bg-[#E9B046]/20 rounded-full flex items-center justify-center mb-6">
+                      <Gift className="h-10 w-10 text-[#E9B046]" />
+                    </div>
+                    <h1 className="font-serif text-[28px] font-bold text-[#771138] mb-3">
+                      Email bevestigd!
+                    </h1>
+                    <p className="text-[#707070] text-[15px] mb-6">
+                      Klik hieronder om je gratis toegang te activeren.
+                    </p>
+                    <button
+                      onClick={activateFreeAccess}
+                      className="inline-block w-full font-bold text-[16px] rounded-full py-[14px] px-[28px] text-white transition-all duration-300 ease-in-out bg-[#E9B046] hover:bg-[#D4A03A] text-center flex items-center justify-center gap-2"
+                    >
+                      <Gift className="h-5 w-5" />
+                      Gratis toegang activeren
+                    </button>
+                  </>
+                )}
+              </>
+            ) : (
+              /* Normal flow: Show login button */
+              <>
+                <div className="mx-auto w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mb-6">
+                  <Check className="h-10 w-10 text-green-600" />
+                </div>
+                <h1 className="font-serif text-[28px] font-bold text-[#771138] mb-3">
+                  {content.title}
+                </h1>
+                <p className="text-[#3D3D3D] text-[15px] mb-2">
+                  {content.subtitle}
+                </p>
+                <p className="text-[#707070] text-[14px] mb-8">
+                  {content.description}
+                </p>
 
-            <Link
-              href="/login"
-              className="inline-block w-full font-bold text-[16px] rounded-full py-[14px] px-[28px] text-white transition-all duration-300 ease-in-out bg-[#771138] hover:bg-[#5A0D29] text-center"
-            >
-              {content.loginButton}
-            </Link>
+                <Link
+                  href="/login"
+                  className="inline-block w-full font-bold text-[16px] rounded-full py-[14px] px-[28px] text-white transition-all duration-300 ease-in-out bg-[#771138] hover:bg-[#5A0D29] text-center"
+                >
+                  {content.loginButton}
+                </Link>
+              </>
+            )}
 
             <div className="mt-6">
               <Link

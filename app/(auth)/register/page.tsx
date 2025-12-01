@@ -2,10 +2,12 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import { getAuthContent } from '@/lib/content';
-import { Eye, EyeOff, Loader2, Check } from 'lucide-react';
+import { Eye, EyeOff, Loader2, Check, Gift } from 'lucide-react';
+
+// Check if free access mode is enabled (Cyber Monday / promotional period)
+const FREE_ACCESS_MODE = process.env.NEXT_PUBLIC_FREE_ACCESS_MODE === 'true';
 
 export default function RegisterPage() {
   const { register: content } = getAuthContent();
@@ -18,8 +20,26 @@ export default function RegisterPage() {
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
   const [checkingAuth, setCheckingAuth] = useState(true);
-  const router = useRouter();
+  const [activatingFree, setActivatingFree] = useState(false);
   const supabase = createClient();
+
+  // Helper function to activate free access
+  const activateFreeAccess = async (): Promise<boolean> => {
+    try {
+      setActivatingFree(true);
+      const response = await fetch('/api/auth/activate-free', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+      });
+      const data = await response.json();
+      return data.success;
+    } catch (err) {
+      console.error('Error activating free access:', err);
+      return false;
+    } finally {
+      setActivatingFree(false);
+    }
+  };
 
   // Check if user is already logged in and redirect accordingly
   // Also clears stale sessions to prevent auth conflicts
@@ -111,8 +131,19 @@ export default function RegisterPage() {
 
       if (data.session) {
         // Automatisch ingelogd - wacht even zodat session cookies zijn gezet
-        // Dan redirect naar checkout met plan parameters
         await new Promise(resolve => setTimeout(resolve, 500));
+
+        // FREE ACCESS MODE: Skip checkout en activeer direct
+        if (FREE_ACCESS_MODE) {
+          const activated = await activateFreeAccess();
+          if (activated) {
+            window.location.href = '/chat';
+            return;
+          }
+          // Fallback naar checkout als activatie faalt
+        }
+
+        // Normale flow: redirect naar checkout met plan parameters
         window.location.href = `/checkout?plan=${plan}&billing=${billing}&new=true`;
       } else {
         // Email confirmation vereist - toon succes melding
@@ -200,13 +231,28 @@ export default function RegisterPage() {
         <div className="absolute -bottom-24 -right-20 w-80 h-80 bg-[#E9B046] rounded-full opacity-20 blur-3xl -z-10 animate-pulse-slower" />
 
         <div className="relative z-10 max-w-md w-full bg-white p-8 md:p-10 rounded-lg shadow-lg">
+          {/* FREE ACCESS BANNER */}
+          {FREE_ACCESS_MODE && (
+            <div className="mb-6 p-4 bg-gradient-to-r from-[#E9B046] to-[#D4A03A] rounded-lg text-white shadow-md">
+              <div className="flex items-center gap-3">
+                <div className="bg-white/20 rounded-full p-2">
+                  <Gift className="h-6 w-6" />
+                </div>
+                <div>
+                  <p className="font-bold text-lg">Cyber Monday Actie!</p>
+                  <p className="text-sm opacity-90">Tijdelijk gratis toegang - geen betaling nodig</p>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Logo en welkomstbericht */}
           <div className="text-center mb-8">
             <h1 className="font-serif text-[28px] font-bold text-[#771138] mb-2">
               {content.title}
             </h1>
             <p className="text-[#3D3D3D] text-[15px]">
-              {content.subtitle}
+              {FREE_ACCESS_MODE ? 'Maak een account aan en krijg direct gratis toegang' : content.subtitle}
             </p>
           </div>
 
@@ -324,13 +370,18 @@ export default function RegisterPage() {
 
             <button
               type="submit"
-              disabled={loading || success}
+              disabled={loading || success || activatingFree}
               className="w-full font-bold text-[16px] rounded-full py-[14px] px-[28px] text-white transition-all duration-300 ease-in-out disabled:opacity-70 bg-[#771138] hover:bg-[#5A0D29] flex items-center justify-center"
             >
-              {loading ? (
+              {loading || activatingFree ? (
                 <>
                   <Loader2 className="animate-spin -ml-1 mr-3 h-5 w-5" />
-                  {content.form.submitButtonLoading}
+                  {activatingFree ? 'Account activeren...' : content.form.submitButtonLoading}
+                </>
+              ) : FREE_ACCESS_MODE ? (
+                <>
+                  <Gift className="-ml-1 mr-2 h-5 w-5" />
+                  Gratis registreren
                 </>
               ) : (
                 content.form.submitButton

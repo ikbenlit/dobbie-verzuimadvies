@@ -41,32 +41,44 @@ export default async function ChatLayout({
     if (FREE_ACCESS_MODE) {
       console.log(`🎁 [ChatLayout] FREE_ACCESS_MODE enabled, activating user ${user.id}`);
 
-      // Calculate dates for free subscription
-      const now = new Date();
-      const endDate = new Date(now);
-      endDate.setMonth(endDate.getMonth() + 1); // 1 month free access
-
-      // Create free subscription
-      const { error: subError } = await supabase
+      // Check if user already has an active subscription (avoid duplicates)
+      const { data: existingSub } = await supabase
         .from('subscriptions')
-        .insert({
-          user_id: user.id,
-          mollie_reference_id: `promo_free_${Date.now()}`,
-          status: 'active',
-          plan_type: 'solo',
-          billing_period: 'monthly',
-          amount: 0,
-          currency: 'EUR',
-          start_date: now.toISOString(),
-          next_billing_date: endDate.toISOString(),
-          is_recurring: false,
-          discount_code: 'PROMO_FREE_ACCESS',
-          discount_amount: 0,
-          original_price: 0,
-        });
+        .select('id')
+        .eq('user_id', user.id)
+        .eq('status', 'active')
+        .single();
 
-      if (subError) {
-        console.error(`⚠️ [ChatLayout] Error creating free subscription:`, subError);
+      if (existingSub) {
+        console.log(`🎁 [ChatLayout] User ${user.id} already has active subscription, skipping insert`);
+      } else {
+        // Calculate dates for free subscription
+        const now = new Date();
+        const endDate = new Date(now);
+        endDate.setMonth(endDate.getMonth() + 1); // 1 month free access
+
+        // Create free subscription
+        const { error: subError } = await supabase
+          .from('subscriptions')
+          .insert({
+            user_id: user.id,
+            mollie_reference_id: `promo_free_${Date.now()}`,
+            status: 'active',
+            plan_type: 'solo',
+            billing_period: 'monthly',
+            amount: 0,
+            currency: 'EUR',
+            start_date: now.toISOString(),
+            next_billing_date: endDate.toISOString(),
+            is_recurring: false,
+            discount_code: 'PROMO_FREE_ACCESS',
+            discount_amount: 0,
+            original_price: 0,
+          });
+
+        if (subError) {
+          console.error(`⚠️ [ChatLayout] Error creating free subscription:`, subError);
+        }
       }
 
       // Update profile subscription status
@@ -74,7 +86,7 @@ export default async function ChatLayout({
         .from('profiles')
         .update({
           subscription_status: 'active',
-          updated_at: now.toISOString(),
+          updated_at: new Date().toISOString(),
         })
         .eq('id', user.id);
 

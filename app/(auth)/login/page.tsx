@@ -10,6 +10,9 @@ import { Eye, EyeOff, Loader2, Check, Gift } from 'lucide-react';
 // Check if free access mode is enabled (Cyber Monday / promotional period)
 const FREE_ACCESS_MODE = true; // Cyber Monday actie - zet op false om uit te schakelen
 
+// Debug logging voor Vercel deployment
+console.log('🎁 [Login] FREE_ACCESS_MODE:', FREE_ACCESS_MODE);
+
 function LoginForm() {
   const { login: content } = getAuthContent();
   const [email, setEmail] = useState('');

@@ -4,10 +4,28 @@ import { Suspense, useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 
+// Check if free access mode is enabled (Cyber Monday / promotional period)
+const FREE_ACCESS_MODE = process.env.NEXT_PUBLIC_FREE_ACCESS_MODE === 'true';
+
 function AuthCallbackContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [error, setError] = useState<string | null>(null);
+
+  // Helper function to activate free access
+  const activateFreeAccess = async (): Promise<boolean> => {
+    try {
+      const response = await fetch('/api/auth/activate-free', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+      });
+      const data = await response.json();
+      return data.success;
+    } catch (err) {
+      console.error('Error activating free access:', err);
+      return false;
+    }
+  };
 
   useEffect(() => {
     const handleCallback = async () => {
@@ -33,6 +51,12 @@ function AuthCallbackContent() {
             const { data: { user } } = await supabase.auth.getUser();
             if (user) {
               console.log('User already authenticated, redirecting...');
+              // FREE ACCESS MODE: Activate and go to chat
+              if (FREE_ACCESS_MODE) {
+                await activateFreeAccess();
+                router.push('/chat');
+                return;
+              }
               router.push(next || '/checkout?plan=solo&billing=yearly');
               return;
             }
@@ -52,7 +76,20 @@ function AuthCallbackContent() {
 
           // For email confirmation (signup), redirect to email-confirmed page
           if (type === 'signup' || type === 'email') {
+            // FREE ACCESS MODE: Activate directly and go to chat
+            if (FREE_ACCESS_MODE) {
+              await activateFreeAccess();
+              router.push('/chat');
+              return;
+            }
             router.push('/email-confirmed');
+            return;
+          }
+
+          // FREE ACCESS MODE: Activate and go to chat
+          if (FREE_ACCESS_MODE) {
+            await activateFreeAccess();
+            router.push('/chat');
             return;
           }
 
@@ -87,7 +124,20 @@ function AuthCallbackContent() {
 
           // For email confirmation (signup), redirect to email-confirmed page
           if (type === 'signup' || type === 'email') {
+            // FREE ACCESS MODE: Activate directly and go to chat
+            if (FREE_ACCESS_MODE) {
+              await activateFreeAccess();
+              router.push('/chat');
+              return;
+            }
             router.push('/email-confirmed');
+            return;
+          }
+
+          // FREE ACCESS MODE: Activate and go to chat
+          if (FREE_ACCESS_MODE) {
+            await activateFreeAccess();
+            router.push('/chat');
             return;
           }
 

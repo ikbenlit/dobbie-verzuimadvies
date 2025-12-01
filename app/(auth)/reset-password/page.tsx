@@ -1,13 +1,13 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { Suspense, useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import { getAuthContent } from '@/lib/content';
 import { Eye, EyeOff, Loader2, Check } from 'lucide-react';
 
-export default function ResetPasswordPage() {
+function ResetPasswordForm() {
   const { resetPassword: content } = getAuthContent();
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -16,21 +16,54 @@ export default function ResetPasswordPage() {
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [verifying, setVerifying] = useState(true);
   const router = useRouter();
+  const searchParams = useSearchParams();
   const supabase = createClient();
 
-  // Check if we have a valid session on mount
+  // Handle the recovery code and verify session on mount
   useEffect(() => {
-    const checkSession = async () => {
+    const handleRecoveryFlow = async () => {
+      setVerifying(true);
+
+      // Check for code parameter (from Supabase recovery email)
+      const code = searchParams.get('code');
+
+      if (code) {
+        console.log('[ResetPassword] Exchanging code for session...');
+        try {
+          const { data, error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
+
+          if (exchangeError) {
+            console.error('[ResetPassword] Code exchange error:', exchangeError);
+            setError(content.errors.invalidToken);
+            setVerifying(false);
+            return;
+          }
+
+          console.log('[ResetPassword] Code exchanged successfully for:', data.user?.email);
+          setVerifying(false);
+          return;
+        } catch (err) {
+          console.error('[ResetPassword] Unexpected error:', err);
+          setError(content.errors.invalidToken);
+          setVerifying(false);
+          return;
+        }
+      }
+
+      // No code - check if we already have a valid session
       const { data: { session } } = await supabase.auth.getSession();
 
       if (!session) {
         setError(content.errors.invalidToken);
       }
+
+      setVerifying(false);
     };
 
-    checkSession();
-  }, [supabase, content.errors.invalidToken]);
+    handleRecoveryFlow();
+  }, [supabase, searchParams, content.errors.invalidToken]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -72,10 +105,11 @@ export default function ResetPasswordPage() {
       setTimeout(() => {
         router.push('/login');
       }, 2000);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Reset password error:', err);
 
-      if (err.message?.includes('session_not_found') || err.message?.includes('invalid')) {
+      const errorMessage = err instanceof Error ? err.message : '';
+      if (errorMessage.includes('session_not_found') || errorMessage.includes('invalid')) {
         setError(content.errors.invalidToken);
       } else {
         setError(content.errors.genericError);
@@ -124,128 +158,138 @@ export default function ResetPasswordPage() {
         <div className="absolute -bottom-24 -right-20 w-80 h-80 bg-[#E9B046] rounded-full opacity-20 blur-3xl -z-10 animate-pulse-slower" />
 
         <div className="relative z-10 max-w-md w-full bg-white p-8 md:p-10 rounded-lg shadow-lg">
-          {/* Logo en welkomstbericht */}
-          <div className="text-center mb-8">
-            <h1 className="font-serif text-[28px] font-bold text-[#771138] mb-2">
-              {content.title}
-            </h1>
-            <p className="text-[#3D3D3D] text-[15px]">
-              {content.subtitle}
-            </p>
-          </div>
-
-          {/* Success Banner */}
-          {message && (
-            <div className="mb-6 bg-green-50 border border-green-200 text-green-800 p-4 rounded-md">
-              <div className="flex items-center">
-                <Check className="h-5 w-5 mr-2 flex-shrink-0" />
-                <p className="text-[14px]">{message}</p>
+          {/* Loading state during verification */}
+          {verifying ? (
+            <div className="text-center py-8">
+              <Loader2 className="h-12 w-12 animate-spin text-[#771138] mx-auto mb-4" />
+              <p className="text-[#3D3D3D]">Link verifiëren...</p>
+            </div>
+          ) : (
+            <>
+              {/* Logo en welkomstbericht */}
+              <div className="text-center mb-8">
+                <h1 className="font-serif text-[28px] font-bold text-[#771138] mb-2">
+                  {content.title}
+                </h1>
+                <p className="text-[#3D3D3D] text-[15px]">
+                  {content.subtitle}
+                </p>
               </div>
-            </div>
-          )}
 
-          {/* Error Banner */}
-          {error && (
-            <div className="mb-6 bg-red-50 border border-red-200 text-red-800 p-4 rounded-md">
-              <p className="text-[14px]">{error}</p>
-            </div>
-          )}
-
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div>
-              <label
-                htmlFor="password"
-                className="block text-[15px] font-semibold text-[#3D3D3D] mb-2"
-              >
-                {content.form.passwordLabel}
-              </label>
-              <div className="relative">
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  id="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="bg-white border border-[#D1D5DB] rounded-md px-4 py-3 w-full pr-12 focus:border-[#771138] focus:outline-none focus:ring-2 focus:ring-[#771138]/20 transition-all duration-300 ease-in-out"
-                  placeholder={content.form.passwordPlaceholder}
-                  required
-                  disabled={loading}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-[#707070] hover:text-[#3D3D3D] transition-colors"
-                >
-                  {showPassword ? (
-                    <EyeOff className="h-5 w-5" />
-                  ) : (
-                    <Eye className="h-5 w-5" />
-                  )}
-                </button>
-              </div>
-            </div>
-
-            <div>
-              <label
-                htmlFor="confirmPassword"
-                className="block text-[15px] font-semibold text-[#3D3D3D] mb-2"
-              >
-                {content.form.confirmPasswordLabel}
-              </label>
-              <div className="relative">
-                <input
-                  type={showConfirmPassword ? 'text' : 'password'}
-                  id="confirmPassword"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="bg-white border border-[#D1D5DB] rounded-md px-4 py-3 w-full pr-12 focus:border-[#771138] focus:outline-none focus:ring-2 focus:ring-[#771138]/20 transition-all duration-300 ease-in-out"
-                  placeholder={content.form.confirmPasswordPlaceholder}
-                  required
-                  disabled={loading}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-[#707070] hover:text-[#3D3D3D] transition-colors"
-                >
-                  {showConfirmPassword ? (
-                    <EyeOff className="h-5 w-5" />
-                  ) : (
-                    <Eye className="h-5 w-5" />
-                  )}
-                </button>
-              </div>
-            </div>
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full font-bold text-[16px] rounded-md py-[14px] px-[28px] text-white transition-all duration-300 ease-in-out disabled:opacity-70 bg-[#771138] hover:bg-[#5A0D29] flex items-center justify-center"
-            >
-              {loading ? (
-                <>
-                  <Loader2 className="animate-spin -ml-1 mr-3 h-5 w-5" />
-                  {content.form.submitButtonLoading}
-                </>
-              ) : (
-                content.form.submitButton
+              {/* Success Banner */}
+              {message && (
+                <div className="mb-6 bg-green-50 border border-green-200 text-green-800 p-4 rounded-md">
+                  <div className="flex items-center">
+                    <Check className="h-5 w-5 mr-2 flex-shrink-0" />
+                    <p className="text-[14px]">{message}</p>
+                  </div>
+                </div>
               )}
-            </button>
 
-            <div className="text-center space-y-2">
-              <Link
-                href="/login"
-                className="block text-[14px] text-[#771138] hover:text-[#5A0D29] font-semibold transition-colors duration-200"
-              >
-                {content.links.backToLogin}
-              </Link>
-              <Link
-                href="/"
-                className="block text-[14px] text-[#707070] hover:text-[#3D3D3D] transition-colors duration-200"
-              >
-                {content.links.backToHome}
-              </Link>
-            </div>
-          </form>
+              {/* Error Banner */}
+              {error && (
+                <div className="mb-6 bg-red-50 border border-red-200 text-red-800 p-4 rounded-md">
+                  <p className="text-[14px]">{error}</p>
+                </div>
+              )}
+
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div>
+                  <label
+                    htmlFor="password"
+                    className="block text-[15px] font-semibold text-[#3D3D3D] mb-2"
+                  >
+                    {content.form.passwordLabel}
+                  </label>
+                  <div className="relative">
+                    <input
+                      type={showPassword ? 'text' : 'password'}
+                      id="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      className="bg-white border border-[#D1D5DB] rounded-md px-4 py-3 w-full pr-12 focus:border-[#771138] focus:outline-none focus:ring-2 focus:ring-[#771138]/20 transition-all duration-300 ease-in-out"
+                      placeholder={content.form.passwordPlaceholder}
+                      required
+                      disabled={loading}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-[#707070] hover:text-[#3D3D3D] transition-colors"
+                    >
+                      {showPassword ? (
+                        <EyeOff className="h-5 w-5" />
+                      ) : (
+                        <Eye className="h-5 w-5" />
+                      )}
+                    </button>
+                  </div>
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="confirmPassword"
+                    className="block text-[15px] font-semibold text-[#3D3D3D] mb-2"
+                  >
+                    {content.form.confirmPasswordLabel}
+                  </label>
+                  <div className="relative">
+                    <input
+                      type={showConfirmPassword ? 'text' : 'password'}
+                      id="confirmPassword"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      className="bg-white border border-[#D1D5DB] rounded-md px-4 py-3 w-full pr-12 focus:border-[#771138] focus:outline-none focus:ring-2 focus:ring-[#771138]/20 transition-all duration-300 ease-in-out"
+                      placeholder={content.form.confirmPasswordPlaceholder}
+                      required
+                      disabled={loading}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-[#707070] hover:text-[#3D3D3D] transition-colors"
+                    >
+                      {showConfirmPassword ? (
+                        <EyeOff className="h-5 w-5" />
+                      ) : (
+                        <Eye className="h-5 w-5" />
+                      )}
+                    </button>
+                  </div>
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full font-bold text-[16px] rounded-md py-[14px] px-[28px] text-white transition-all duration-300 ease-in-out disabled:opacity-70 bg-[#771138] hover:bg-[#5A0D29] flex items-center justify-center"
+                >
+                  {loading ? (
+                    <>
+                      <Loader2 className="animate-spin -ml-1 mr-3 h-5 w-5" />
+                      {content.form.submitButtonLoading}
+                    </>
+                  ) : (
+                    content.form.submitButton
+                  )}
+                </button>
+
+                <div className="text-center space-y-2">
+                  <Link
+                    href="/login"
+                    className="block text-[14px] text-[#771138] hover:text-[#5A0D29] font-semibold transition-colors duration-200"
+                  >
+                    {content.links.backToLogin}
+                  </Link>
+                  <Link
+                    href="/"
+                    className="block text-[14px] text-[#707070] hover:text-[#3D3D3D] transition-colors duration-200"
+                  >
+                    {content.links.backToHome}
+                  </Link>
+                </div>
+              </form>
+            </>
+          )}
         </div>
       </div>
 
@@ -281,5 +325,24 @@ export default function ResetPasswordPage() {
         }
       `}</style>
     </div>
+  );
+}
+
+function LoadingFallback() {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-[#F5F2EB]">
+      <div className="text-center">
+        <Loader2 className="h-12 w-12 animate-spin text-[#771138] mx-auto mb-4" />
+        <p className="text-[#3D3D3D]">Laden...</p>
+      </div>
+    </div>
+  );
+}
+
+export default function ResetPasswordPage() {
+  return (
+    <Suspense fallback={<LoadingFallback />}>
+      <ResetPasswordForm />
+    </Suspense>
   );
 }

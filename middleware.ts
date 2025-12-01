@@ -3,8 +3,10 @@ import { NextResponse, type NextRequest } from 'next/server';
 export async function middleware(request: NextRequest) {
   try {
     // Handle auth code on any page - redirect to callback
+    // Exception: /reset-password should handle its own code (password recovery flow)
     const code = request.nextUrl.searchParams.get('code');
-    if (code && !request.nextUrl.pathname.startsWith('/auth/callback')) {
+    const isResetPasswordPage = request.nextUrl.pathname.startsWith('/reset-password');
+    if (code && !request.nextUrl.pathname.startsWith('/auth/callback') && !isResetPasswordPage) {
       const callbackUrl = new URL('/auth/callback', request.url);
       callbackUrl.searchParams.set('code', code);
       // Preserve other params like 'next' or 'type'

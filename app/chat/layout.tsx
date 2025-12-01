@@ -64,8 +64,6 @@ export default async function ChatLayout({
             user_id: user.id,
             mollie_reference_id: `promo_free_${Date.now()}`,
             status: 'active',
-            plan_type: 'solo',
-            billing_period: 'monthly',
             amount: 0,
             currency: 'EUR',
             start_date: now.toISOString(),

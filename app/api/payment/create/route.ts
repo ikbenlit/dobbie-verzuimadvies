@@ -457,8 +457,6 @@ async function activateFreeSubscription(
         user_id: user.id,
         mollie_reference_id: `free_${Date.now()}`, // Unique reference for free subscriptions
         status: 'active',
-        plan_type: plan,
-        billing_period: billing,
         amount: 0,
         currency: 'EUR',
         start_date: now.toISOString(),

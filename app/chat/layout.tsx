@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation';
 import { ChatSidebar } from '@/components/layout/ChatSidebar';
 
 // Check if free access mode is enabled (Cyber Monday / promotional period)
-const FREE_ACCESS_MODE = true; // Cyber Monday actie - zet op false om uit te schakelen
+const FREE_ACCESS_MODE = false; // Cyber Monday actie - zet op false om uit te schakelen
 
 export default async function ChatLayout({
   children,

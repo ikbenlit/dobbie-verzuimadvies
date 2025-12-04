@@ -152,7 +152,7 @@ function LoginForm() {
         <div className="absolute -bottom-24 -right-20 w-80 h-80 bg-[#E9B046] rounded-full opacity-20 blur-3xl -z-10 animate-pulse-slower" />
 
         <div className="relative z-10 max-w-md w-full bg-white p-8 md:p-10 rounded-lg shadow-lg">
-          {/* FREE ACCESS BANNER */}
+{/* FREE ACCESS BANNER
           {FREE_ACCESS_MODE && (
             <div className="mb-6 p-4 bg-gradient-to-r from-[#E9B046] to-[#D4A03A] rounded-lg text-white shadow-md">
               <div className="flex items-center gap-3">
@@ -166,7 +166,7 @@ function LoginForm() {
               </div>
             </div>
           )}
-
+*/}
           {/* Logo en welkomstbericht */}
           <div className="text-center mb-8">
             <h1 className="font-serif text-[28px] font-bold text-[#771138] mb-2">

@@ -7,7 +7,7 @@ import { getAuthContent } from '@/lib/content';
 import { Eye, EyeOff, Loader2, Check, Gift } from 'lucide-react';
 
 // Check if free access mode is enabled (Cyber Monday / promotional period)
-const FREE_ACCESS_MODE = true; // Cyber Monday actie - zet op false om uit te schakelen
+const FREE_ACCESS_MODE = false; // Cyber Monday actie - zet op false om uit te schakelen
 
 // Debug logging voor Vercel deployment
 console.log('🎁 [Register] FREE_ACCESS_MODE:', FREE_ACCESS_MODE);
@@ -235,20 +235,20 @@ export default function RegisterPage() {
 
         <div className="relative z-10 max-w-md w-full bg-white p-8 md:p-10 rounded-lg shadow-lg">
           {/* FREE ACCESS BANNER */}
-          {FREE_ACCESS_MODE && (
+{/*          {FREE_ACCESS_MODE && (
             <div className="mb-6 p-4 bg-gradient-to-r from-[#E9B046] to-[#D4A03A] rounded-lg text-white shadow-md">
               <div className="flex items-center gap-3">
                 <div className="bg-white/20 rounded-full p-2">
                   <Gift className="h-6 w-6" />
                 </div>
                 <div>
-                  <p className="font-bold text-lg">Cyber Monday Actie!</p>
+                  <p className="font-bold text-lg">Start vandaag nog met DOBbie</p>
                   <p className="text-sm opacity-90">Tijdelijk gratis toegang - geen betaling nodig</p>
                 </div>
               </div>
             </div>
           )}
-
+*/}
           {/* Logo en welkomstbericht */}
           <div className="text-center mb-8">
             <h1 className="font-serif text-[28px] font-bold text-[#771138] mb-2">

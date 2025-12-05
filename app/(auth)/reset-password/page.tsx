@@ -53,7 +53,14 @@ function ResetPasswordForm() {
       }
 
       // No code - check if we already have a valid session
-      const { data: { session } } = await supabase.auth.getSession();
+      let { data: { session } } = await supabase.auth.getSession();
+
+      if (!session) {
+        // Retry after short delay (session may still be loading from callback)
+        await new Promise(resolve => setTimeout(resolve, 500));
+        const retryResult = await supabase.auth.getSession();
+        session = retryResult.data.session;
+      }
 
       if (!session) {
         setError(content.errors.invalidToken);

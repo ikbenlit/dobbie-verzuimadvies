@@ -36,6 +36,13 @@ function ResetPasswordForm() {
 
           if (exchangeError) {
             console.error('[ResetPassword] Code exchange error:', exchangeError);
+            // Don't show error yet - check if session already exists (from callback)
+            const { data: { session } } = await supabase.auth.getSession();
+            if (session) {
+              console.log('[ResetPassword] Session already exists, continuing...');
+              setVerifying(false);
+              return;
+            }
             setError(content.errors.invalidToken);
             setVerifying(false);
             return;
@@ -46,6 +53,13 @@ function ResetPasswordForm() {
           return;
         } catch (err) {
           console.error('[ResetPassword] Unexpected error:', err);
+          // Don't show error yet - check if session already exists
+          const { data: { session } } = await supabase.auth.getSession();
+          if (session) {
+            console.log('[ResetPassword] Session already exists after error, continuing...');
+            setVerifying(false);
+            return;
+          }
           setError(content.errors.invalidToken);
           setVerifying(false);
           return;

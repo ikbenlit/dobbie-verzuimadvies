@@ -109,6 +109,21 @@ function AuthCallbackContent() {
 
           if (error) {
             console.error('Token verification error:', error.message, error);
+
+            // Check if user is already logged in (token was already used)
+            const { data: { user } } = await supabase.auth.getUser();
+            if (user) {
+              console.log('User already authenticated after token error, redirecting...');
+              // FREE ACCESS MODE: Activate and go to chat
+              if (FREE_ACCESS_MODE) {
+                await activateFreeAccess();
+                router.push('/chat');
+                return;
+              }
+              router.push(next || '/checkout?plan=solo&billing=yearly');
+              return;
+            }
+
             setError(`Verificatie mislukt: ${error.message}`);
             setTimeout(() => router.push('/login'), 3000);
             return;

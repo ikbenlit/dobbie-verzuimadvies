@@ -16,7 +16,7 @@ import { createClient } from '@/lib/supabase/server';
 export async function POST(_request: NextRequest) {
   try {
     // Check if free access mode is enabled
-    const freeAccessMode = false; // Cyber Monday actie - zet op false om uit te schakelen
+    const freeAccessMode = true; // Cyber Monday actie - zet op false om uit te schakelen
 
     if (!freeAccessMode) {
       return NextResponse.json(

@@ -114,6 +114,13 @@ function AuthCallbackContent() {
             const { data: { user } } = await supabase.auth.getUser();
             if (user) {
               console.log('User already authenticated after token error, redirecting...');
+
+              // For recovery, always go to reset-password
+              if (type === 'recovery') {
+                router.push('/reset-password');
+                return;
+              }
+
               // FREE ACCESS MODE: Activate and go to chat
               if (FREE_ACCESS_MODE) {
                 await activateFreeAccess();

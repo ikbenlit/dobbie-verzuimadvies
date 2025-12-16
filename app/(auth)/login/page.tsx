@@ -10,6 +10,9 @@ import { Eye, EyeOff, Loader2, Check, Gift } from 'lucide-react';
 // Check if free access mode is enabled (Cyber Monday / promotional period)
 const FREE_ACCESS_MODE = true; // Cyber Monday actie - zet op false om uit te schakelen
 
+// Registratie tijdelijk uitgeschakeld - moet overeenkomen met register/page.tsx
+const REGISTRATION_DISABLED = true;
+
 // Debug logging voor Vercel deployment
 console.log('🎁 [Login] FREE_ACCESS_MODE:', FREE_ACCESS_MODE);
 
@@ -268,15 +271,21 @@ function LoginForm() {
             )}
 
             <div className="text-center space-y-2">
-              <p className="text-[14px] text-[#707070]">
-                {content.links.noAccount}{' '}
-                <Link
-                  href="/register"
-                  className="text-[#771138] hover:text-[#5A0D29] font-semibold transition-colors duration-200"
-                >
-                  {content.links.register}
-                </Link>
-              </p>
+              {REGISTRATION_DISABLED ? (
+                <p className="text-[14px] text-gray-500">
+                  Registratie is momenteel gesloten
+                </p>
+              ) : (
+                <p className="text-[14px] text-[#707070]">
+                  {content.links.noAccount}{' '}
+                  <Link
+                    href="/register"
+                    className="text-[#771138] hover:text-[#5A0D29] font-semibold transition-colors duration-200"
+                  >
+                    {content.links.register}
+                  </Link>
+                </p>
+              )}
               <Link
                 href="/"
                 className="block text-[14px] text-[#707070] hover:text-[#3D3D3D] transition-colors duration-200"

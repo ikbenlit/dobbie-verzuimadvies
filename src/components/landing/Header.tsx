@@ -3,6 +3,9 @@
 import Link from 'next/link';
 import { getCommonContent } from '@/lib/content';
 
+// Registratie tijdelijk uitgeschakeld - moet overeenkomen met register/page.tsx
+const REGISTRATION_DISABLED = true;
+
 export default function Header() {
   const { nav } = getCommonContent();
 
@@ -39,12 +42,21 @@ export default function Header() {
           ))}
         </nav>
 
-        <Link
-          href="/register"
-          className="hidden md:inline-block bg-teal text-white font-bold py-2 px-6 rounded-full hover:bg-teal-dark transition-all"
-        >
-          {nav.startButton}
-        </Link>
+        {REGISTRATION_DISABLED ? (
+          <Link
+            href="/login"
+            className="hidden md:inline-block bg-teal text-white font-bold py-2 px-6 rounded-full hover:bg-teal-dark transition-all"
+          >
+            Inloggen
+          </Link>
+        ) : (
+          <Link
+            href="/register"
+            className="hidden md:inline-block bg-teal text-white font-bold py-2 px-6 rounded-full hover:bg-teal-dark transition-all"
+          >
+            {nav.startButton}
+          </Link>
+        )}
       </div>
     </header>
   );

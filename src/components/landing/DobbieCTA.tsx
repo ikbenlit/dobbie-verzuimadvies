@@ -1,6 +1,9 @@
-import { CheckCircle, Sparkles } from 'lucide-react';
+import { CheckCircle, Sparkles, Lock } from 'lucide-react';
 import { getDobbieCTAContent } from '@/lib/content';
 import Link from 'next/link';
+
+// Registratie tijdelijk uitgeschakeld - moet overeenkomen met register/page.tsx
+const REGISTRATION_DISABLED = true;
 
 export default function DobbieCTA() {
   const content = getDobbieCTAContent();
@@ -72,12 +75,22 @@ export default function DobbieCTA() {
 
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Link
-                href="/register"
-                className="bg-gradient-to-r from-bordeaux to-bordeaux-hover hover:from-bordeaux-hover hover:to-bordeaux text-white px-8 py-4 rounded-full font-bold text-lg transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:scale-105 active:scale-95 min-w-[200px] text-center"
-              >
-                {content.buttons.primary}
-              </Link>
+              {REGISTRATION_DISABLED ? (
+                <span
+                  className="bg-gray-400 text-white px-8 py-4 rounded-full font-bold text-lg cursor-not-allowed opacity-70 min-w-[200px] text-center flex items-center justify-center gap-2"
+                  title="Registratie is momenteel gesloten"
+                >
+                  <Lock className="w-5 h-5" />
+                  Registratie gesloten
+                </span>
+              ) : (
+                <Link
+                  href="/register"
+                  className="bg-gradient-to-r from-bordeaux to-bordeaux-hover hover:from-bordeaux-hover hover:to-bordeaux text-white px-8 py-4 rounded-full font-bold text-lg transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:scale-105 active:scale-95 min-w-[200px] text-center"
+                >
+                  {content.buttons.primary}
+                </Link>
+              )}
               <Link
                 href="/contact"
                 className="bg-white text-teal border-2 border-teal hover:bg-teal hover:text-white px-8 py-4 rounded-full font-bold text-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95 min-w-[200px] text-center"

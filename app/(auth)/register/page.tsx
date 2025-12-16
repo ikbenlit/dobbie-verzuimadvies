@@ -4,10 +4,14 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
 import { getAuthContent } from '@/lib/content';
-import { Eye, EyeOff, Loader2, Check, Gift } from 'lucide-react';
+import { Eye, EyeOff, Loader2, Check, Gift, Lock } from 'lucide-react';
 
 // Check if free access mode is enabled (Cyber Monday / promotional period)
 const FREE_ACCESS_MODE = true; // Cyber Monday actie - zet op false om uit te schakelen
+
+// Registratie tijdelijk uitgeschakeld
+const REGISTRATION_DISABLED = true; // Zet op false om registratie weer in te schakelen
+const REGISTRATION_DISABLED_MESSAGE = "De gratis registratieperiode is afgelopen. Neem contact op voor meer informatie.";
 
 // Debug logging voor Vercel deployment
 console.log('🎁 [Register] FREE_ACCESS_MODE:', FREE_ACCESS_MODE);
@@ -249,13 +253,32 @@ export default function RegisterPage() {
             </div>
           )}
 */}
+          {/* Registratie gesloten banner */}
+          {REGISTRATION_DISABLED && (
+            <div className="mb-6 p-4 bg-gray-100 border border-gray-300 rounded-lg">
+              <div className="flex items-center gap-3">
+                <div className="bg-gray-400 rounded-full p-2">
+                  <Lock className="h-5 w-5 text-white" />
+                </div>
+                <div>
+                  <p className="font-bold text-gray-700">Registratie gesloten</p>
+                  <p className="text-sm text-gray-600">{REGISTRATION_DISABLED_MESSAGE}</p>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Logo en welkomstbericht */}
           <div className="text-center mb-8">
             <h1 className="font-serif text-[28px] font-bold text-[#771138] mb-2">
               {content.title}
             </h1>
             <p className="text-[#3D3D3D] text-[15px]">
-              {FREE_ACCESS_MODE ? 'Maak een account aan en krijg direct gratis toegang' : content.subtitle}
+              {REGISTRATION_DISABLED
+                ? 'Registratie is momenteel niet beschikbaar'
+                : FREE_ACCESS_MODE
+                  ? 'Maak een account aan en krijg direct gratis toegang'
+                  : content.subtitle}
             </p>
           </div>
 
@@ -298,7 +321,8 @@ export default function RegisterPage() {
                 id="fullName"
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
-                className="bg-white border border-[#D1D5DB] rounded-md px-4 py-3 w-full focus:border-[#771138] focus:outline-none focus:ring-2 focus:ring-[#771138]/20 transition-all duration-300 ease-in-out"
+                disabled={REGISTRATION_DISABLED}
+                className={`border border-[#D1D5DB] rounded-md px-4 py-3 w-full focus:border-[#771138] focus:outline-none focus:ring-2 focus:ring-[#771138]/20 transition-all duration-300 ease-in-out ${REGISTRATION_DISABLED ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-white'}`}
                 placeholder={content.form.fullNamePlaceholder}
                 required
               />
@@ -316,7 +340,8 @@ export default function RegisterPage() {
                 id="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="bg-white border border-[#D1D5DB] rounded-md px-4 py-3 w-full focus:border-[#771138] focus:outline-none focus:ring-2 focus:ring-[#771138]/20 transition-all duration-300 ease-in-out"
+                disabled={REGISTRATION_DISABLED}
+                className={`border border-[#D1D5DB] rounded-md px-4 py-3 w-full focus:border-[#771138] focus:outline-none focus:ring-2 focus:ring-[#771138]/20 transition-all duration-300 ease-in-out ${REGISTRATION_DISABLED ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-white'}`}
                 placeholder={content.form.emailPlaceholder}
                 required
               />
@@ -334,7 +359,8 @@ export default function RegisterPage() {
                 id="organization"
                 value={organization}
                 onChange={(e) => setOrganization(e.target.value)}
-                className="bg-white border border-[#D1D5DB] rounded-md px-4 py-3 w-full focus:border-[#771138] focus:outline-none focus:ring-2 focus:ring-[#771138]/20 transition-all duration-300 ease-in-out"
+                disabled={REGISTRATION_DISABLED}
+                className={`border border-[#D1D5DB] rounded-md px-4 py-3 w-full focus:border-[#771138] focus:outline-none focus:ring-2 focus:ring-[#771138]/20 transition-all duration-300 ease-in-out ${REGISTRATION_DISABLED ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-white'}`}
                 placeholder={content.form.organizationPlaceholder}
               />
             </div>
@@ -352,7 +378,8 @@ export default function RegisterPage() {
                   id="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="bg-white border border-[#D1D5DB] rounded-md px-4 py-3 w-full pr-12 focus:border-[#771138] focus:outline-none focus:ring-2 focus:ring-[#771138]/20 transition-all duration-300 ease-in-out"
+                  disabled={REGISTRATION_DISABLED}
+                  className={`border border-[#D1D5DB] rounded-md px-4 py-3 w-full pr-12 focus:border-[#771138] focus:outline-none focus:ring-2 focus:ring-[#771138]/20 transition-all duration-300 ease-in-out ${REGISTRATION_DISABLED ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-white'}`}
                   placeholder={content.form.passwordPlaceholder}
                   required
                   minLength={8}
@@ -373,10 +400,15 @@ export default function RegisterPage() {
 
             <button
               type="submit"
-              disabled={loading || success || activatingFree}
-              className="w-full font-bold text-[16px] rounded-full py-[14px] px-[28px] text-white transition-all duration-300 ease-in-out disabled:opacity-70 bg-[#771138] hover:bg-[#5A0D29] flex items-center justify-center"
+              disabled={loading || success || activatingFree || REGISTRATION_DISABLED}
+              className={`w-full font-bold text-[16px] rounded-full py-[14px] px-[28px] text-white transition-all duration-300 ease-in-out disabled:opacity-70 flex items-center justify-center ${REGISTRATION_DISABLED ? 'bg-gray-400 cursor-not-allowed' : 'bg-[#771138] hover:bg-[#5A0D29]'}`}
             >
-              {loading || activatingFree ? (
+              {REGISTRATION_DISABLED ? (
+                <>
+                  <Lock className="-ml-1 mr-2 h-5 w-5" />
+                  Registratie gesloten
+                </>
+              ) : loading || activatingFree ? (
                 <>
                   <Loader2 className="animate-spin -ml-1 mr-3 h-5 w-5" />
                   {activatingFree ? 'Account activeren...' : content.form.submitButtonLoading}

@@ -1,7 +1,10 @@
-import { AlertCircle, CheckCircle2 } from 'lucide-react';
+import { AlertCircle, CheckCircle2, Lock } from 'lucide-react';
 import Link from 'next/link';
 import { getProblemSolutionContent } from '@/lib/content';
 import type { ProblemSolutionParagraph } from '@/types/content';
+
+// Registratie tijdelijk uitgeschakeld - moet overeenkomen met register/page.tsx
+const REGISTRATION_DISABLED = true;
 
 // Helper functie om paragrafen te renderen
 function renderParagraph(paragraph: string | ProblemSolutionParagraph, index: number) {
@@ -118,12 +121,22 @@ export default function ProblemSolution() {
               <p className="text-brand-text mb-6">
                 {content.cta.action.subtitle}
               </p>
-              <Link
-                href="/register"
-                className="inline-block bg-teal hover:bg-teal-hover text-white font-semibold px-8 py-3 rounded-lg transition-colors duration-200"
-              >
-                {content.cta.action.buttonText}
-              </Link>
+              {REGISTRATION_DISABLED ? (
+                <span
+                  className="inline-flex items-center gap-2 bg-gray-400 text-white font-semibold px-8 py-3 rounded-lg cursor-not-allowed opacity-70"
+                  title="Registratie is momenteel gesloten"
+                >
+                  <Lock className="w-4 h-4" />
+                  Registratie gesloten
+                </span>
+              ) : (
+                <Link
+                  href="/register"
+                  className="inline-block bg-teal hover:bg-teal-hover text-white font-semibold px-8 py-3 rounded-lg transition-colors duration-200"
+                >
+                  {content.cta.action.buttonText}
+                </Link>
+              )}
             </div>
           )}
         </div>

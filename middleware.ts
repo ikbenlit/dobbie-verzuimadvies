@@ -12,7 +12,6 @@ export async function middleware(request: NextRequest) {
       // Preserve other params like 'next' or 'type'
       const type = request.nextUrl.searchParams.get('type');
       if (type) callbackUrl.searchParams.set('type', type);
-      console.log('[Middleware] Redirecting auth code to callback:', callbackUrl.toString());
       return NextResponse.redirect(callbackUrl);
     }
 
@@ -43,13 +42,11 @@ export async function middleware(request: NextRequest) {
     if (!hasSession) {
       // Get all cookies and check for sb-*-auth-token pattern
       const allCookies = cookies.getAll();
-      console.log('🍪 [Middleware] All cookies:', allCookies.map(c => c.name).join(', ') || 'NONE');
       hasSession = allCookies.some(cookie =>
         cookie.name.includes('sb-') &&
         cookie.name.includes('auth-token') &&
         !cookie.name.includes('code-verifier')
       );
-      console.log('🔐 [Middleware] Has session:', hasSession, 'for path:', request.nextUrl.pathname);
     }
 
     // Protected routes check
